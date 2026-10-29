@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Global Suicide Rates: Historical Analytics Dashboard
 
 A descriptive dashboard for the supplied SDG-3 age-adjusted suicide-rate dataset (1950–2005). The data pipeline validates the CSV, produces a pandas analysis report, and loads SQLite for a FastAPI JSON API. The React/TypeScript frontend uses the API for all displayed rates and comparisons.
@@ -161,3 +162,7 @@ Color tokens use calm teal (`#287c68`) and blue (`#647aab`), neutral surfaces, v
 - Former-state records are valid historical source entities, not current countries; they remain available outside the current-country top ranking.
 - No attempt is made to impute missing years, correct outliers, infer causes, or predict future rates.
 - Add newer comparable data beyond 2005, source metadata/versioning, regional and gender breakdowns, population weights if defensible, and a documented sensitivity analysis for alternative panels and coverage thresholds.
+=======
+# Global-Suicide-Rate---Historical-Analytics-Dashboard
+Made by yours truly.
+>>>>>>> origin/main
