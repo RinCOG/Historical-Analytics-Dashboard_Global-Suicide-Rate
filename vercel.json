@@ -8,7 +8,8 @@
         "backend/main.py": {
           "includeFiles": "data/**"
         }
-      }
+      },
+      "buildCommand": "pip install -r requirements.txt && python -m backend.analysis && python -m backend.ingest"
     },
     "frontend": {
       "root": "frontend",
