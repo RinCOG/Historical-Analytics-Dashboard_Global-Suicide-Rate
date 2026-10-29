@@ -1,0 +1,3898 @@
+{
+  "source": "SDG-3___suicide-rates-by-country.csv",
+  "period": {
+    "from": 1950,
+    "to": 2005
+  },
+  "row_count": 2843,
+  "entity_count": 196,
+  "iso_entity_count": 190,
+  "former_state_entities": {
+    "Czechoslovakia": "OWID_CZS",
+    "East Germany": "OWID_GDR",
+    "Serbia and Montenegro": "OWID_SRM",
+    "USSR": "OWID_USS",
+    "West Germany": "OWID_GFR",
+    "Yugoslavia": "OWID_YGS"
+  },
+  "quality": {
+    "null_cells": 0,
+    "duplicate_entity_year_rows": 0,
+    "invalid_codes": 0,
+    "non_country_aggregates": [],
+    "negative_or_zero_rates": 0,
+    "rate_iqr_fences": [
+      -8.597387499999995,
+      30.91988049999999
+    ],
+    "rate_outlier_count": 82,
+    "outliers_retained": true,
+    "country_year_gaps_within_observed_span": 331
+  },
+  "summary": {
+    "mean": 11.95023697859163,
+    "median": 10.64097,
+    "std": 7.749463448870158,
+    "min": 0.0383766,
+    "max": 44.35212,
+    "q1": 6.221588000000001,
+    "q3": 16.100904999999997,
+    "global_peak_year": 1982,
+    "global_peak_avg_rate": 14.763732284615385,
+    "global_peak_countries_reporting": 52,
+    "fixed_panel_entities": [
+      "Australia",
+      "Canada",
+      "Ireland",
+      "Japan",
+      "Netherlands",
+      "New Zealand",
+      "United Kingdom",
+      "United States"
+    ],
+    "fixed_panel_average": 10.666410969029018,
+    "fixed_panel_peak_year": 1998,
+    "fixed_panel_peak_avg_rate": 12.212896624999999,
+    "minimum_years_for_top_countries": 10,
+    "unfiltered_top_three": [
+      {
+        "entity": "Lithuania",
+        "avg_rate": 35.12718217391305,
+        "years_reported": 23
+      },
+      {
+        "entity": "Guyana",
+        "avg_rate": 30.847468313333334,
+        "years_reported": 3
+      },
+      {
+        "entity": "Russia",
+        "avg_rate": 30.76561291666667,
+        "years_reported": 24
+      }
+    ]
+  },
+  "rate_histogram": [
+    {
+      "range": "0\u20135",
+      "count": 507
+    },
+    {
+      "range": "5\u201310",
+      "count": 820
+    },
+    {
+      "range": "10\u201315",
+      "count": 714
+    },
+    {
+      "range": "15\u201320",
+      "count": 393
+    },
+    {
+      "range": "20\u201325",
+      "count": 218
+    },
+    {
+      "range": "25\u201330",
+      "count": 96
+    },
+    {
+      "range": "30\u201335",
+      "count": 51
+    },
+    {
+      "range": "35\u201340",
+      "count": 37
+    },
+    {
+      "range": "40+",
+      "count": 7
+    }
+  ],
+  "anomalies": {
+    "consecutive_changes": 2457,
+    "change_mean": -0.021071596091168095,
+    "change_std": 1.269571178978553,
+    "iqr_change_fences": [
+      -1.9613830000000023,
+      1.873025000000001
+    ],
+    "zscore_count": 122,
+    "iqr_count": 235,
+    "both_count": 122,
+    "rows": [
+      {
+        "entity": "Argentina",
+        "year": 1967,
+        "change": 1.9985930000000005,
+        "z_score": 1.590824232254635,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Australia",
+        "year": 1962,
+        "change": 1.9808800000000009,
+        "z_score": 1.5768722772218728,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Australia",
+        "year": 1963,
+        "change": 2.16258,
+        "z_score": 1.7199914681806563,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Australia",
+        "year": 1968,
+        "change": -2.46622,
+        "z_score": -1.9259640139878582,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Austria",
+        "year": 1970,
+        "change": 1.9158300000000033,
+        "z_score": 1.5256345041240822,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Austria",
+        "year": 1988,
+        "change": -2.4172100000000007,
+        "z_score": -1.8873604281381617,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Azerbaijan",
+        "year": 1990,
+        "change": -1.9629219999999998,
+        "z_score": -1.5295325193749028,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Belarus",
+        "year": 1986,
+        "change": -5.178629999999998,
+        "z_score": -4.062441310347324,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Belarus",
+        "year": 1989,
+        "change": 3.174810000000001,
+        "z_score": 2.5172921762940845,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Belarus",
+        "year": 1992,
+        "change": 2.4149899999999995,
+        "z_score": 1.9188066304806373,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Belarus",
+        "year": 1993,
+        "change": 3.9312200000000033,
+        "z_score": 3.1130917758160117,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Belarus",
+        "year": 1994,
+        "change": 2.2756599999999985,
+        "z_score": 1.8090609129446575,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Belarus",
+        "year": 2005,
+        "change": -4.207522149999999,
+        "z_score": -3.297531184724187,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Belgium",
+        "year": 1977,
+        "change": 2.2240800000000007,
+        "z_score": 1.7684330215321438,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Belgium",
+        "year": 1988,
+        "change": -2.0996799999999993,
+        "z_score": -1.6372523560129946,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Belgium",
+        "year": 1993,
+        "change": 2.3819800000000004,
+        "z_score": 1.892805725177669,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Bulgaria",
+        "year": 1983,
+        "change": -2.0282,
+        "z_score": -1.5809498806704863,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Bulgaria",
+        "year": 1984,
+        "change": 3.0851499999999987,
+        "z_score": 2.446669905180354,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Bulgaria",
+        "year": 2003,
+        "change": -1.99113,
+        "z_score": -1.551751045178785,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Chile",
+        "year": 1956,
+        "change": 3.417464999999999,
+        "z_score": 2.7084236417982317,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Chile",
+        "year": 1960,
+        "change": 2.391114,
+        "z_score": 1.9000002804347822,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Chile",
+        "year": 1963,
+        "change": -3.56684,
+        "z_score": -2.792886655446619,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Chile",
+        "year": 1966,
+        "change": 6.033507,
+        "z_score": 4.768994993224755,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Chile",
+        "year": 1967,
+        "change": -5.850858000000001,
+        "z_score": -4.5919334815077075,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Chile",
+        "year": 1968,
+        "change": 7.822528,
+        "z_score": 6.178148752874037,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Chile",
+        "year": 2000,
+        "change": 2.733309,
+        "z_score": 2.169536172290264,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Colombia",
+        "year": 1958,
+        "change": 2.1570373,
+        "z_score": 1.715625663339009,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Colombia",
+        "year": 1965,
+        "change": 1.9235730000000002,
+        "z_score": 1.5317334138411622,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Colombia",
+        "year": 1968,
+        "change": -3.0582380000000002,
+        "z_score": -2.392277372232423,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Colombia",
+        "year": 1998,
+        "change": 2.1416000000000004,
+        "z_score": 1.7034662033137589,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Costa Rica",
+        "year": 1963,
+        "change": 1.8958110000000001,
+        "z_score": 1.5098661877575201,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Costa Rica",
+        "year": 1976,
+        "change": 2.2500790000000004,
+        "z_score": 1.788911589753043,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Costa Rica",
+        "year": 1977,
+        "change": -2.3685229999999997,
+        "z_score": -1.8490112589020007,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Costa Rica",
+        "year": 1980,
+        "change": 2.0096669999999994,
+        "z_score": 1.5995468625280385,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Croatia",
+        "year": 1995,
+        "change": -2.5528000000000013,
+        "z_score": -1.9941602690963434,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Croatia",
+        "year": 1996,
+        "change": 2.671050000000001,
+        "z_score": 2.1204967792803426,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Croatia",
+        "year": 2001,
+        "change": -2.4408499999999993,
+        "z_score": -1.9059808886459517,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Cuba",
+        "year": 1970,
+        "change": 2.05659,
+        "z_score": 1.6365065862339223,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Cuba",
+        "year": 1971,
+        "change": 1.978489999999999,
+        "z_score": 1.5749897518152038,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Cuba",
+        "year": 1973,
+        "change": 2.0204600000000035,
+        "z_score": 1.6080481582243442,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Cuba",
+        "year": 1996,
+        "change": -1.9831399999999988,
+        "z_score": -1.5454575815807614,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Czech Republic",
+        "year": 1987,
+        "change": -1.9803400000000018,
+        "z_score": -1.5432521124850864,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Czechoslovakia",
+        "year": 1970,
+        "change": 1.9802399999999984,
+        "z_score": 1.5763681700000018,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Czechoslovakia",
+        "year": 1973,
+        "change": -1.9645299999999999,
+        "z_score": -1.5307990887698488,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Denmark",
+        "year": 1961,
+        "change": -3.3680199999999996,
+        "z_score": -2.636282596302835,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Denmark",
+        "year": 1962,
+        "change": 2.1782900000000023,
+        "z_score": 1.7323657251424769,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Denmark",
+        "year": 1968,
+        "change": 2.6906099999999995,
+        "z_score": 2.1359035562487168,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Denmark",
+        "year": 1971,
+        "change": 2.8368399999999987,
+        "z_score": 2.2510841797704715,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Denmark",
+        "year": 1979,
+        "change": 2.6231100000000005,
+        "z_score": 2.082735997692207,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Denmark",
+        "year": 1980,
+        "change": 4.929919999999999,
+        "z_score": 3.8997353421921095,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Denmark",
+        "year": 1990,
+        "change": -2.422060000000002,
+        "z_score": -1.8911806156788897,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Denmark",
+        "year": 1994,
+        "change": -2.61927,
+        "z_score": -2.046516530092657,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Estonia",
+        "year": 1982,
+        "change": -4.333930000000002,
+        "z_score": -3.3970985442334865,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Estonia",
+        "year": 1986,
+        "change": -3.19604,
+        "z_score": -2.5008195337761894,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Estonia",
+        "year": 1987,
+        "change": -2.1423500000000004,
+        "z_score": -1.6708621296960517,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Estonia",
+        "year": 1992,
+        "change": 4.8219899999999996,
+        "z_score": 3.8147223852290852,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Estonia",
+        "year": 1993,
+        "change": 5.697219999999998,
+        "z_score": 4.50411264116115,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Estonia",
+        "year": 1994,
+        "change": 2.517140000000005,
+        "z_score": 1.9992668690961604,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Estonia",
+        "year": 1996,
+        "change": -2.0656800000000004,
+        "z_score": -1.6104716598511977,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Estonia",
+        "year": 1998,
+        "change": -2.6509699999999974,
+        "z_score": -2.0714855909258603,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Estonia",
+        "year": 2000,
+        "change": -5.770320000000002,
+        "z_score": -4.528496313640683,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Estonia",
+        "year": 2003,
+        "change": -2.3072099999999978,
+        "z_score": -1.8007169993794019,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Estonia",
+        "year": 2005,
+        "change": -3.6996399999999987,
+        "z_score": -2.8974889039844633,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Finland",
+        "year": 1956,
+        "change": 2.4276100000000014,
+        "z_score": 1.9287469947618707,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Finland",
+        "year": 1963,
+        "change": -3.0970699999999987,
+        "z_score": -2.4228640779193316,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Finland",
+        "year": 1968,
+        "change": 1.9199300000000008,
+        "z_score": 1.5288639410141796,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Finland",
+        "year": 1970,
+        "change": -2.481349999999999,
+        "z_score": -1.9378814237798576,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Finland",
+        "year": 1972,
+        "change": 1.881800000000002,
+        "z_score": 1.4988301779362583,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Finland",
+        "year": 1996,
+        "change": -2.57489,
+        "z_score": -2.011559844926169,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Finland",
+        "year": 1998,
+        "change": -2.1218199999999996,
+        "z_score": -1.6546913152195302,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Finland",
+        "year": 2002,
+        "change": -2.0582499999999975,
+        "z_score": -1.6046192900723084,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Guatemala",
+        "year": 1967,
+        "change": 1.989586,
+        "z_score": 1.5837297107743609,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Hungary",
+        "year": 1957,
+        "change": 1.9595200000000013,
+        "z_score": 1.560047698691991,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Hungary",
+        "year": 1959,
+        "change": 1.9982700000000015,
+        "z_score": 1.5905698156410988,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Hungary",
+        "year": 1974,
+        "change": 3.0784299999999973,
+        "z_score": 2.441376779350727,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Hungary",
+        "year": 1978,
+        "change": 2.8233800000000002,
+        "z_score": 2.2404821747605377,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Hungary",
+        "year": 1982,
+        "change": -2.035640000000001,
+        "z_score": -1.5868101271247155,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Hungary",
+        "year": 1983,
+        "change": 2.4965600000000023,
+        "z_score": 1.983056671242929,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Hungary",
+        "year": 1988,
+        "change": -3.4074099999999987,
+        "z_score": -2.6673088204738113,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Hungary",
+        "year": 1993,
+        "change": -2.637240000000002,
+        "z_score": -2.060670915681703,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Hungary",
+        "year": 1995,
+        "change": -2.47954,
+        "z_score": -1.9364557455430098,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Hungary",
+        "year": 2001,
+        "change": -2.927690000000002,
+        "z_score": -2.289448950981531,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Ireland",
+        "year": 1999,
+        "change": -2.1666299999999996,
+        "z_score": -1.6899866974257114,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Japan",
+        "year": 1951,
+        "change": -2.2956000000000003,
+        "z_score": -1.7915721793076842,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Japan",
+        "year": 1954,
+        "change": 2.6827799999999975,
+        "z_score": 2.12973611945616,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Japan",
+        "year": 1959,
+        "change": -3.0596999999999994,
+        "z_score": -2.39342894216738,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Japan",
+        "year": 1961,
+        "change": -2.099630000000001,
+        "z_score": -1.6372129726362876,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Japan",
+        "year": 1962,
+        "change": -2.2007499999999993,
+        "z_score": -1.7168619136916092,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Japan",
+        "year": 1983,
+        "change": 3.0589399999999998,
+        "z_score": 2.4260251391097456,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Japan",
+        "year": 1998,
+        "change": 4.983260000000001,
+        "z_score": 3.941749528464767,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Kazakhstan",
+        "year": 1986,
+        "change": -6.451029999999999,
+        "z_score": -5.064669480825898,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Kazakhstan",
+        "year": 1989,
+        "change": 2.711590000000001,
+        "z_score": 2.1524288211156155,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Kazakhstan",
+        "year": 1993,
+        "change": 4.062809999999999,
+        "z_score": 3.2167409466375076,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Kazakhstan",
+        "year": 1995,
+        "change": 4.906970000000001,
+        "z_score": 3.8816583722828977,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Kazakhstan",
+        "year": 1999,
+        "change": -2.385810000000003,
+        "z_score": -1.862627667565209,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Kazakhstan",
+        "year": 2000,
+        "change": 2.78885,
+        "z_score": 2.2132840148056294,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Kazakhstan",
+        "year": 2005,
+        "change": -3.590570000000003,
+        "z_score": -2.8115780060324878,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Kyrgyzstan",
+        "year": 1986,
+        "change": -3.5212199999999996,
+        "z_score": -2.7569532625377593,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Kyrgyzstan",
+        "year": 1987,
+        "change": 2.6336999999999993,
+        "z_score": 2.091077396879072,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Kyrgyzstan",
+        "year": 1993,
+        "change": 2.6122699999999988,
+        "z_score": 2.0741976816217975,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Kyrgyzstan",
+        "year": 1996,
+        "change": -3.5941400000000012,
+        "z_score": -2.814389979129475,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Kyrgyzstan",
+        "year": 2003,
+        "change": -2.2807000000000013,
+        "z_score": -1.779835933048544,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Latvia",
+        "year": 1985,
+        "change": -3.932380000000002,
+        "z_score": -3.0808106458873135,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Latvia",
+        "year": 1986,
+        "change": -3.8147400000000005,
+        "z_score": -2.988149437167492,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Latvia",
+        "year": 1989,
+        "change": 2.1062200000000004,
+        "z_score": 1.6755985259548059,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Latvia",
+        "year": 1991,
+        "change": 2.0121,
+        "z_score": 1.601463257638676,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Latvia",
+        "year": 1992,
+        "change": 5.892769999999999,
+        "z_score": 4.658141027468197,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Latvia",
+        "year": 1993,
+        "change": 6.562529999999999,
+        "z_score": 5.185689235154246,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Latvia",
+        "year": 1996,
+        "change": -3.4574,
+        "z_score": -2.7066843205069966,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Latvia",
+        "year": 1999,
+        "change": -3.47297,
+        "z_score": -2.718948304014032,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Latvia",
+        "year": 2001,
+        "change": -2.0148899999999976,
+        "z_score": -1.5704660257906746,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Latvia",
+        "year": 2003,
+        "change": -2.707460000000001,
+        "z_score": -2.115980929931156,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Lithuania",
+        "year": 1986,
+        "change": -8.55779,
+        "z_score": -6.724095935114988,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Lithuania",
+        "year": 1987,
+        "change": 3.2680299999999995,
+        "z_score": 2.59071854382946,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Lithuania",
+        "year": 1988,
+        "change": -2.2663100000000007,
+        "z_score": -1.7685013972318298,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Lithuania",
+        "year": 1991,
+        "change": 4.61253,
+        "z_score": 3.6497375435217276,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Lithuania",
+        "year": 1992,
+        "change": 3.6100800000000035,
+        "z_score": 2.8601402238924902,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Lithuania",
+        "year": 1993,
+        "change": 7.25656,
+        "z_score": 5.7323541338946145,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Lithuania",
+        "year": 1994,
+        "change": 3.835259999999998,
+        "z_score": 3.037507199237004,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Lithuania",
+        "year": 1998,
+        "change": -2.503790000000002,
+        "z_score": -1.9555566832466467,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Lithuania",
+        "year": 2000,
+        "change": 1.8857600000000048,
+        "z_score": 1.5019493413715759,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Lithuania",
+        "year": 2001,
+        "change": -3.01079,
+        "z_score": -2.3549041230711,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Lithuania",
+        "year": 2003,
+        "change": -2.869240000000005,
+        "z_score": -2.243409783609266,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Lithuania",
+        "year": 2005,
+        "change": -2.0745600000000053,
+        "z_score": -1.6174661475546357,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 1971,
+        "change": 2.4953319999999994,
+        "z_score": 1.9820894155109654,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 1972,
+        "change": -2.1508799999999995,
+        "z_score": -1.6775809337625254,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 1973,
+        "change": 5.045327,
+        "z_score": 3.990637689308128,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 1974,
+        "change": -2.895136,
+        "z_score": -2.263807222074142,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 1975,
+        "change": 3.714328,
+        "z_score": 2.9422529889946962,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 1978,
+        "change": 1.9276850000000003,
+        "z_score": 1.5349723027416715,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 1980,
+        "change": -4.614824,
+        "z_score": -3.618349628576779,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 1984,
+        "change": 10.439994,
+        "z_score": 8.239841742869219,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 1986,
+        "change": -8.597232,
+        "z_score": -6.755163117997742,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 1987,
+        "change": 11.658522000000001,
+        "z_score": 9.199636687946958,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 1988,
+        "change": 2.7524499999999996,
+        "z_score": 2.184612916561822,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 1989,
+        "change": -2.326360000000001,
+        "z_score": -1.81580083265877,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 1995,
+        "change": 2.315850000000001,
+        "z_score": 1.840717271142973,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 1997,
+        "change": -2.9739699999999996,
+        "z_score": -2.325902204462941,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 1998,
+        "change": 2.56456,
+        "z_score": 2.036618063566523,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 2000,
+        "change": -2.7833299999999994,
+        "z_score": -2.1757412657486723,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 2001,
+        "change": -2.0112130000000015,
+        "z_score": -1.5675697722675326,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mauritius",
+        "year": 2003,
+        "change": -3.4426060000000005,
+        "z_score": -2.6950315670064784,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Mexico",
+        "year": 1974,
+        "change": 1.9087231,
+        "z_score": 1.5200366297254833,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Moldova",
+        "year": 1986,
+        "change": -2.05696,
+        "z_score": -1.6036031989532304,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Moldova",
+        "year": 1990,
+        "change": -2.2803699999999996,
+        "z_score": -1.7795760027622665,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Moldova",
+        "year": 2001,
+        "change": 2.0336800000000004,
+        "z_score": 1.6184611230260761,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "New Zealand",
+        "year": 1977,
+        "change": 2.7147679999999994,
+        "z_score": 2.154932028539208,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "New Zealand",
+        "year": 1986,
+        "change": 2.3052160000000015,
+        "z_score": 1.8323412145846039,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Portugal",
+        "year": 1957,
+        "change": -2.0945860000000014,
+        "z_score": -1.6332399775939315,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Portugal",
+        "year": 1980,
+        "change": -2.4188849999999995,
+        "z_score": -1.8886797712578964,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Portugal",
+        "year": 2002,
+        "change": 3.253947,
+        "z_score": 2.579625821945737,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Romania",
+        "year": 1990,
+        "change": -1.9914810000000003,
+        "z_score": -1.552027516483279,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Romania",
+        "year": 1992,
+        "change": 2.0655289999999997,
+        "z_score": 1.6435475463218725,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Russia",
+        "year": 1986,
+        "change": -7.6935199999999995,
+        "z_score": -6.04333851535743,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Russia",
+        "year": 1992,
+        "change": 4.100829999999998,
+        "z_score": 3.2466880662866706,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Russia",
+        "year": 1993,
+        "change": 6.564700000000002,
+        "z_score": 5.187398473703398,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Russia",
+        "year": 1994,
+        "change": 3.6576200000000014,
+        "z_score": 2.897585938466955,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Russia",
+        "year": 1996,
+        "change": -2.0820799999999977,
+        "z_score": -1.6233894074115922,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Russia",
+        "year": 1997,
+        "change": -2.05433,
+        "z_score": -1.601531633338362,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Russia",
+        "year": 1998,
+        "change": -2.1666999999999987,
+        "z_score": -1.6900418341531025,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Russia",
+        "year": 1999,
+        "change": 3.2250000000000014,
+        "z_score": 2.5568252098341038,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Russia",
+        "year": 2003,
+        "change": -2.6490699999999983,
+        "z_score": -2.069989022610937,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Russia",
+        "year": 2005,
+        "change": -1.98846,
+        "z_score": -1.5496479728625496,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Singapore",
+        "year": 1966,
+        "change": 2.62355,
+        "z_score": 2.0830825714072416,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Singapore",
+        "year": 1968,
+        "change": 3.443670000000001,
+        "z_score": 2.7290644695311714,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Singapore",
+        "year": 1969,
+        "change": -5.42878,
+        "z_score": -4.259476344020081,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Singapore",
+        "year": 1971,
+        "change": 2.621269999999999,
+        "z_score": 2.0812866894293323,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Singapore",
+        "year": 1975,
+        "change": 2.1619899999999994,
+        "z_score": 1.7195267443354951,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Singapore",
+        "year": 1977,
+        "change": -2.0588800000000003,
+        "z_score": -1.605115520618838,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Singapore",
+        "year": 1978,
+        "change": 1.9153199999999995,
+        "z_score": 1.5252327936816523,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Singapore",
+        "year": 1981,
+        "change": -4.182690999999998,
+        "z_score": -3.277972494033068,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Singapore",
+        "year": 1982,
+        "change": 2.511830999999999,
+        "z_score": 1.9950851421572444,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Singapore",
+        "year": 1984,
+        "change": -2.970485,
+        "z_score": -2.323157183106357,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Singapore",
+        "year": 1985,
+        "change": 4.994294999999999,
+        "z_score": 3.950441439704337,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Singapore",
+        "year": 1988,
+        "change": 2.60863,
+        "z_score": 2.0713305717974175,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Singapore",
+        "year": 1990,
+        "change": -2.6046699999999987,
+        "z_score": -2.0350165840937664,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Singapore",
+        "year": 1991,
+        "change": -2.432780000000001,
+        "z_score": -1.899624411645197,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Singapore",
+        "year": 1996,
+        "change": -4.26056,
+        "z_score": -3.3393073772513935,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Singapore",
+        "year": 1999,
+        "change": -2.2205019999999998,
+        "z_score": -1.7324199228265458,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Slovenia",
+        "year": 1986,
+        "change": -2.782309999999999,
+        "z_score": -2.174937844863818,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Slovenia",
+        "year": 1989,
+        "change": 1.984849999999998,
+        "z_score": 1.5799993173325275,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Slovenia",
+        "year": 1990,
+        "change": -6.022029999999997,
+        "z_score": -4.726760108666742,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Slovenia",
+        "year": 1991,
+        "change": 3.954559999999997,
+        "z_score": 3.1314759360635467,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Slovenia",
+        "year": 1992,
+        "change": -2.8014699999999984,
+        "z_score": -2.190029554818525,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Slovenia",
+        "year": 1995,
+        "change": -2.575479999999999,
+        "z_score": -2.012024568771329,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Slovenia",
+        "year": 2002,
+        "change": -2.0720000000000027,
+        "z_score": -1.6154497186671573,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "South Korea",
+        "year": 1996,
+        "change": 2.01276,
+        "z_score": 1.6019831182112285,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "South Korea",
+        "year": 1998,
+        "change": 5.067609999999998,
+        "z_score": 4.008189284972048,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "South Korea",
+        "year": 1999,
+        "change": -3.259829999999999,
+        "z_score": -2.551064845780926,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "South Korea",
+        "year": 2002,
+        "change": 3.1532799999999988,
+        "z_score": 2.5003336942833916,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "South Korea",
+        "year": 2003,
+        "change": 4.09318,
+        "z_score": 3.2406624096502674,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Sri Lanka",
+        "year": 1960,
+        "change": 2.17103,
+        "z_score": 1.726647258844397,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Sri Lanka",
+        "year": 1962,
+        "change": 2.24122,
+        "z_score": 1.781933643067826,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Sri Lanka",
+        "year": 1967,
+        "change": 4.836079999999999,
+        "z_score": 3.8258206207855476,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Sri Lanka",
+        "year": 1982,
+        "change": 2.6370999999999967,
+        "z_score": 2.09375546649525,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Sri Lanka",
+        "year": 1983,
+        "change": 3.2865500000000054,
+        "z_score": 2.6053061465623024,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Sri Lanka",
+        "year": 1986,
+        "change": -2.1725600000000043,
+        "z_score": -1.6946575659033463,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Sweden",
+        "year": 1956,
+        "change": 2.0497000000000014,
+        "z_score": 1.6310795569234886,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Sweden",
+        "year": 1958,
+        "change": -2.538310000000001,
+        "z_score": -1.982746966526212,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Sweden",
+        "year": 1981,
+        "change": -1.990730000000001,
+        "z_score": -1.5514359781651175,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Switzerland",
+        "year": 1975,
+        "change": 2.080829999999999,
+        "z_score": 1.655599647262215,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Switzerland",
+        "year": 1986,
+        "change": -2.0794700000000006,
+        "z_score": -1.6213335951474093,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Switzerland",
+        "year": 2003,
+        "change": -2.2352000000000007,
+        "z_score": -1.7439970602437849,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1958,
+        "change": -2.8644670000000003,
+        "z_score": -2.239650246468667,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1968,
+        "change": 3.6287959999999995,
+        "z_score": 2.8748822094620223,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1971,
+        "change": -4.084397999999999,
+        "z_score": -3.2005502890968454,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1972,
+        "change": 5.3430279999999994,
+        "z_score": 4.2251271018982255,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1974,
+        "change": -2.739326,
+        "z_score": -2.141080743575033,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1978,
+        "change": -4.660372999999999,
+        "z_score": -3.6542270970907116,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1982,
+        "change": 2.0567149999999996,
+        "z_score": 1.6366050446756935,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1983,
+        "change": 1.9630489999999998,
+        "z_score": 1.5628273774200774,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1984,
+        "change": -2.906078999999999,
+        "z_score": -2.27242666790057,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1985,
+        "change": -3.9158740000000005,
+        "z_score": -3.0678094055682936,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1986,
+        "change": 6.932537000000001,
+        "z_score": 5.4771317364700804,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1988,
+        "change": 4.481769999999999,
+        "z_score": 3.54674213675359,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1991,
+        "change": -1.9757000000000016,
+        "z_score": -1.539597335126535,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1994,
+        "change": -2.17666,
+        "z_score": -1.697887002793442,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1995,
+        "change": 3.5425900000000006,
+        "z_score": 2.806980542011319,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1996,
+        "change": -3.6856300000000015,
+        "z_score": -2.8864536818307363,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 1999,
+        "change": -2.297830000000001,
+        "z_score": -1.793328677908885,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Trinidad and Tobago",
+        "year": 2002,
+        "change": -2.0863899999999997,
+        "z_score": -1.6267842544838687,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Turkmenistan",
+        "year": 1986,
+        "change": 2.3152849999999994,
+        "z_score": 1.8402722389861652,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Turkmenistan",
+        "year": 1998,
+        "change": 2.045642000000001,
+        "z_score": 1.6278832020698242,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "USSR",
+        "year": 1985,
+        "change": -5.035530000000001,
+        "z_score": -3.9497260862075243,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "USSR",
+        "year": 1986,
+        "change": -5.707930000000001,
+        "z_score": -4.479353736183783,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Ukraine",
+        "year": 1986,
+        "change": -3.57555,
+        "z_score": -2.799747239669244,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Ukraine",
+        "year": 1989,
+        "change": 1.9921399999999991,
+        "z_score": 1.5857414136566315,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Ukraine",
+        "year": 1994,
+        "change": 2.3639699999999984,
+        "z_score": 1.8786198328872563,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Ukraine",
+        "year": 2001,
+        "change": -2.2195500000000017,
+        "z_score": -1.731670063334017,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Uruguay",
+        "year": 1956,
+        "change": 2.2731700000000004,
+        "z_score": 1.8070996207845744,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Uruguay",
+        "year": 1957,
+        "change": -3.24958,
+        "z_score": -2.542991253555679,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Uruguay",
+        "year": 1965,
+        "change": 2.548350000000001,
+        "z_score": 2.023849972837619,
+        "zscore_flag": true,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Uruguay",
+        "year": 1989,
+        "change": 2.3172749999999986,
+        "z_score": 1.841839697379164,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Uruguay",
+        "year": 1999,
+        "change": -2.3096200000000007,
+        "z_score": -1.802615278136755,
+        "zscore_flag": false,
+        "iqr_flag": true
+      },
+      {
+        "entity": "Uruguay",
+        "year": 2000,
+        "change": 3.0078000000000014,
+        "z_score": 2.3857438214122664,
+        "zscore_flag": true,
+        "iqr_flag": true
+      }
+    ]
+  },
+  "yearly": [
+    {
+      "year": 1950,
+      "avg_rate": 10.0267761,
+      "countries_reporting": 10
+    },
+    {
+      "year": 1951,
+      "avg_rate": 10.33357,
+      "countries_reporting": 16
+    },
+    {
+      "year": 1952,
+      "avg_rate": 11.264735052631579,
+      "countries_reporting": 19
+    },
+    {
+      "year": 1953,
+      "avg_rate": 11.479295285714286,
+      "countries_reporting": 21
+    },
+    {
+      "year": 1954,
+      "avg_rate": 11.707912,
+      "countries_reporting": 22
+    },
+    {
+      "year": 1955,
+      "avg_rate": 11.626099241379311,
+      "countries_reporting": 29
+    },
+    {
+      "year": 1956,
+      "avg_rate": 12.06892348275862,
+      "countries_reporting": 29
+    },
+    {
+      "year": 1957,
+      "avg_rate": 11.91628178275862,
+      "countries_reporting": 29
+    },
+    {
+      "year": 1958,
+      "avg_rate": 11.965727068965517,
+      "countries_reporting": 29
+    },
+    {
+      "year": 1959,
+      "avg_rate": 11.942115310344828,
+      "countries_reporting": 29
+    },
+    {
+      "year": 1960,
+      "avg_rate": 11.745654733333334,
+      "countries_reporting": 30
+    },
+    {
+      "year": 1961,
+      "avg_rate": 11.001529354838711,
+      "countries_reporting": 31
+    },
+    {
+      "year": 1962,
+      "avg_rate": 10.8036495,
+      "countries_reporting": 32
+    },
+    {
+      "year": 1963,
+      "avg_rate": 10.77328762857143,
+      "countries_reporting": 35
+    },
+    {
+      "year": 1964,
+      "avg_rate": 10.929189277777777,
+      "countries_reporting": 36
+    },
+    {
+      "year": 1965,
+      "avg_rate": 11.061356542857142,
+      "countries_reporting": 35
+    },
+    {
+      "year": 1966,
+      "avg_rate": 11.250242888888888,
+      "countries_reporting": 36
+    },
+    {
+      "year": 1967,
+      "avg_rate": 11.240607648648648,
+      "countries_reporting": 37
+    },
+    {
+      "year": 1968,
+      "avg_rate": 11.752552205128206,
+      "countries_reporting": 39
+    },
+    {
+      "year": 1969,
+      "avg_rate": 11.332904783783784,
+      "countries_reporting": 37
+    },
+    {
+      "year": 1970,
+      "avg_rate": 11.587252166666666,
+      "countries_reporting": 36
+    },
+    {
+      "year": 1971,
+      "avg_rate": 11.774201788571428,
+      "countries_reporting": 35
+    },
+    {
+      "year": 1972,
+      "avg_rate": 11.6833346,
+      "countries_reporting": 36
+    },
+    {
+      "year": 1973,
+      "avg_rate": 12.318204830555555,
+      "countries_reporting": 36
+    },
+    {
+      "year": 1974,
+      "avg_rate": 12.424821816216216,
+      "countries_reporting": 37
+    },
+    {
+      "year": 1975,
+      "avg_rate": 11.646932931578947,
+      "countries_reporting": 38
+    },
+    {
+      "year": 1976,
+      "avg_rate": 11.647635094736842,
+      "countries_reporting": 38
+    },
+    {
+      "year": 1977,
+      "avg_rate": 11.704942241463415,
+      "countries_reporting": 41
+    },
+    {
+      "year": 1978,
+      "avg_rate": 11.742691065789474,
+      "countries_reporting": 38
+    },
+    {
+      "year": 1979,
+      "avg_rate": 11.624344594736842,
+      "countries_reporting": 38
+    },
+    {
+      "year": 1980,
+      "avg_rate": 12.972093002439024,
+      "countries_reporting": 41
+    },
+    {
+      "year": 1981,
+      "avg_rate": 14.295450664705884,
+      "countries_reporting": 51
+    },
+    {
+      "year": 1982,
+      "avg_rate": 14.763732284615385,
+      "countries_reporting": 52
+    },
+    {
+      "year": 1983,
+      "avg_rate": 13.664347839024392,
+      "countries_reporting": 41
+    },
+    {
+      "year": 1984,
+      "avg_rate": 13.268984293023257,
+      "countries_reporting": 43
+    },
+    {
+      "year": 1985,
+      "avg_rate": 14.21802,
+      "countries_reporting": 60
+    },
+    {
+      "year": 1986,
+      "avg_rate": 13.487080021311474,
+      "countries_reporting": 61
+    },
+    {
+      "year": 1987,
+      "avg_rate": 12.844556683870968,
+      "countries_reporting": 62
+    },
+    {
+      "year": 1988,
+      "avg_rate": 13.063390816666667,
+      "countries_reporting": 60
+    },
+    {
+      "year": 1989,
+      "avg_rate": 13.485136295081967,
+      "countries_reporting": 61
+    },
+    {
+      "year": 1990,
+      "avg_rate": 13.219593639344263,
+      "countries_reporting": 61
+    },
+    {
+      "year": 1991,
+      "avg_rate": 13.11316605357143,
+      "countries_reporting": 56
+    },
+    {
+      "year": 1992,
+      "avg_rate": 13.258250363793103,
+      "countries_reporting": 58
+    },
+    {
+      "year": 1993,
+      "avg_rate": 13.7190733220339,
+      "countries_reporting": 59
+    },
+    {
+      "year": 1994,
+      "avg_rate": 13.705408241666667,
+      "countries_reporting": 60
+    },
+    {
+      "year": 1995,
+      "avg_rate": 13.914370057627119,
+      "countries_reporting": 59
+    },
+    {
+      "year": 1996,
+      "avg_rate": 12.983587,
+      "countries_reporting": 60
+    },
+    {
+      "year": 1997,
+      "avg_rate": 12.951138516129033,
+      "countries_reporting": 62
+    },
+    {
+      "year": 1998,
+      "avg_rate": 13.043489661904763,
+      "countries_reporting": 63
+    },
+    {
+      "year": 1999,
+      "avg_rate": 12.422328252307691,
+      "countries_reporting": 65
+    },
+    {
+      "year": 2000,
+      "avg_rate": 12.088495469230768,
+      "countries_reporting": 65
+    },
+    {
+      "year": 2001,
+      "avg_rate": 12.36165435483871,
+      "countries_reporting": 62
+    },
+    {
+      "year": 2002,
+      "avg_rate": 9.522092382631579,
+      "countries_reporting": 190
+    },
+    {
+      "year": 2003,
+      "avg_rate": 12.49449109090909,
+      "countries_reporting": 55
+    },
+    {
+      "year": 2004,
+      "avg_rate": 9.775985834188482,
+      "countries_reporting": 191
+    },
+    {
+      "year": 2005,
+      "avg_rate": 9.640839010502617,
+      "countries_reporting": 191
+    }
+  ],
+  "top_countries": [
+    {
+      "entity": "Lithuania",
+      "avg_rate": 35.12718217391305,
+      "years_reported": 23
+    },
+    {
+      "entity": "Russia",
+      "avg_rate": 30.76561291666667,
+      "years_reported": 24
+    },
+    {
+      "entity": "Hungary",
+      "avg_rate": 29.845399803921573,
+      "years_reported": 51
+    },
+    {
+      "entity": "Estonia",
+      "avg_rate": 27.673795217391305,
+      "years_reported": 23
+    },
+    {
+      "entity": "Latvia",
+      "avg_rate": 27.524057692307696,
+      "years_reported": 26
+    },
+    {
+      "entity": "Kazakhstan",
+      "avg_rate": 25.86096217391304,
+      "years_reported": 23
+    },
+    {
+      "entity": "Belarus",
+      "avg_rate": 25.55377376136364,
+      "years_reported": 22
+    },
+    {
+      "entity": "Slovenia",
+      "avg_rate": 25.35698142857143,
+      "years_reported": 21
+    },
+    {
+      "entity": "Finland",
+      "avg_rate": 22.153145555555554,
+      "years_reported": 54
+    },
+    {
+      "entity": "Ukraine",
+      "avg_rate": 21.59801565217391,
+      "years_reported": 23
+    }
+  ],
+  "coverage": [
+    {
+      "entity": "Afghanistan",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Albania",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Algeria",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Andorra",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Angola",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Antigua and Barbuda",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Argentina",
+      "years_reported": 34,
+      "first_year": 1966,
+      "last_year": 2005,
+      "gaps": 6
+    },
+    {
+      "entity": "Armenia",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Australia",
+      "years_reported": 56,
+      "first_year": 1950,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Austria",
+      "years_reported": 51,
+      "first_year": 1955,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Azerbaijan",
+      "years_reported": 21,
+      "first_year": 1981,
+      "last_year": 2005,
+      "gaps": 4
+    },
+    {
+      "entity": "Bahamas",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Bahrain",
+      "years_reported": 9,
+      "first_year": 1985,
+      "last_year": 2005,
+      "gaps": 12
+    },
+    {
+      "entity": "Bangladesh",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Barbados",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Belarus",
+      "years_reported": 22,
+      "first_year": 1981,
+      "last_year": 2005,
+      "gaps": 3
+    },
+    {
+      "entity": "Belgium",
+      "years_reported": 49,
+      "first_year": 1954,
+      "last_year": 2005,
+      "gaps": 3
+    },
+    {
+      "entity": "Belize",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Benin",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Bhutan",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Bolivia",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Bosnia and Herzegovina",
+      "years_reported": 10,
+      "first_year": 1985,
+      "last_year": 2005,
+      "gaps": 11
+    },
+    {
+      "entity": "Botswana",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Brazil",
+      "years_reported": 24,
+      "first_year": 1982,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Brunei",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Bulgaria",
+      "years_reported": 42,
+      "first_year": 1964,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Burkina Faso",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Burundi",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Cambodia",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Cameroon",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Canada",
+      "years_reported": 56,
+      "first_year": 1950,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Cape Verde",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Central African Republic",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Chad",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Chile",
+      "years_reported": 51,
+      "first_year": 1955,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "China",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Colombia",
+      "years_reported": 43,
+      "first_year": 1953,
+      "last_year": 2005,
+      "gaps": 10
+    },
+    {
+      "entity": "Comoros",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Congo",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Cook Islands",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Costa Rica",
+      "years_reported": 44,
+      "first_year": 1962,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Cote d'Ivoire",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Croatia",
+      "years_reported": 21,
+      "first_year": 1985,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Cuba",
+      "years_reported": 25,
+      "first_year": 1964,
+      "last_year": 2005,
+      "gaps": 17
+    },
+    {
+      "entity": "Cyprus",
+      "years_reported": 5,
+      "first_year": 1999,
+      "last_year": 2005,
+      "gaps": 2
+    },
+    {
+      "entity": "Czech Republic",
+      "years_reported": 20,
+      "first_year": 1986,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Czechoslovakia",
+      "years_reported": 39,
+      "first_year": 1953,
+      "last_year": 1991,
+      "gaps": 0
+    },
+    {
+      "entity": "Democratic Republic of Congo",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Denmark",
+      "years_reported": 55,
+      "first_year": 1951,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Djibouti",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Dominica",
+      "years_reported": 2,
+      "first_year": 2004,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Dominican Republic",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "East Germany",
+      "years_reported": 4,
+      "first_year": 1973,
+      "last_year": 1990,
+      "gaps": 14
+    },
+    {
+      "entity": "Ecuador",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Egypt",
+      "years_reported": 13,
+      "first_year": 1973,
+      "last_year": 2005,
+      "gaps": 20
+    },
+    {
+      "entity": "El Salvador",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Equatorial Guinea",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Eritrea",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Estonia",
+      "years_reported": 23,
+      "first_year": 1981,
+      "last_year": 2005,
+      "gaps": 2
+    },
+    {
+      "entity": "Ethiopia",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Fiji",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Finland",
+      "years_reported": 54,
+      "first_year": 1952,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "France",
+      "years_reported": 55,
+      "first_year": 1950,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Gabon",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Gambia",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Georgia",
+      "years_reported": 21,
+      "first_year": 1981,
+      "last_year": 2005,
+      "gaps": 4
+    },
+    {
+      "entity": "Germany",
+      "years_reported": 16,
+      "first_year": 1990,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Ghana",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Greece",
+      "years_reported": 45,
+      "first_year": 1961,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Grenada",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Guatemala",
+      "years_reported": 34,
+      "first_year": 1963,
+      "last_year": 2005,
+      "gaps": 9
+    },
+    {
+      "entity": "Guinea",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Guinea-Bissau",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Guyana",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Haiti",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Honduras",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Hungary",
+      "years_reported": 51,
+      "first_year": 1955,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Iceland",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "India",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Indonesia",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Iran",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Iraq",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Ireland",
+      "years_reported": 56,
+      "first_year": 1950,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Israel",
+      "years_reported": 31,
+      "first_year": 1975,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Italy",
+      "years_reported": 55,
+      "first_year": 1951,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Jamaica",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Japan",
+      "years_reported": 56,
+      "first_year": 1950,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Jordan",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Kazakhstan",
+      "years_reported": 23,
+      "first_year": 1981,
+      "last_year": 2005,
+      "gaps": 2
+    },
+    {
+      "entity": "Kenya",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Kuwait",
+      "years_reported": 26,
+      "first_year": 1972,
+      "last_year": 2005,
+      "gaps": 8
+    },
+    {
+      "entity": "Kyrgyzstan",
+      "years_reported": 23,
+      "first_year": 1981,
+      "last_year": 2005,
+      "gaps": 2
+    },
+    {
+      "entity": "Laos",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Latvia",
+      "years_reported": 26,
+      "first_year": 1980,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Lebanon",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Lesotho",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Liberia",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Libya",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Lithuania",
+      "years_reported": 23,
+      "first_year": 1981,
+      "last_year": 2005,
+      "gaps": 2
+    },
+    {
+      "entity": "Luxembourg",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Macedonia",
+      "years_reported": 15,
+      "first_year": 1991,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Madagascar",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Malawi",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Malaysia",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Maldives",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Mali",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Malta",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Marshall Islands",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Mauritania",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Mauritius",
+      "years_reported": 45,
+      "first_year": 1961,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Mexico",
+      "years_reported": 51,
+      "first_year": 1955,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Micronesia (country)",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Moldova",
+      "years_reported": 23,
+      "first_year": 1981,
+      "last_year": 2005,
+      "gaps": 2
+    },
+    {
+      "entity": "Monaco",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Mongolia",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Morocco",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Mozambique",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Myanmar",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Namibia",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Nauru",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Nepal",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Netherlands",
+      "years_reported": 56,
+      "first_year": 1950,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "New Zealand",
+      "years_reported": 56,
+      "first_year": 1950,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Nicaragua",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Niger",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Nigeria",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Niue",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "North Korea",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Norway",
+      "years_reported": 55,
+      "first_year": 1951,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Oman",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Pakistan",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Palau",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Panama",
+      "years_reported": 16,
+      "first_year": 1984,
+      "last_year": 2005,
+      "gaps": 6
+    },
+    {
+      "entity": "Papua New Guinea",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Paraguay",
+      "years_reported": 12,
+      "first_year": 1994,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Peru",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Philippines",
+      "years_reported": 11,
+      "first_year": 1992,
+      "last_year": 2005,
+      "gaps": 3
+    },
+    {
+      "entity": "Poland",
+      "years_reported": 42,
+      "first_year": 1959,
+      "last_year": 2005,
+      "gaps": 5
+    },
+    {
+      "entity": "Portugal",
+      "years_reported": 51,
+      "first_year": 1955,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Qatar",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Romania",
+      "years_reported": 17,
+      "first_year": 1989,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Russia",
+      "years_reported": 24,
+      "first_year": 1980,
+      "last_year": 2005,
+      "gaps": 2
+    },
+    {
+      "entity": "Rwanda",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Saint Lucia",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Saint Vincent and the Grenadines",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Samoa",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "San Marino",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Sao Tome and Principe",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Saudi Arabia",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Senegal",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Serbia",
+      "years_reported": 8,
+      "first_year": 1998,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Serbia and Montenegro",
+      "years_reported": 8,
+      "first_year": 1997,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Seychelles",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Sierra Leone",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Singapore",
+      "years_reported": 43,
+      "first_year": 1963,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Slovakia",
+      "years_reported": 14,
+      "first_year": 1992,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Slovenia",
+      "years_reported": 21,
+      "first_year": 1985,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Solomon Islands",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Somalia",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "South Africa",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "South Korea",
+      "years_reported": 21,
+      "first_year": 1985,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Spain",
+      "years_reported": 55,
+      "first_year": 1951,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Sri Lanka",
+      "years_reported": 30,
+      "first_year": 1950,
+      "last_year": 2005,
+      "gaps": 26
+    },
+    {
+      "entity": "Sudan",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Suriname",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Swaziland",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Sweden",
+      "years_reported": 55,
+      "first_year": 1951,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Switzerland",
+      "years_reported": 55,
+      "first_year": 1951,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Syria",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Tajikistan",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Tanzania",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Thailand",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Timor",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Togo",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Tonga",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Trinidad and Tobago",
+      "years_reported": 49,
+      "first_year": 1951,
+      "last_year": 2005,
+      "gaps": 6
+    },
+    {
+      "entity": "Tunisia",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Turkey",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Turkmenistan",
+      "years_reported": 19,
+      "first_year": 1981,
+      "last_year": 2005,
+      "gaps": 6
+    },
+    {
+      "entity": "Tuvalu",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "USSR",
+      "years_reported": 9,
+      "first_year": 1982,
+      "last_year": 1990,
+      "gaps": 0
+    },
+    {
+      "entity": "Uganda",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Ukraine",
+      "years_reported": 23,
+      "first_year": 1981,
+      "last_year": 2005,
+      "gaps": 2
+    },
+    {
+      "entity": "United Arab Emirates",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "United Kingdom",
+      "years_reported": 56,
+      "first_year": 1950,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "United States",
+      "years_reported": 56,
+      "first_year": 1950,
+      "last_year": 2005,
+      "gaps": 0
+    },
+    {
+      "entity": "Uruguay",
+      "years_reported": 45,
+      "first_year": 1955,
+      "last_year": 2005,
+      "gaps": 6
+    },
+    {
+      "entity": "Uzbekistan",
+      "years_reported": 23,
+      "first_year": 1981,
+      "last_year": 2005,
+      "gaps": 2
+    },
+    {
+      "entity": "Vanuatu",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Venezuela",
+      "years_reported": 48,
+      "first_year": 1955,
+      "last_year": 2005,
+      "gaps": 3
+    },
+    {
+      "entity": "Vietnam",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "West Germany",
+      "years_reported": 39,
+      "first_year": 1952,
+      "last_year": 1990,
+      "gaps": 0
+    },
+    {
+      "entity": "Yemen",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Yugoslavia",
+      "years_reported": 15,
+      "first_year": 1968,
+      "last_year": 1990,
+      "gaps": 8
+    },
+    {
+      "entity": "Zambia",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    },
+    {
+      "entity": "Zimbabwe",
+      "years_reported": 3,
+      "first_year": 2002,
+      "last_year": 2005,
+      "gaps": 1
+    }
+  ],
+  "coverage_count_distribution": [
+    {
+      "nunique": 2,
+      "entities": 1
+    },
+    {
+      "nunique": 3,
+      "entities": 121
+    },
+    {
+      "nunique": 4,
+      "entities": 1
+    },
+    {
+      "nunique": 5,
+      "entities": 1
+    },
+    {
+      "nunique": 8,
+      "entities": 2
+    },
+    {
+      "nunique": 9,
+      "entities": 2
+    },
+    {
+      "nunique": 10,
+      "entities": 1
+    },
+    {
+      "nunique": 11,
+      "entities": 1
+    },
+    {
+      "nunique": 12,
+      "entities": 1
+    },
+    {
+      "nunique": 13,
+      "entities": 1
+    },
+    {
+      "nunique": 14,
+      "entities": 1
+    },
+    {
+      "nunique": 15,
+      "entities": 2
+    },
+    {
+      "nunique": 16,
+      "entities": 2
+    },
+    {
+      "nunique": 17,
+      "entities": 1
+    },
+    {
+      "nunique": 19,
+      "entities": 1
+    },
+    {
+      "nunique": 20,
+      "entities": 1
+    },
+    {
+      "nunique": 21,
+      "entities": 5
+    },
+    {
+      "nunique": 22,
+      "entities": 1
+    },
+    {
+      "nunique": 23,
+      "entities": 7
+    },
+    {
+      "nunique": 24,
+      "entities": 2
+    },
+    {
+      "nunique": 25,
+      "entities": 1
+    },
+    {
+      "nunique": 26,
+      "entities": 2
+    },
+    {
+      "nunique": 30,
+      "entities": 1
+    },
+    {
+      "nunique": 31,
+      "entities": 1
+    },
+    {
+      "nunique": 34,
+      "entities": 2
+    },
+    {
+      "nunique": 39,
+      "entities": 2
+    },
+    {
+      "nunique": 42,
+      "entities": 2
+    },
+    {
+      "nunique": 43,
+      "entities": 2
+    },
+    {
+      "nunique": 44,
+      "entities": 1
+    },
+    {
+      "nunique": 45,
+      "entities": 3
+    },
+    {
+      "nunique": 48,
+      "entities": 1
+    },
+    {
+      "nunique": 49,
+      "entities": 2
+    },
+    {
+      "nunique": 51,
+      "entities": 5
+    },
+    {
+      "nunique": 54,
+      "entities": 1
+    },
+    {
+      "nunique": 55,
+      "entities": 7
+    },
+    {
+      "nunique": 56,
+      "entities": 8
+    }
+  ],
+  "insights": [
+    {
+      "title": "The dataset-wide observation mean is 11.95 per 100,000.",
+      "detail": "The mean across 2,843 observed country-year records is 11.95; the median is 10.64.",
+      "caveat": "This weights each reported record equally, not each country equally, and coverage varies by year."
+    },
+    {
+      "title": "The highest simple yearly mean is in 1982 (14.76).",
+      "detail": "There are 52 entities reporting in the peak year.",
+      "caveat": "The number and composition of reporting entities change over time; the fixed eight-entity panel peaks in 1998 (12.21)."
+    },
+    {
+      "title": "Lithuania has the highest eligible country mean (35.13).",
+      "detail": "The ranking requires at least 10 observations; Lithuania has 23.",
+      "caveat": "Without that rule, the raw top three are Lithuania (35.1; n=23), Guyana (30.8; n=3), Russia (30.8; n=24); short series such as Guyana (3) are less comparable."
+    },
+    {
+      "title": "Reporting coverage ranges from 10 entities in 1950 to 191 in 2004 and 2005.",
+      "detail": "The reporting count varies sharply in nearby years, including 62 in 2001, 190 in 2002, 55 in 2003, and 191 in 2004.",
+      "caveat": "A change in the yearly average can reflect changing coverage as well as changing observed rates."
+    },
+    {
+      "title": "Only 8 entities report in every year from 1950 through 2005.",
+      "detail": "Their average across annual panel means is 10.67, versus 11.95 across all records.",
+      "caveat": "This fixed panel is a small, selected group and is not representative of the full world population."
+    },
+    {
+      "title": "Year-over-year anomaly rules flag 122 changes by |z| > 2 and 235 by the 1.5\u00d7IQR rule.",
+      "detail": "There are 2,457 consecutive-year country changes; 122 are flagged by both methods.",
+      "caveat": "Flags identify unusual observed changes, not data errors or explanations; missing intervening years are not treated as annual changes."
+    },
+    {
+      "title": "82 observed rates exceed the distribution's Tukey IQR fences.",
+      "detail": "The maximum is 44.35 for Lithuania in 1996; no negative or zero rates occur.",
+      "caveat": "Extreme values are retained because a statistical outlier alone is not evidence of an invalid record."
+    }
+  ]
+}

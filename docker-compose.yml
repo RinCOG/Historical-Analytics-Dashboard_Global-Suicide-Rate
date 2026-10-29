@@ -1,0 +1,19 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_PATH: /app/data/suicide_rates.sqlite
+      CORS_ORIGINS: http://localhost:8080
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "8000:8000"
+  dashboard:
+    build:
+      context: frontend
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
