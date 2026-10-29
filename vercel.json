@@ -10,11 +10,40 @@
       "framework": "vite"
     }
   },
+  "functions": {
+    "backend/main.py": {
+      "includeFiles": "data/**"
+    }
+  },
   "rewrites": [
+    {
+      "source": "/docs(.*)",
+      "destination": {
+        "service": "app"
+      }
+    },
+    {
+      "source": "/redoc(.*)",
+      "destination": {
+        "service": "app"
+      }
+    },
+    {
+      "source": "/openapi.json",
+      "destination": {
+        "service": "app"
+      }
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": {
+        "service": "app"
+      }
+    },
     {
       "source": "/(.*)",
       "destination": {
-        "service": "app"
+        "service": "frontend"
       }
     }
   ]

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Global Suicide Rates: Historical Analytics Dashboard
 
 A descriptive dashboard for the supplied SDG-3 age-adjusted suicide-rate dataset (1950–2005). The data pipeline validates the CSV, produces a pandas analysis report, and loads SQLite for a FastAPI JSON API. The React/TypeScript frontend uses the API for all displayed rates and comparisons.
@@ -104,6 +103,8 @@ docker-compose.yml
 
 OpenAPI UI: `http://localhost:8000/docs`
 
+For Vercel, `vercel.json` routes `/api/*` and the FastAPI documentation paths to the backend service, and all other paths to the Vite frontend. It includes the generated data files in the FastAPI function bundle. The FastAPI build command regenerates `data/analysis_report.json` and the SQLite database from the tracked CSV before deployment. The Vercel warning about FastAPI static-file collection is not used to serve the dashboard: the frontend is built and served by its separate Vite service.
+
 | Endpoint | Output |
 |---|---|
 | `GET /api/v1/kpis?from=1950&to=2005` | Global record mean, annual peak year/value, highest eligible country, entity count |
@@ -162,7 +163,3 @@ Color tokens use calm teal (`#287c68`) and blue (`#647aab`), neutral surfaces, v
 - Former-state records are valid historical source entities, not current countries; they remain available outside the current-country top ranking.
 - No attempt is made to impute missing years, correct outliers, infer causes, or predict future rates.
 - Add newer comparable data beyond 2005, source metadata/versioning, regional and gender breakdowns, population weights if defensible, and a documented sensitivity analysis for alternative panels and coverage thresholds.
-=======
-# Global-Suicide-Rate---Historical-Analytics-Dashboard
-Made by yours truly.
->>>>>>> origin/main
