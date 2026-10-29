@@ -171,9 +171,9 @@ function App() {
   return (
     <div className={darkMode ? 'app theme-dark' : 'app'}>
       <header className="topbar">
-        <a className="brand" href="#main" aria-label="Global health data home">
+        <a className="brand" href="#main" aria-label="Global Health Data home">
           <span className="brand-mark" aria-hidden="true">GH</span>
-          <span>Global health data</span>
+          <span>Global Health Data</span>
         </a>
         <div className="topbar-actions">
           <span className="dataset-badge"><span aria-hidden="true" className="status-dot" /> Historical dataset · 1950—2005</span>
