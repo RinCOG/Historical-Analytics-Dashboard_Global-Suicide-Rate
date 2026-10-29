@@ -2299,7 +2299,7 @@
     },
     {
       "entity": "Hungary",
-      "avg_rate": 29.845399803921573,
+      "avg_rate": 29.845399803921566,
       "years_reported": 51
     },
     {
@@ -2309,17 +2309,17 @@
     },
     {
       "entity": "Latvia",
-      "avg_rate": 27.524057692307696,
+      "avg_rate": 27.524057692307693,
       "years_reported": 26
     },
     {
       "entity": "Kazakhstan",
-      "avg_rate": 25.86096217391304,
+      "avg_rate": 25.860962173913045,
       "years_reported": 23
     },
     {
       "entity": "Belarus",
-      "avg_rate": 25.55377376136364,
+      "avg_rate": 25.553773761363633,
       "years_reported": 22
     },
     {
@@ -2334,7 +2334,7 @@
     },
     {
       "entity": "Ukraine",
-      "avg_rate": 21.59801565217391,
+      "avg_rate": 21.598015652173913,
       "years_reported": 23
     }
   ],
