@@ -7,7 +7,9 @@
     },
     "frontend": {
       "root": "frontend",
-      "framework": "vite"
+      "framework": "vite",
+      "installCommand": "unset NPM_CONFIG_CACHE_DIR npm_config_cache_dir; npm install",
+      "buildCommand": "unset NPM_CONFIG_CACHE_DIR npm_config_cache_dir; npm run build"
     }
   },
   "functions": {
