@@ -119,6 +119,7 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
   const [minYears, setMinYears] = useState(10)
   const [panelSeries, setPanelSeries] = useState<'all' | 'raw' | 'fixed' | 'wide' | 'median'>('all')
   const [activeSection, setActiveSection] = useState('overview')
+  const [paramsInitialized, setParamsInitialized] = useState(false)
 
   const [quality, setQuality] = useState<AnalysisQuality | null>(null)
   const [distribution, setDistribution] = useState<RateDistribution | null>(null)
@@ -137,13 +138,14 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
   const compareRefHolder = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
+    if (!paramsInitialized) return
     let active = true
     setLoading(true)
     const load = async () => {
       const results = await Promise.allSettled([
         api.analysisQuality(),
         api.analysisDistribution(),
-        api.analysisTopCountries(minYears, from, to),
+        api.analysisTopCountries(minYears, 1950, 2005),
         api.analysisTrend(from, to),
         api.analysisDecomposition(entity),
         api.analysisCompareMulti(compareEntities),
@@ -170,7 +172,7 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
     }
     load()
     return () => { active = false }
-  }, [from, to, entity, compareEntities, minYears])
+  }, [from, to, entity, compareEntities, minYears, paramsInitialized])
 
   useEffect(() => {
     const onScroll = () => {
@@ -196,19 +198,31 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
-    const qFrom = Number(params.get('from'))
-    const qTo = Number(params.get('to'))
+    const parseYear = (key: string, fallback: number) => {
+      const raw = params.get(key)
+      const value = raw === null ? fallback : Number(raw)
+      return Number.isInteger(value) ? Math.max(1950, Math.min(2005, value)) : fallback
+    }
+    const qFrom = parseYear('from', 1950)
+    const qTo = parseYear('to', 2005)
     const qEntity = params.get('entity')
     const qCompare = params.get('compare')
     const qMinYears = Number(params.get('min_years'))
-    setFrom(Number.isFinite(qFrom) ? Math.max(1950, Math.min(2005, qFrom)) : 1950)
-    setTo(Number.isFinite(qTo) ? Math.max(1950, Math.min(2005, qTo)) : 2005)
+    if (qFrom <= qTo) {
+      setFrom(qFrom)
+      setTo(qTo)
+    } else {
+      setFrom(1950)
+      setTo(2005)
+    }
     if (qEntity) setEntity(qEntity)
     if (qCompare) setCompareEntities(qCompare)
     if (Number.isFinite(qMinYears) && qMinYears >= 1) setMinYears(Math.min(56, Math.floor(qMinYears)))
+    setParamsInitialized(true)
   }, [])
 
   useEffect(() => {
+    if (!paramsInitialized) return
     const params = new URLSearchParams()
     params.set('from', String(from))
     params.set('to', String(to))
@@ -216,7 +230,7 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
     if (compareEntities) params.set('compare', compareEntities)
     if (minYears) params.set('min_years', String(minYears))
     window.history.replaceState(null, '', `?${params.toString()}`)
-  }, [from, to, entity, compareEntities, minYears])
+  }, [from, to, entity, compareEntities, minYears, paramsInitialized])
 
   const trendChartData = useMemo(() => {
     if (!trend) return [] as Array<Record<string, string | number | null>>
@@ -232,6 +246,10 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
       countries_reporting: row.countries_reporting,
     }))
   }, [trend])
+  const trendYearDomain: [number, number] | ['dataMin', 'dataMax'] = trendChartData.length === 1
+    ? [Number(trendChartData[0].year) - 1, Number(trendChartData[0].year) + 1]
+    : ['dataMin', 'dataMax']
+  const reportingChartData = trend?.reporting_counts ?? []
 
   const peakRows = useMemo(() => {
     if (!trend) return { raw: null, fixed: null, wide: null, median: null }
@@ -386,7 +404,7 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
             {[1, 3, 5, 10, 20, 56].map((value) => <option key={value} value={value}>{value}</option>)}
           </select>
         </div>
-        <ChartWindow eyebrow="C · OBJECTIVE 1 + Q2" title="Top countries by historical mean" caption="Coverage-qualified ranking with minimum-years sensitivity">
+        <ChartWindow eyebrow="C · OBJECTIVE 1 + Q2" title="Top countries by historical mean" caption={`Historical period 1950–2005 · at least ${minYears} reported years`}>
           <div className="chart-wrap" ref={(node) => { topRefHolder.current = node }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={topCountries} layout="vertical" margin={{ top: 0, right: 42, bottom: 0, left: 10 }}>
@@ -434,27 +452,28 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
             {panelSeries === 'all' ? (
               <LineChart data={trendChartData} margin={{ top: 14, right: 18, bottom: 4, left: 0 }}>
                 <CartesianGrid strokeDasharray="3 5" vertical={false} />
-                <XAxis dataKey="year" type="number" domain={['dataMin', 'dataMax']} tickCount={8} />
+                <XAxis dataKey="year" type="number" domain={trendYearDomain} tickCount={trendChartData.length === 1 ? 3 : 8} />
                 <YAxis domain={[0, 'auto']} width={48} />
                 <Tooltip />
                 <Legend />
-                <Line type="monotone" dataKey="raw" name="Raw mean" stroke="var(--accent)" strokeWidth={3} dot={false} />
-                <Line type="monotone" dataKey="fixed" name="Fixed panel" stroke="var(--secondary)" strokeWidth={2} dot={false} strokeDasharray="5 4" />
-                <Line type="monotone" dataKey="wide" name="Wide panel" stroke="var(--accent-dark)" strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="median" name="Median" stroke="#8a6fb8" strokeWidth={2} dot={false} strokeDasharray="2 3" />
+                <Line type="monotone" dataKey="raw" name="Raw mean" stroke="var(--accent)" strokeWidth={3} dot={trendChartData.length === 1 ? { r: 5 } : false} />
+                <Line type="monotone" dataKey="fixed" name="Fixed panel" stroke="var(--secondary)" strokeWidth={2} dot={trendChartData.length === 1 ? { r: 5 } : false} strokeDasharray="5 4" />
+                <Line type="monotone" dataKey="wide" name="Wide panel" stroke="var(--accent-dark)" strokeWidth={2} dot={trendChartData.length === 1 ? { r: 5 } : false} />
+                <Line type="monotone" dataKey="median" name="Median" stroke="#8a6fb8" strokeWidth={2} dot={trendChartData.length === 1 ? { r: 5 } : false} strokeDasharray="2 3" />
               </LineChart>
             ) : (
               <LineChart data={trendChartData} margin={{ top: 14, right: 18, bottom: 4, left: 0 }}>
                 <CartesianGrid strokeDasharray="3 5" vertical={false} />
-                <XAxis dataKey="year" type="number" domain={['dataMin', 'dataMax']} tickCount={8} />
+                <XAxis dataKey="year" type="number" domain={trendYearDomain} tickCount={trendChartData.length === 1 ? 3 : 8} />
                 <YAxis domain={[0, 'auto']} width={48} />
                 <Tooltip />
                 <Legend />
-                <Line type="monotone" dataKey={panelSeries === 'raw' ? 'raw' : panelSeries === 'fixed' ? 'fixed' : panelSeries === 'wide' ? 'wide' : 'median'} name={panelSeries} stroke="var(--accent)" strokeWidth={3} dot={false} />
+                <Line type="monotone" dataKey={panelSeries === 'raw' ? 'raw' : panelSeries === 'fixed' ? 'fixed' : panelSeries === 'wide' ? 'wide' : 'median'} name={panelSeries} stroke="var(--accent)" strokeWidth={3} dot={trendChartData.length === 1 ? { r: 5 } : false} />
               </LineChart>
             )}
           </ResponsiveContainer>
         </div>
+        {trendChartData.length === 1 && <p className="panel-note">Selected year: {trendChartData[0].year} · raw mean {formatRate(Number(trendChartData[0].raw))} per 100,000. Select a wider year range to see the historical trend.</p>}
         <ExportButtons rows={trend.yearly} name="analysis-trend" chartRef={trendRefHolder} />
           <div className="chart-explanation">
             <p>The annual mean rate across reporting entities fluctuates over 1950–2005; the unweighted yearly mean peaks at 14.76 per 100,000 in 1982, when 52 entities reported.</p>
@@ -471,15 +490,16 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
         <ChartWindow eyebrow="D · OBJECTIVE 2 + Q1" title="Reporting counts" caption="Entities reporting per year">
           <div className="chart-wrap" ref={(node) => { trendRefHolder.current = node }}>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={trend.reporting_counts ?? []} margin={{ top: 10, right: 10, bottom: 0, left: -20 }}>
+            <BarChart data={reportingChartData} margin={{ top: 10, right: 10, bottom: 0, left: -20 }}>
               <CartesianGrid strokeDasharray="3 5" vertical={false} />
-              <XAxis dataKey="year" type="number" domain={['dataMin', 'dataMax']} padding={{ left: 0, right: 0 }} />
+              <XAxis dataKey="year" interval="preserveStartEnd" />
               <YAxis allowDecimals={false} />
               <Tooltip />
-              <Bar dataKey="countries_reporting" name="Countries reporting" fill="var(--secondary)" />
+              <Bar dataKey="countries_reporting" name="Countries reporting" fill="var(--secondary)" minPointSize={4} />
             </BarChart>
           </ResponsiveContainer>
         </div>
+          {reportingChartData.length === 1 && <p className="panel-note">Selected year: {reportingChartData[0].year} · {reportingChartData[0].countries_reporting} entities reporting. Choose a wider year range to see the historical trend.</p>}
           <div className="chart-explanation">
             <p>The bar chart shows how many entities reported a suicide rate in each year, from 10 in 1950 to 191 in 2004 and 2005. Coverage is uneven and jumps sharply in nearby years — for example, 62 entities in 2001, 190 in 2002, and 55 in 2003 — meaning annual averages can shift even when underlying rates do not.</p>
           </div>
