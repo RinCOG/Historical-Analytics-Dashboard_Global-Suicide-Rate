@@ -280,16 +280,6 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
           <h1 id="analysis-title">In-Depth Analysis</h1>
           <p className="intro-description">A deeper, evidence-first read of the Global Suicide Rates dashboard: data quality, trends, comparisons, anomalies, and coverage with explicit caveats.</p>
         </div>
-        <div className="range-control" aria-label="Analysis year range">
-          <div className="range-heading">
-            <span className="eyebrow">YEAR RANGE</span>
-            <span className="range-values">{from} — {to}</span>
-          </div>
-          <div className="range-fields">
-            <label>From <input type="number" min="1950" max={to} step="1" value={from} onChange={(event) => setFrom(Math.max(1950, Math.min(to, Number(event.target.value) || 1950)))} aria-label="Start year" /></label>
-            <label>To <input type="number" min={from} max="2005" step="1" value={to} onChange={(event) => setTo(Math.min(2005, Math.max(from, Number(event.target.value) || 2005)))} aria-label="End year" /></label>
-          </div>
-        </div>
       </section>
 
       <nav className="toc" aria-label="In-depth analysis sections">
