@@ -6,9 +6,26 @@ import subprocess
 import sys
 from pathlib import Path
 
+# Ensure the project root is importable (needed on Vercel serverless).
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DB_PATH = ROOT / "data" / "suicide_rates.sqlite"
-CSV_PATH = ROOT / "data" / "SDG-3___suicide-rates-by-country.csv"
+def _csv_candidates() -> list[Path]:
+    return [
+        ROOT / "data" / "SDG-3___suicide-rates-by-country.csv",
+        Path.cwd() / "data" / "SDG-3___suicide-rates-by-country.csv",
+        Path("/tmp") / "data" / "SDG-3___suicide-rates-by-country.csv",
+        Path("/var/task") / "data" / "SDG-3___suicide-rates-by-country.csv",
+    ]
+
+def _find_csv() -> Path | None:
+    for p in _csv_candidates():
+        if p.exists():
+            return p
+    return None
+
+CSV_PATH = _find_csv() or (ROOT / "data" / "SDG-3___suicide-rates-by-country.csv")
 
 
 def _candidate_paths() -> list[Path]:
@@ -28,18 +45,21 @@ def _ensure_db() -> Path:
         if candidate.exists():
             return candidate
     # Fall back: generate the DB from the committed CSV into a writable location.
+    csv = _find_csv()
+    if csv is None:
+        return DEFAULT_DB_PATH
     out_dir = Path("/tmp") / "data"
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / "suicide_rates.sqlite"
     if not out_path.exists():
-        # Run ingest logic by importing and invoking it programmatically.
         try:
             from backend import ingest
-            ingest.ingest(CSV_PATH, out_path)
-        except Exception:
-            # Last resort: shell out to the module.
+            ingest.ingest(csv, out_path)
+        except Exception as e:
+            import logging
+            logging.exception("ingest failed: %s", e)
             subprocess.run(
-                [sys.executable, "-m", "backend.ingest", "--db", str(out_path)],
+                [sys.executable, "-m", "backend.ingest", "--csv", str(csv), "--db", str(out_path)],
                 check=False,
             )
     if out_path.exists():

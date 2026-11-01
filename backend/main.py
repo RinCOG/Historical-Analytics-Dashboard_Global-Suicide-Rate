@@ -1,6 +1,11 @@
 from __future__ import annotations
 
 import os
+import sys
+from pathlib import Path
+
+# Ensure project root is importable on Vercel serverless.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.exceptions import RequestValidationError
@@ -74,6 +79,26 @@ async def request_validation_error_handler(_, exc: RequestValidationError):
         status_code=422,
         content={"error": "validation_error", "message": "Request validation failed.", "details": details},
     )
+
+
+@app.get("/api/v1/health")
+def health():
+    from backend import services, db
+    info = {"status": "ok", "db_path": None, "rows": 0, "error": None}
+    try:
+        path = db._ensure_db()
+        info["db_path"] = str(path)
+        info["db_exists"] = path.exists()
+        if path.exists():
+            conn = db.connect()
+            try:
+                info["rows"] = int(conn.execute("SELECT COUNT(*) FROM suicide_rates").fetchone()[0])
+            finally:
+                conn.close()
+    except Exception as exc:  # pragma: no cover - diagnostic only
+        info["status"] = "error"
+        info["error"] = str(exc)
+    return info
 
 
 @app.get("/api/v1/kpis")
