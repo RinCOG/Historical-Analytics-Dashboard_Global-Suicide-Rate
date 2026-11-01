@@ -6,6 +6,7 @@ from pathlib import Path
 
 # Ensure project root is importable on Vercel serverless.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, os.getcwd())
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.exceptions import RequestValidationError
@@ -21,12 +22,14 @@ app = FastAPI(
     description="Descriptive API for the 1950-2005 country-level dataset. No causal or predictive claims.",
 )
 
-origins = [origin.strip() for origin in os.environ.get("CORS_ORIGINS", "http://localhost:5173").split(",") if origin.strip()]
+origins = [origin.strip() for origin in os.environ.get("CORS_ORIGINS", "*").split(",") if origin.strip()]
+if origins == ["*"]:
+    origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=False,
-    allow_methods=["GET"],
+    allow_methods=["GET", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -84,8 +87,11 @@ async def request_validation_error_handler(_, exc: RequestValidationError):
 @app.get("/api/v1/health")
 def health():
     from backend import services, db
-    info = {"status": "ok", "db_path": None, "rows": 0, "error": None}
+    info = {"status": "ok", "db_path": None, "rows": 0, "error": None, "csv_found": None, "csv_candidates": None}
     try:
+        info["csv_candidates"] = [str(p) for p in db._csv_candidates()]
+        csv = db._find_csv()
+        info["csv_found"] = str(csv) if csv else None
         path = db._ensure_db()
         info["db_path"] = str(path)
         info["db_exists"] = path.exists()

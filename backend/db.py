@@ -47,6 +47,8 @@ def _ensure_db() -> Path:
     # Fall back: generate the DB from the committed CSV into a writable location.
     csv = _find_csv()
     if csv is None:
+        import logging
+        logging.error("CSV not found in any candidate location: %s", _csv_candidates())
         return DEFAULT_DB_PATH
     out_dir = Path("/tmp") / "data"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -62,6 +64,9 @@ def _ensure_db() -> Path:
                 [sys.executable, "-m", "backend.ingest", "--csv", str(csv), "--db", str(out_path)],
                 check=False,
             )
+    if not out_path.exists():
+        import logging
+        logging.error("DB generation failed; out_path=%s", out_path)
     if out_path.exists():
         return out_path
     # If still missing, return the default (will raise FileNotFoundError downstream).

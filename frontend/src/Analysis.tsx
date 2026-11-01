@@ -159,7 +159,8 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
         setAnomalySummary(an)
         setCoverage(cov)
         setFindings(fnd)
-      } catch {
+      } catch (err) {
+        console.error('Analysis data failed to load:', err)
         if (active) {
           setQuality(null)
           setDistribution(null)
