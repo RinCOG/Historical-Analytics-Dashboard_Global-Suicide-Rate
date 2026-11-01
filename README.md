@@ -89,6 +89,7 @@ data/
   suicide_rates.sqlite
 frontend/
   src/App.tsx        # responsive dashboard
+  src/Analysis.tsx   # in-depth analysis page
   src/api.ts         # typed API client
   src/styles.css     # tokens, responsive layout, light/dark theme
   Dockerfile
@@ -115,8 +116,49 @@ For Vercel, `vercel.json` routes `/api/*` and the FastAPI documentation paths to
 | `GET /api/v1/anomalies?entity=Lithuania&method=zscore&threshold=2&from=&to=` | Consecutive-year anomaly changes (`zscore` or `iqr`) |
 | `GET /api/v1/coverage?from=&to=&limit=250&offset=0` | Coverage years, first/last years, and internal gaps |
 | `GET /api/v1/insights` | Analysis findings and caveats |
+| `GET /api/v1/analysis/quality` | Dataset quality checks, Tukey fences, and headline statistics |
+| `GET /api/v1/analysis/distribution` | Rate histogram bins and Tukey outlier rows |
+| `GET /api/v1/analysis/top-countries?min_years=&n=&from=&to=` | Coverage-qualified ranking with minimum-years sensitivity |
+| `GET /api/v1/analysis/trend?from=&to=` | Raw mean, fixed panel, wider panel, median, and reporting counts |
+| `GET /api/v1/analysis/decomposition?entity=` | Year-over-year composition vs within-country effect |
+| `GET /api/v1/analysis/compare-multi?entities=` | Multi-entity comparison rows with global and panel baselines |
+| `GET /api/v1/analysis/anomalies` | Global anomaly summary and flagged rows |
+| `GET /api/v1/analysis/coverage` | Deep coverage rows, tiers, and cohorts |
+| `GET /api/v1/analysis/findings` | Numbered findings register |
 
 Expensive parameterized aggregations are cached in-process; coverage and anomaly/country list routes support pagination as applicable. Invalid inputs return FastAPI JSON validation errors; an unknown entity returns a consistent 404 error. CORS origins are configurable with `CORS_ORIGINS`.
+
+## In-Depth Analysis Page (`/analysis`)
+
+The `/analysis` route is a dedicated, separate page titled **In-Depth Analysis**. It expands the dashboard objectives with explicit evidence, calculation notes, caveats, confidence context, and cross-links back to the main dashboard. The dashboard at `/` is unchanged apart from the "See full analysis" cross-links added to its panels.
+
+### Page sections
+
+1. **A. Overview** - headline statistics (observation mean, median, peak year, top eligible country).
+2. **B. Data foundation and quality** - record-weighted mean vs medians, rate histogram and Tukey outliers, integrity checks.
+3. **C. Objective 1 + Q2** - top countries by historical mean with minimum-years sensitivity.
+4. **D. Objective 2 + Q1** - global trend with raw mean, fixed eight-entity panel, wider panel, median, and reporting counts; peak-year sensitivity.
+5. **E. Objective 3 + Q3** - country vs global baseline comparison.
+6. **F. Objective 4** - anomaly flags (z-score, IQR, both) and flagged rows.
+7. **G. Objective 5** - reporting coverage, tiers, and gaps.
+8. **H. Findings register** - numbered findings with caveats and confidence.
+9. **I. Methods and context** - source, methods, limitations, safe-messaging note, and correlation disclaimer.
+
+### Backend analysis endpoints
+
+All new endpoints live under `/api/v1/analysis/...` and reuse the pandas analysis report plus cached server-side aggregations:
+
+| Endpoint | Output |
+|---|---|
+| `GET /api/v1/analysis/quality` | Quality checks, Tukey fences, summary, coverage counts |
+| `GET /api/v1/analysis/distribution` | Rate histogram and Tukey outlier rows |
+| `GET /api/v1/analysis/top-countries?min_years=&n=&from=&to=` | Top countries by mean with minimum-years sensitivity |
+| `GET /api/v1/analysis/trend?from=&to=` | Multi-series trend (raw, fixed panel, wider panel, median) and reporting counts |
+| `GET /api/v1/analysis/decomposition?entity=` | Composition vs within-country decomposition for year pairs |
+| `GET /api/v1/analysis/compare-multi?entities=` | Multi-entity comparison rows with global and panel baselines |
+| `GET /api/v1/analysis/anomalies` | Anomaly counts, IQR fences, flagged rows |
+| `GET /api/v1/analysis/coverage` | Deep coverage report |
+| `GET /api/v1/analysis/findings` | Findings register |
 
 ## Run locally
 

@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from backend import services
+from backend.analysis import MIN_TOP_COUNTRY_YEARS
 
 app = FastAPI(
     title="Global Suicide Rates: Historical Analytics Dashboard API",
@@ -148,3 +149,64 @@ def coverage(
 @app.get("/api/v1/insights")
 def insights():
     return services.get_insights()
+
+
+
+@app.get("/api/v1/analysis/quality")
+def analysis_quality():
+    return services.get_analysis_quality()
+
+
+@app.get("/api/v1/analysis/distribution")
+def analysis_distribution():
+    return services.get_rate_distribution()
+
+
+@app.get("/api/v1/analysis/top-countries")
+def analysis_top_countries(
+    min_years: int = Query(MIN_TOP_COUNTRY_YEARS, ge=1, le=56),
+    n: int = Query(10, ge=1, le=100),
+    from_year: int = Query(1950, alias="from", ge=1950, le=2005),
+    to_year: int = Query(2005, alias="to", ge=1950, le=2005),
+):
+    start, end = list_range(from_year, to_year)
+    return services.get_top_countries_by_years(min_years, start, end, n)
+
+
+@app.get("/api/v1/analysis/trend")
+def analysis_trend(
+    from_year: int = Query(1950, alias="from", ge=1950, le=2005),
+    to_year: int = Query(2005, alias="to", ge=1950, le=2005),
+):
+    start, end = list_range(from_year, to_year)
+    return services.get_trend_methods(start, end)
+
+
+@app.get("/api/v1/analysis/decomposition")
+def analysis_decomposition(
+    entity: str = Query(..., min_length=1, max_length=100),
+):
+    return services.get_decomposition(entity)
+
+
+@app.get("/api/v1/analysis/compare-multi")
+def analysis_compare_multi(
+    entities: str = Query(..., min_length=1, max_length=200),
+):
+    names = tuple([name.strip() for name in entities.split(",") if name.strip()])
+    return services.get_compare_multi(names)
+
+
+@app.get("/api/v1/analysis/anomalies")
+def analysis_anomalies():
+    return services.get_anomaly_summary()
+
+
+@app.get("/api/v1/analysis/coverage")
+def analysis_coverage():
+    return services.get_coverage_deep()
+
+
+@app.get("/api/v1/analysis/findings")
+def analysis_findings():
+    return services.get_findings()

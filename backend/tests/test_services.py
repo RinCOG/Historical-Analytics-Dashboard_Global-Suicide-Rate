@@ -9,11 +9,19 @@ from backend.analysis import CSV_PATH, analyze, load_and_validate
 from backend.ingest import ingest
 from backend.services import (
     get_anomalies,
+    get_analysis_quality,
     get_compare,
+    get_compare_multi,
     get_coverage,
+    get_decomposition,
+    get_coverage_deep,
+    get_findings,
     get_global_trend,
     get_kpis,
     get_top_countries,
+    get_top_countries_by_years,
+    get_trend_methods,
+    get_rate_distribution,
 )
 
 
@@ -81,6 +89,109 @@ class DashboardDataTests(unittest.TestCase):
             "Australia", "Canada", "Ireland", "Japan", "Netherlands", "New Zealand",
             "United Kingdom", "United States",
         ])
+
+
+class AnalysisEndpointsTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.temp_dir = tempfile.TemporaryDirectory()
+        cls.db_path = Path(cls.temp_dir.name) / "test.sqlite"
+        ingest(CSV_PATH, cls.db_path)
+        cls.previous_db_path = os.environ.get("DATABASE_PATH")
+        os.environ["DATABASE_PATH"] = str(cls.db_path)
+        for function in (
+            get_anomalies,
+            get_analysis_quality,
+            get_compare_multi,
+            get_coverage_deep,
+            get_findings,
+            get_kpis,
+            get_top_countries_by_years,
+            get_trend_methods,
+            get_rate_distribution,
+        ):
+            function.cache_clear()
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls.previous_db_path is None:
+            os.environ.pop("DATABASE_PATH", None)
+        else:
+            os.environ["DATABASE_PATH"] = cls.previous_db_path
+        cls.temp_dir.cleanup()
+
+    def test_analysis_quality_reference_figures(self):
+        quality = get_analysis_quality()
+        self.assertEqual(quality["row_count"], 2843)
+        self.assertEqual(quality["entity_count"], 196)
+        self.assertEqual(quality["iso_entity_count"], 190)
+        self.assertEqual(quality["former_state_entities"]["USSR"], "OWID_USS")
+        self.assertAlmostEqual(float(quality["summary"]["mean"]), 11.9502369786, places=8)
+        self.assertEqual(quality["summary"]["global_peak_year"], 1982)
+        self.assertAlmostEqual(float(quality["summary"]["global_peak_avg_rate"]), 14.7637322846, places=8)
+        self.assertEqual(int(quality["quality"]["rate_outlier_count"]), 82)
+
+    def test_rate_distribution_outliers_and_fences(self):
+        distribution = get_rate_distribution()
+        self.assertEqual(len(distribution["outliers"]), 82)
+        maximum = max(distribution["outliers"], key=lambda row: row["rate"])
+        self.assertEqual(maximum["entity"], "Lithuania")
+        self.assertEqual(maximum["year"], 1996)
+        self.assertAlmostEqual(float(maximum["rate"]), 44.35, places=2)
+        self.assertEqual(len(distribution["histogram"]), 9)
+        self.assertEqual(len(distribution["rate_iqr_fences"]), 2)
+
+    def test_trend_methods_panel_definitions_and_peaks(self):
+        trend = get_trend_methods(1950, 2005)
+        self.assertEqual(trend["from"], 1950)
+        self.assertEqual(trend["to"], 2005)
+        self.assertEqual(len(trend["yearly"]), 56)
+        self.assertEqual(len(trend["fixed_panel"]), 56)
+        self.assertEqual(len(trend["wide_panel"]), 56)
+        self.assertEqual(len(trend["median"]), 56)
+        self.assertEqual(len(trend["reporting_counts"]), 56)
+        self.assertEqual(
+            trend["panel_entities"],
+            [
+                "Australia", "Canada", "Ireland", "Japan", "Netherlands", "New Zealand",
+                "United Kingdom", "United States",
+            ],
+        )
+        raw_peak = max(trend["yearly"], key=lambda row: row["avg_rate"])
+        fixed_peak = max(trend["fixed_panel"], key=lambda row: row["avg_rate"])
+        wide_peak = max(trend["wide_panel"], key=lambda row: row["avg_rate"])
+        self.assertEqual(raw_peak["year"], 1982)
+        self.assertAlmostEqual(float(raw_peak["avg_rate"]), 14.76, places=2)
+        self.assertEqual(fixed_peak["year"], 1998)
+        self.assertAlmostEqual(float(fixed_peak["avg_rate"]), 12.21, places=2)
+        self.assertEqual(wide_peak["year"], 1984)
+
+    def test_decomposition_components_sum_to_total_change(self):
+        decomposition = get_decomposition("Lithuania")
+        pairs = decomposition["pairs"]
+        self.assertTrue(any((pair["from_year"], pair["to_year"]) == (2000, 2002) for pair in pairs))
+        self.assertTrue(any((pair["from_year"], pair["to_year"]) == (2003, 2004) for pair in pairs))
+        for pair in pairs:
+            self.assertAlmostEqual(
+                float(pair["within_effect"]) + float(pair["composition_effect"]),
+                float(pair["total_change"]),
+                places=6,
+            )
+
+    def test_top_countries_min_years_sensitivity(self):
+        default_top = get_top_countries_by_years(10, 1950, 2005, 10)
+        self.assertEqual(default_top[0]["entity"], "Lithuania")
+        low_threshold_top = get_top_countries_by_years(3, 1950, 2005, 10)
+        self.assertTrue(any(row["entity"] == "Guyana" for row in low_threshold_top))
+
+    def test_findings_register_shape(self):
+        findings = get_findings()
+        self.assertEqual(len(findings), 7)
+        self.assertEqual(findings[0]["number"], 1)
+        for finding in findings:
+            self.assertTrue(
+                {"number", "title", "detail", "caveat", "confidence", "section"} <= set(finding)
+            )
 
 
 if __name__ == "__main__":

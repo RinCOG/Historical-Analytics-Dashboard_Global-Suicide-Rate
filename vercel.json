@@ -44,6 +44,12 @@
       }
     },
     {
+      "source": "/analysis",
+      "destination": {
+        "service": "frontend"
+      }
+    },
+    {
       "source": "/(.*)",
       "destination": {
         "service": "frontend"

@@ -12,6 +12,7 @@ import {
   BarChart,
 } from 'recharts'
 import { api, type Anomaly, type CompareRow, type Country, type Coverage, type Insight, type KPI, type TopCountry, type TrendRow } from './api'
+import Analysis from './Analysis'
 
 const ALL_YEARS = { from: 1950, to: 2005 }
 type DashboardData = {
@@ -130,6 +131,8 @@ function App() {
   const topRef = useRef<HTMLDivElement>(null)
   const compareRef = useRef<HTMLDivElement>(null)
   const coverageRef = useRef<HTMLDivElement>(null)
+  const [route, setRoute] = useState<'dashboard' | 'analysis'>('dashboard')
+  const [analysisSection, setAnalysisSection] = useState<string | null>(null)
 
   useEffect(() => {
     api.countries().then((countries) => {
@@ -168,13 +171,18 @@ function App() {
   const updateFrom = (value: number) => setRange((current) => ({ ...current, from: Math.max(1950, Math.min(Math.trunc(value || 1950), current.to)) }))
   const updateTo = (value: number) => setRange((current) => ({ ...current, to: Math.min(2005, Math.max(Math.trunc(value || 2005), current.from)) }))
 
+  const openAnalysis = (section: string) => {
+    setAnalysisSection(section)
+    setRoute('analysis')
+  }
+
   return (
     <div className={darkMode ? 'app theme-dark' : 'app'}>
       <header className="topbar">
-        <a className="brand" href="#main" aria-label="Global Health Data home">
-          <span className="brand-mark" aria-hidden="true">GH</span>
-          <span>Global Health Data</span>
-        </a>
+        <div className="topnav" role="navigation" aria-label="Dashboard and analysis">
+          <button type="button" className={route === 'dashboard' ? 'topnav-link active' : 'topnav-link'} onClick={() => setRoute('dashboard')}>Dashboard</button>
+          <button type="button" className={route === 'analysis' ? 'topnav-link active' : 'topnav-link'} onClick={() => setRoute('analysis')}>In-Depth Analysis</button>
+        </div>
         <div className="topbar-actions">
           <span className="dataset-badge"><span aria-hidden="true" className="status-dot" /> Historical dataset · 1950—2005</span>
           <button className="theme-toggle" onClick={() => setDarkMode((value) => !value)} aria-label={`Switch to ${darkMode ? 'light' : 'dark'} theme`}>
@@ -183,10 +191,12 @@ function App() {
         </div>
       </header>
 
+      {route === 'analysis' ? (
+        <Analysis focusSection={analysisSection} />
+      ) : (
       <main id="main" className="dashboard">
         <section className="page-intro" aria-labelledby="page-title">
           <div className="intro-copy">
-            <p className="eyebrow">PUBLIC HEALTH · HISTORICAL INDICATORS</p>
             <h1 id="page-title">Global Suicide Rates:<br /><span>Historical Analytics Dashboard</span></h1>
             <p className="intro-description">A descriptive view of reported age-adjusted rates to support careful comparison and resource planning.</p>
           </div>
@@ -232,6 +242,7 @@ function App() {
             </ResponsiveContainer>
           </div>
           <div className="chart-footnote"><span className="legend-key" /> Annual average <span className="legend-dash" /> Selected-period observation mean ({data.kpis ? formatRate(data.kpis.global_avg) : '—'}) <span className="footnote-spacer" /> Annual reporting count is in the CSV export.</div>
+          <p className="panel-note"><button type="button" className="see-full-link" onClick={() => openAnalysis('trend')}>See full analysis</button> for the expanded global trend, calculation notes, and reporting context.</p>
         </section>
 
         <section className="panel" aria-labelledby="top-title">
@@ -248,6 +259,7 @@ function App() {
             </ResponsiveContainer>
           </div>
           <p className="panel-note">A minimum of 10 observed years reduces rankings driven by sparse series. It excludes Guyana (3 observations), which ranks second if all means are shown without a coverage rule.</p>
+          <p className="panel-note"><button type="button" className="see-full-link" onClick={() => openAnalysis('top')}>See full analysis</button> for the expanded ranking methodology and year-sensitivity controls.</p>
         </section>
 
         <div className="two-column">
@@ -274,9 +286,9 @@ function App() {
                 </LineChart>
               </ResponsiveContainer>
             </div>
-            {selectedCountry && <p className="panel-note">Code: {selectedCountry.code}. Lines are shown only for years where {selectedEntity} has a reported rate.</p>}
+            {selectedCountry && <p className="panel-note"><strong>{selectedCountry.code}</strong><br />Lines are shown only for years where {selectedEntity} has a reported rate.</p>}
           </section>
-
+          
           <section className="panel anomaly-panel" aria-labelledby="anomaly-title">
             <div className="panel-heading">
               <div><p className="eyebrow">04 · YEAR-OVER-YEAR ANOMALIES</p><h2 id="anomaly-title">Unusual annual changes</h2><p className="panel-caption">For {selectedEntity} · pooled z-score threshold |z| &gt; 2</p></div>
@@ -287,7 +299,7 @@ function App() {
             </tbody></table></div> : <div className="empty-state">No flagged consecutive-year changes for this entity in the selected range.</div>}
             <p className="panel-note">Z-scores are standardized against all consecutive-year entity changes. Sparse or missing years are not interpolated.</p>
           </section>
-        </div>
+                  </div>
 
         <section className="panel" aria-labelledby="coverage-title">
           <PanelHeader eyebrow="05 · DATA AVAILABILITY" title="Reporting coverage by entity" caption={`Observed years within ${range.from}–${range.to} · gaps count missing years between first and last report`} rows={data.coverage} name="reporting-coverage" chartRef={coverageRef} />
@@ -305,20 +317,21 @@ function App() {
             </div>
           </div>
           <p className="panel-note">All entities are shown, including those with no reports in the selected range. Download CSV for first/last year and internal gap counts.</p>
-        </section>
+                  </section>
 
         <section className="insights-section" aria-labelledby="insights-title">
           <div className="insights-intro"><p className="eyebrow">ANALYSIS SUMMARY</p><h2 id="insights-title">Key insights</h2><p>Each finding is descriptive and includes a coverage or interpretation caveat.</p></div>
           <div className="insights-list">{data.insights.map((insight, index) => <article className="insight-card" key={insight.title}><span className="insight-number">{String(index + 1).padStart(2, '0')}</span><div><h3>{insight.title}</h3><p>{insight.detail}</p><p className="caveat"><strong>Caveat</strong> {insight.caveat}</p></div></article>)}</div>
-        </section>
+                  </section>
 
         <section className="about-panel" aria-labelledby="about-title">
           <div><p className="eyebrow">METHOD & SOURCE</p><h2 id="about-title">About the data</h2></div>
           <div className="about-content">
-            <p><strong>Source:</strong> SDG-3 suicide rates by country, age-adjusted suicides per 100,000 people. Analysis accessed October 23, 2026. Data range: 1950–2005.</p>
+            <p><strong>Source:</strong> SDG-3 suicide rates by country, age-adjusted suicides per 100,000 people. Original dataset: <a href="https://github.com/liadkeller/Suicides-Data-Analysis-DSE200X/blob/master/suicide-rates-by-country.csv" target="_blank" rel="noreferrer">Suicides Data Analysis (liadkeller/Suicides-Data-Analysis-DSE200X)<span className="sr-only"> (opens in a new tab)</span></a>. Analysis accessed October 23, 2026. Data range: 1950–2005.</p>
             <p><strong>Method:</strong> Yearly averages are unweighted means of entities with an observation in that year. Country ranking requires at least 10 observations; six former-state entities with publisher-specific codes remain available in historical views but are not ranked as current countries.</p>
             <p><strong>Limitations:</strong> Data ends in 2005; country coverage and years reported are uneven. Outliers are retained. The data are descriptive only; no causal or predictive claims are made. Correlation does not establish causation.</p>
           </div>
+          <p className="panel-note"><button type="button" className="see-full-link" onClick={() => openAnalysis('methods')}>See full analysis</button> for methods, limitations, and context.</p>
         </section>
 
         <footer className="footer">
@@ -326,6 +339,7 @@ function App() {
           <span>Historical public health data · Use with care</span>
         </footer>
       </main>
+      )}
     </div>
   )
 }

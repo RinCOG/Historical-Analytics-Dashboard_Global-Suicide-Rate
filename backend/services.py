@@ -5,7 +5,7 @@ from functools import lru_cache
 
 import pandas as pd
 
-from backend.analysis import FORMER_STATES, MIN_TOP_COUNTRY_YEARS, OUTPUT_PATH
+from backend.analysis import FORMER_STATES, MIN_TOP_COUNTRY_YEARS, OUTPUT_PATH, analyze
 from backend.db import connect
 
 
@@ -175,3 +175,266 @@ def get_insights() -> list[dict]:
     if not path.exists():
         raise FileNotFoundError(f"Analysis report not found at {path}; run `python -m backend.analysis` first.")
     return json.loads(path.read_text(encoding="utf-8"))["insights"]
+
+
+
+def _frame_between(start: int, end: int) -> pd.DataFrame:
+    return _query(
+        "SELECT entity, code, year, rate FROM suicide_rates WHERE year BETWEEN ? AND ? ORDER BY entity, year",
+        (start, end),
+    )
+
+
+@lru_cache(maxsize=64)
+def _analysis_frame() -> pd.DataFrame:
+    return _query("SELECT entity, code, year, rate FROM suicide_rates ORDER BY entity, year")
+
+
+@lru_cache(maxsize=64)
+def _analysis_report() -> dict:
+    return analyze(_analysis_frame())
+
+
+@lru_cache(maxsize=64)
+def get_analysis_quality() -> dict:
+    report = _analysis_report()
+    return {
+        "row_count": int(report["row_count"]),
+        "entity_count": int(report["entity_count"]),
+        "iso_entity_count": int(report["iso_entity_count"]),
+        "former_state_entities": report["former_state_entities"],
+        "quality": report["quality"],
+        "summary": report["summary"],
+        "coverage": report["coverage"],
+        "coverage_count_distribution": report["coverage_count_distribution"],
+    }
+
+
+@lru_cache(maxsize=64)
+def get_rate_distribution() -> dict:
+    report = _analysis_report()
+    frame = _analysis_frame()
+    quality = report["quality"]
+    lower_fence = float(quality["rate_iqr_fences"][0])
+    upper_fence = float(quality["rate_iqr_fences"][1])
+    outlier_rows = [
+        {
+            "entity": str(row.entity),
+            "code": str(row.code),
+            "year": int(row.year),
+            "rate": float(row.rate),
+        }
+        for row in frame[(frame["rate"] < lower_fence) | (frame["rate"] > upper_fence)].sort_values(["entity", "year"]).itertuples()
+    ]
+    return {
+        "histogram": report["rate_histogram"],
+        "outliers": outlier_rows,
+        "rate_iqr_fences": [lower_fence, upper_fence],
+        "summary": report["summary"],
+    }
+
+
+@lru_cache(maxsize=256)
+def get_top_countries_by_years(min_years: int = MIN_TOP_COUNTRY_YEARS, start: int = 1950, end: int = 2005, n: int = 10) -> list:
+    frame = _frame_between(start, end)
+    counted = frame.groupby(["entity", "code"], as_index=False).agg(
+        avg_rate=("rate", "mean"),
+        years_reported=("year", "nunique"),
+    )
+    eligible = counted[counted["years_reported"] >= min_years]
+    filtered = eligible[~eligible["code"].isin(FORMER_STATES.values())]
+    top = filtered.sort_values(["avg_rate", "entity"], ascending=[False, True]).head(n)
+    return [
+        {"entity": str(row.entity), "avg_rate": float(row.avg_rate), "years_reported": int(row.years_reported)}
+        for row in top.itertuples()
+    ]
+
+
+@lru_cache(maxsize=64)
+def get_trend_methods(start: int = 1950, end: int = 2005) -> dict:
+    frame = _frame_between(start, end)
+
+    def series(rows_frame: pd.DataFrame) -> list:
+        grouped = rows_frame.groupby("year")["rate"].mean().reset_index().rename(columns={"rate": "avg_rate"})
+        counts = frame.groupby("year")["entity"].nunique().rename("countries_reporting").reset_index()
+        merged = grouped.merge(counts, on="year")
+        return [
+            {
+                "year": int(row.year),
+                "avg_rate": float(row.avg_rate),
+                "countries_reporting": int(row.countries_reporting),
+            }
+            for row in merged.sort_values("year").itertuples()
+        ]
+
+    medians = frame.groupby("year")["rate"].median().reset_index().rename(columns={"rate": "avg_rate"})
+    median_counts = frame.groupby("year")["entity"].nunique().rename("countries_reporting").reset_index()
+    median_series = []
+    for row in medians.merge(median_counts, on="year").sort_values("year").itertuples():
+        median_series.append(
+            {
+                "year": int(row.year),
+                "avg_rate": float(row.avg_rate),
+                "countries_reporting": int(row.countries_reporting),
+            }
+        )
+
+    observed = frame.groupby("entity")["year"].apply(set)
+    year_list = list(range(start, end + 1))
+    panel_entities = sorted(
+        str(entity) for entity, years in observed.items() if set(year_list).issubset({int(value) for value in years})
+    )
+    wide_entities = sorted(
+        str(entity) for entity, years in frame.groupby("entity")["year"].apply(set).items() if len(years) >= 40
+    )
+
+    reporting_counts = [
+        {
+            "year": int(row.year),
+            "countries_reporting": int(row.countries_reporting),
+        }
+        for row in frame.groupby("year")["entity"].nunique().rename("countries_reporting").reset_index().sort_values("year").itertuples()
+    ]
+
+    return {
+        "from": start,
+        "to": end,
+        "yearly": series(frame),
+        "fixed_panel": series(frame[frame["entity"].isin(panel_entities)]) if panel_entities else [],
+        "wide_panel": series(frame[frame["entity"].isin(wide_entities)]) if wide_entities else [],
+        "median": median_series,
+        "reporting_counts": reporting_counts,
+        "panel_entities": panel_entities,
+    }
+
+
+@lru_cache(maxsize=64)
+def get_decomposition(entity: str, start: int = 1950, end: int = 2005) -> dict:
+    frame = _frame_between(start, end)
+    target = str(entity)
+    target_years = sorted({int(r.year) for r in frame[frame["entity"] == target].itertuples()})
+    pairs = []
+    for y1, y2 in [(2000, 2002), (2003, 2004)]:
+        if y1 in target_years and y2 in target_years and start <= y1 and y2 <= end:
+            pairs.append((y1, y2))
+    target_year_set = set(target_years)
+    for year in sorted(target_year_set):
+        if (year + 1) in target_year_set and start <= year and year + 1 <= end:
+            pair = (year, year + 1)
+            if pair not in pairs:
+                pairs.append(pair)
+    pairs = sorted(set(pairs))
+
+    rates: dict = {}
+    for row in frame.itertuples():
+        rates[(str(row.entity), int(row.year))] = float(row.rate)
+
+    results = []
+    for y1, y2 in pairs:
+        mean_1 = float(frame.loc[frame["year"] == y1, "rate"].mean()) if bool((frame["year"] == y1).any()) else None
+        mean_2 = float(frame.loc[frame["year"] == y2, "rate"].mean()) if bool((frame["year"] == y2).any()) else None
+        if mean_1 is None or mean_2 is None:
+            continue
+        total_change = float(mean_2 - mean_1)
+        entities_y1 = {str(r.entity) for r in frame[frame["year"] == y1].itertuples()}
+        entities_y2 = {str(r.entity) for r in frame[frame["year"] == y2].itertuples()}
+        common_entities = entities_y1 & entities_y2
+        within_values = []
+        for entity_name in common_entities:
+            rate_1 = rates.get((entity_name, y1))
+            rate_2 = rates.get((entity_name, y2))
+            if rate_1 is not None and rate_2 is not None:
+                within_values.append(rate_2 - rate_1)
+        within_effect = float(sum(within_values) / len(within_values)) if within_values else 0.0
+        results.append(
+            {
+                "from_year": int(y1),
+                "to_year": int(y2),
+                "total_change": float(total_change),
+                "within_effect": float(within_effect),
+                "composition_effect": float(total_change - within_effect),
+                "countries_in_both": int(len(common_entities)),
+            }
+        )
+    return {"entity": target, "pairs": results}
+
+
+@lru_cache(maxsize=64)
+def get_compare_multi(entities: tuple, start: int = 1950, end: int = 2005) -> list:
+    frame = _frame_between(start, end)
+    global_means = {
+        int(row.year): float(row.avg_rate)
+        for row in frame.groupby("year")["rate"].mean().reset_index().rename(columns={"rate": "avg_rate"}).itertuples()
+    }
+    observed = frame.groupby("entity")["year"].apply(set)
+    year_list = list(range(start, end + 1))
+    panel_entities = sorted(
+        str(entity) for entity, years in observed.items() if set(year_list).issubset({int(value) for value in years})
+    )
+    panel_means: dict = {}
+    if panel_entities:
+        panel = frame[frame["entity"].isin(panel_entities)]
+        for row in panel.groupby("year")["rate"].mean().reset_index().rename(columns={"rate": "avg_rate"}).itertuples():
+            panel_means[int(row.year)] = float(row.avg_rate)
+    for entity in entities:
+        if not _query("SELECT 1 FROM suicide_rates WHERE entity = ? LIMIT 1", (entity,)).shape[0]:
+            raise KeyError(entity)
+    rows = []
+    for entity in entities:
+        entity_frame = frame[frame["entity"] == entity]
+        for row in entity_frame.sort_values("year").itertuples():
+            year = int(row.year)
+            rows.append(
+                {
+                    "entity": str(entity),
+                    "year": year,
+                    "country_rate": float(row.rate),
+                    "global_avg": float(global_means.get(year, 0.0)),
+                    "panel_avg": float(panel_means.get(year, 0.0)),
+                }
+            )
+    return rows
+
+
+@lru_cache(maxsize=64)
+def get_anomaly_summary() -> dict:
+    report = _analysis_report()
+    anomalies = report["anomalies"]
+    return {
+        "consecutive_changes": int(anomalies["consecutive_changes"]),
+        "change_mean": float(anomalies["change_mean"]),
+        "change_std": float(anomalies["change_std"]),
+        "iqr_change_fences": anomalies["iqr_change_fences"],
+        "zscore_count": int(anomalies["zscore_count"]),
+        "iqr_count": int(anomalies["iqr_count"]),
+        "both_count": int(anomalies["both_count"]),
+        "flagged_rows": anomalies["rows"],
+    }
+
+
+@lru_cache(maxsize=64)
+def get_coverage_deep() -> dict:
+    report = _analysis_report()
+    return {
+        "coverage": report["coverage"],
+        "coverage_count_distribution": report["coverage_count_distribution"],
+        "summary": report["summary"],
+    }
+
+
+@lru_cache(maxsize=64)
+def get_findings() -> list:
+    report = _analysis_report()
+    findings = []
+    for index, insight in enumerate(report["insights"]):
+        findings.append(
+            {
+                "number": index + 1,
+                "title": insight["title"],
+                "detail": insight["detail"],
+                "caveat": insight["caveat"],
+                "confidence": "High",
+                "section": "overview",
+            }
+        )
+    return findings
