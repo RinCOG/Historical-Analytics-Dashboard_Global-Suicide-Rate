@@ -129,6 +129,8 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
   const [anomalySummary, setAnomalySummary] = useState<AnomalySummary | null>(null)
   const [coverage, setCoverage] = useState<CoverageDeep | null>(null)
   const [findings, setFindings] = useState<Finding[]>([])
+  const [loadErrors, setLoadErrors] = useState<string[]>([])
+  const [loading, setLoading] = useState(true)
 
   const trendRefHolder = useRef<HTMLDivElement | null>(null)
   const topRefHolder = useRef<HTMLDivElement | null>(null)
@@ -136,43 +138,35 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
 
   useEffect(() => {
     let active = true
+    setLoading(true)
     const load = async () => {
-      try {
-        const [q, d, top, tr, dec, cmp, an, cov, fnd] = await Promise.all([
-          api.analysisQuality(),
-          api.analysisDistribution(),
-          api.analysisTopCountries(minYears, from, to),
-          api.analysisTrend(from, to),
-          api.analysisDecomposition(entity),
-          api.analysisCompareMulti(compareEntities),
-          api.analysisAnomalies(),
-          api.analysisCoverage(),
-          api.analysisFindings(),
-        ])
-        if (!active) return
-        setQuality(q)
-        setDistribution(d)
-        setTopCountries(top)
-        setTrend(tr)
-        setDecomposition(dec)
-        setCompare(cmp)
-        setAnomalySummary(an)
-        setCoverage(cov)
-        setFindings(fnd)
-      } catch (err) {
-        console.error('Analysis data failed to load:', err)
-        if (active) {
-          setQuality(null)
-          setDistribution(null)
-          setTopCountries([])
-          setTrend(null)
-          setDecomposition(null)
-          setCompare([])
-          setAnomalySummary(null)
-          setCoverage(null)
-          setFindings([])
-        }
-      }
+      const results = await Promise.allSettled([
+        api.analysisQuality(),
+        api.analysisDistribution(),
+        api.analysisTopCountries(minYears, from, to),
+        api.analysisTrend(from, to),
+        api.analysisDecomposition(entity),
+        api.analysisCompareMulti(compareEntities),
+        api.analysisAnomalies(),
+        api.analysisCoverage(),
+        api.analysisFindings(),
+      ])
+      if (!active) return
+      const [q, d, top, tr, dec, cmp, an, cov, fnd] = results
+      setQuality(q.status === 'fulfilled' ? q.value : null)
+      setDistribution(d.status === 'fulfilled' ? d.value : null)
+      setTopCountries(top.status === 'fulfilled' ? top.value : [])
+      setTrend(tr.status === 'fulfilled' ? tr.value : null)
+      setDecomposition(dec.status === 'fulfilled' ? dec.value : null)
+      setCompare(cmp.status === 'fulfilled' ? cmp.value : [])
+      setAnomalySummary(an.status === 'fulfilled' ? an.value : null)
+      setCoverage(cov.status === 'fulfilled' ? cov.value : null)
+      setFindings(fnd.status === 'fulfilled' ? fnd.value : [])
+      const names = ['quality', 'distribution', 'top countries', 'trend', 'decomposition', 'comparison', 'anomalies', 'coverage', 'findings']
+      setLoadErrors(results.flatMap((result, index) => result.status === 'rejected'
+        ? [`${names[index]}: ${result.reason instanceof Error ? result.reason.message : String(result.reason)}`]
+        : []))
+      setLoading(false)
     }
     load()
     return () => { active = false }
@@ -261,9 +255,10 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
           <div className="panel-heading">
             <div>
               <h2>In-Depth Analysis</h2>
-              <p className="panel-caption">Loading the expanded analytical view…</p>
+              <p className="panel-caption">{loading ? 'Loading the expanded analytical view…' : 'Some required analysis data could not be loaded.'}</p>
             </div>
           </div>
+          {loadErrors.length > 0 && <div role="alert" className="error-banner"><strong>API loading errors</strong><ul>{loadErrors.map((error) => <li key={error}>{error}</li>)}</ul></div>}
         </section>
       </main>
     )
@@ -282,6 +277,7 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
           <p className="intro-description">A deeper, evidence-first read of the Global Suicide Rates dashboard: data quality, trends, comparisons, anomalies, and coverage with explicit caveats.</p>
         </div>
       </section>
+      {loadErrors.length > 0 && <div role="alert" className="error-banner"><strong>Some analysis sections could not load</strong><ul>{loadErrors.map((error) => <li key={error}>{error}</li>)}</ul></div>}
 
       <nav className="toc" aria-label="In-depth analysis sections">
         <div className="toc-sticky">
@@ -303,7 +299,7 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
           <article className="kpi-card"><div className="kpi-label">Observation mean</div><div className="kpi-value">{formatRate(summary.mean)}</div><div className="kpi-unit">per 100,000 · across records</div></article>
           <article className="kpi-card"><div className="kpi-label">Median</div><div className="kpi-value">{formatRate(summary.median)}</div><div className="kpi-unit">per 100,000</div></article>
           <article className="kpi-card"><div className="kpi-label">Peak year</div><div className="kpi-value">{summary.global_peak_year}</div><div className="kpi-unit">{formatRate(summary.global_peak_avg_rate)} per 100,000</div></article>
-          <article className="kpi-card"><div className="kpi-label">Top eligible country</div><div className="kpi-value kpi-country">{topCountries[0]?.entity ?? '—'}</div><div className="kpi-unit">{topCountries[0] ? `${formatRate(topCountries[0].avg_rate)} mean · ${topCountries[0].years_reported} yrs` : 'Requires 10+ observations'}</div></article>
+          <article className="kpi-card"><div className="kpi-label">Top eligible country</div><div className="kpi-value kpi-country">{topCountries[0]?.entity ?? '—'}</div><div className="kpi-unit">{topCountries[0] ? `${formatRate(topCountries[0].avg_rate)} mean · ${topCountries[0].years_reported} yr` : 'Requires 10+ observations'}</div></article>
         </div>
         <p className="panel-note">How to read this page: each objective pairs a short answer with visual evidence, calculation notes, caveats, and a link back to the dashboard panel. Headline figures are means of country-year observations, not world rates.</p>
       </section>

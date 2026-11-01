@@ -121,8 +121,8 @@ function PanelHeader({ eyebrow, title, caption, rows, name, chartRef }: {
 
 function App() {
   const [range, setRange] = useState(ALL_YEARS)
-  const [selectedEntity, setSelectedEntity] = useState('')
-  const [search, setSearch] = useState('')
+  const [selectedEntity, setSelectedEntity] = useState('Lithuania')
+  const [search, setSearch] = useState('Lithuania')
   const [darkMode, setDarkMode] = useState(false)
   const [data, setData] = useState(emptyData)
   const [loading, setLoading] = useState(true)
@@ -135,14 +135,28 @@ function App() {
   const [analysisSection, setAnalysisSection] = useState<string | null>(null)
 
   useEffect(() => {
-    api.countries().then((countries) => {
-      setData((current) => ({ ...current, countries }))
-      const defaultCountry = countries.find((country) => country.entity === 'Lithuania')?.entity ?? countries[0]?.entity ?? ''
-      setSelectedEntity((current) => current || defaultCountry)
-      setSearch((current) => current || defaultCountry)
-    }).catch((caught: Error) => setError(caught.message))
-    api.insights().then((insights) => setData((current) => ({ ...current, insights })))
-      .catch((caught: Error) => setError(caught.message))
+    let active = true
+    Promise.allSettled([api.countries(), api.insights()]).then(([countriesResult, insightsResult]) => {
+      if (!active) return
+      const failures: string[] = []
+      if (countriesResult.status === 'fulfilled') {
+        setData((current) => ({ ...current, countries: countriesResult.value }))
+        const defaultCountry = countriesResult.value.find((country) => country.entity === 'Lithuania')?.entity ?? countriesResult.value[0]?.entity ?? ''
+        if (defaultCountry) {
+          setSelectedEntity((current) => current || defaultCountry)
+          setSearch((current) => current || defaultCountry)
+        }
+      } else {
+        failures.push(`countries: ${countriesResult.reason instanceof Error ? countriesResult.reason.message : String(countriesResult.reason)}`)
+      }
+      if (insightsResult.status === 'fulfilled') {
+        setData((current) => ({ ...current, insights: insightsResult.value }))
+      } else {
+        failures.push(`insights: ${insightsResult.reason instanceof Error ? insightsResult.reason.message : String(insightsResult.reason)}`)
+      }
+      if (failures.length) setError(failures.join(' · '))
+    })
+    return () => { active = false }
   }, [])
 
   useEffect(() => {
@@ -150,17 +164,34 @@ function App() {
     let active = true
     setLoading(true)
     setError('')
-    Promise.all([
+    Promise.allSettled([
       api.kpis(range.from, range.to),
       api.trend(range.from, range.to),
       api.top(range.from, range.to),
       api.compare(selectedEntity, range.from, range.to),
       api.anomalies(selectedEntity, range.from, range.to),
       api.coverage(range.from, range.to),
-    ]).then(([kpis, trend, top, compare, anomalies, coverage]) => {
-      if (active) setData((current) => ({ ...current, kpis, trend, top, compare, anomalies, coverage }))
-    }).catch((caught: Error) => {
-      if (active) setError(caught.message)
+    ]).then(([kpisResult, trendResult, topResult, compareResult, anomaliesResult, coverageResult]) => {
+      if (!active) return
+      const updates: Partial<DashboardData> = {}
+      const failures: string[] = []
+      const addFailure = (name: string, reason: unknown) => {
+        failures.push(`${name}: ${reason instanceof Error ? reason.message : String(reason)}`)
+      }
+      if (kpisResult.status === 'fulfilled') updates.kpis = kpisResult.value
+      else addFailure('kpis', kpisResult.reason)
+      if (trendResult.status === 'fulfilled') updates.trend = trendResult.value
+      else addFailure('global trend', trendResult.reason)
+      if (topResult.status === 'fulfilled') updates.top = topResult.value
+      else addFailure('top countries', topResult.reason)
+      if (compareResult.status === 'fulfilled') updates.compare = compareResult.value
+      else addFailure('country comparison', compareResult.reason)
+      if (anomaliesResult.status === 'fulfilled') updates.anomalies = anomaliesResult.value
+      else addFailure('anomalies', anomaliesResult.reason)
+      if (coverageResult.status === 'fulfilled') updates.coverage = coverageResult.value
+      else addFailure('coverage', coverageResult.reason)
+      setData((current) => ({ ...current, ...updates }))
+      setError(failures.join(' · '))
     }).finally(() => {
       if (active) setLoading(false)
     })
@@ -168,6 +199,7 @@ function App() {
   }, [range, selectedEntity])
 
   const selectedCountry = useMemo(() => data.countries.find((country) => country.entity === selectedEntity), [data.countries, selectedEntity])
+  const topCountry = data.kpis?.top_country ?? data.top[0] ?? null
   const updateFrom = (value: number) => setRange((current) => ({ ...current, from: Math.max(1950, Math.min(Math.trunc(value || 1950), current.to)) }))
   const updateTo = (value: number) => setRange((current) => ({ ...current, to: Math.min(2005, Math.max(Math.trunc(value || 2005), current.from)) }))
 
@@ -222,7 +254,7 @@ function App() {
         <section className="kpi-grid" aria-label="Summary indicators">
           <article className="kpi-card"><div className="kpi-label">Global average <span className="info-dot" title="Mean of all country-year observations in the selected years." aria-label="Mean of all observed country-year records">i</span></div><div className="kpi-value">{data.kpis ? formatRate(data.kpis.global_avg) : '—'}</div><div className="kpi-unit">per 100,000 · observed records</div></article>
           <article className="kpi-card"><div className="kpi-label">Peak year average</div><div className="kpi-value">{data.kpis ? data.kpis.peak_year : '—'}</div><div className="kpi-unit">{data.kpis ? `${formatRate(data.kpis.peak_value)} per 100,000` : 'Selected period'}</div></article>
-          <article className="kpi-card"><div className="kpi-label">Highest eligible country</div><div className="kpi-value kpi-country">{data.kpis?.top_country?.entity ?? '—'}</div><div className="kpi-unit">{data.kpis?.top_country ? `${formatRate(data.kpis.top_country.avg_rate)} mean · ${data.kpis.top_country.years_reported} years` : 'Requires 10+ observations'}</div></article>
+          <article className="kpi-card"><div className="kpi-label">Highest eligible country</div><div className="kpi-value kpi-country">{topCountry?.entity ?? '—'}</div><div className="kpi-unit">{topCountry ? `${formatRate(topCountry.avg_rate)} mean · ${topCountry.years_reported} yr` : 'Requires 10+ observations'}</div></article>
           <article className="kpi-card"><div className="kpi-label">Entities reported</div><div className="kpi-value">{data.kpis?.country_count ?? '—'}</div><div className="kpi-unit">in selected year range</div></article>
         </section>
         {loading && <p className="loading-note" role="status">Updating the selected period…</p>}

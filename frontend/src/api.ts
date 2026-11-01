@@ -113,7 +113,23 @@ export type Finding = {
 const API_BASE = import.meta.env.VITE_API_BASE ?? '/api/v1'
 
 async function request<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`)
+  const url = `${API_BASE}${path}`
+  let response: Response
+  try {
+    response = await fetch(url)
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : String(error)
+    throw new Error(`Could not reach API ${url}: ${reason}`)
+  }
+
+  const contentType = response.headers.get('content-type') ?? ''
+  if (!contentType.includes('application/json')) {
+    const responseKind = contentType || 'unknown content type'
+    throw new Error(
+      `API ${url} returned ${responseKind} instead of JSON (HTTP ${response.status}). Check the Vercel /api/* rewrite and backend deployment.`,
+    )
+  }
+
   if (!response.ok) {
     const body = await response.json().catch(() => ({}))
     throw new Error(body.message ?? `Request failed (${response.status})`)
