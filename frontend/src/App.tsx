@@ -123,7 +123,7 @@ function App() {
   const [range, setRange] = useState(ALL_YEARS)
   const [selectedEntity, setSelectedEntity] = useState('Lithuania')
   const [search, setSearch] = useState('Lithuania')
-  const [darkMode, setDarkMode] = useState(false)
+  const [darkMode, setDarkMode] = useState(true)
   const [data, setData] = useState(emptyData)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
