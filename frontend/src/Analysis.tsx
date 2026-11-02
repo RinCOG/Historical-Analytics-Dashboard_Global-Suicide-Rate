@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { api, type AnomalySummary, type AnalysisQuality, type AnalysisTrend, type CompareMultiRow, type CoverageDeep, type Decomposition, type Finding, type RateDistribution, type TopCountry } from './api'
+import { api, type AnomalySummary, type AnalysisFlaggedRow, type AnalysisQuality, type AnalysisTrend, type CompareMultiRow, type CoverageDeep, type Decomposition, type Finding, type RateDistribution, type TopCountry } from './api'
 
 function formatRate(value: number) {
   return value.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -96,6 +96,18 @@ function ChartWindow({ eyebrow, title, caption, children }: { eyebrow: string; t
       </div>
       {children}
     </div>
+  )
+}
+
+function InterpretationBox({ children }: { children: React.ReactNode }) {
+  return (
+    <aside className="interpretation-box" role="note" aria-label="Interpretation">
+      <div className="interpretation-badge">
+        <span className="interpretation-bubble" aria-hidden="true">i</span>
+        <strong>Interpretation</strong>
+      </div>
+      <p>{children}</p>
+    </aside>
   )
 }
 
@@ -284,8 +296,43 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
 
   const summary = quality.summary
   const outliers = [...(distribution.outliers ?? [])].sort((a, b) => b.rate - a.rate).slice(0, 15)
-  type FlaggedRow = { entity: string; year: number; change: number; z_score: number; zscore_flag: boolean; iqr_flag: boolean }
-  const flaggedRows: FlaggedRow[] = (anomalySummary?.flagged_rows ?? []) as unknown as FlaggedRow[]
+  const flaggedRows: AnalysisFlaggedRow[] = anomalySummary?.flagged_rows ?? []
+  const topCountry = topCountries[0]
+  const outlierCounts = distribution.outliers.reduce<Record<string, number>>((counts, row) => {
+    counts[row.entity] = (counts[row.entity] ?? 0) + 1
+    return counts
+  }, {})
+  const topOutlierCountries = Object.entries(outlierCounts).sort((a, b) => b[1] - a[1]).slice(0, 3)
+  const topThreeOutlierShare = distribution.outliers.length
+    ? topOutlierCountries.reduce((sum, [, count]) => sum + count, 0) / distribution.outliers.length
+    : 0
+  const histogramFiveToTen = distribution.histogram.find((bin) => bin.range === '5–10')?.count ?? 0
+  const histogramTenToFifteen = distribution.histogram.find((bin) => bin.range === '10–15')?.count ?? 0
+  const changeFlagCounts = flaggedRows.filter((row) => row.zscore_flag).reduce<Record<string, number>>((counts, row) => {
+    counts[row.entity] = (counts[row.entity] ?? 0) + 1
+    return counts
+  }, {})
+  const topChangeFlagCountries = Object.entries(changeFlagCounts).sort((a, b) => b[1] - a[1]).slice(0, 3)
+  const topThreeChangeFlagShare = anomalySummary?.zscore_count
+    ? topChangeFlagCountries.reduce((sum, [, count]) => sum + count, 0) / anomalySummary.zscore_count
+    : 0
+  const selectedComparison = compare.filter((row) => row.entity === compareEntities && row.year >= from && row.year <= to)
+  const bothBaselineShare = selectedComparison.length
+    ? selectedComparison.filter((row) => row.country_rate > row.global_avg && row.country_rate > row.panel_avg).length / selectedComparison.length
+    : 0
+  const globalGaps = selectedComparison.map((row) => row.country_rate - row.global_avg)
+  const panelGaps = selectedComparison.map((row) => row.country_rate - row.panel_avg)
+  const gapRange = (gaps: number[]) => gaps.length
+    ? `${formatRate(Math.min(...gaps))} to ${formatRate(Math.max(...gaps))}`
+    : 'no observed years'
+  const reportingCounts = trend.reporting_counts.map((row) => row.countries_reporting)
+  const decompositionExample = decomposition?.pairs.find((pair) => pair.from_year === 2002 && pair.to_year === 2003)
+    ?? decomposition?.pairs.reduce<typeof decomposition.pairs[number] | undefined>(
+      (largest, pair) => !largest || Math.abs(pair.composition_effect) > Math.abs(largest.composition_effect) ? pair : largest,
+      undefined,
+    )
+  const coverageComplete = coverage?.coverage.filter((row) => row.years_reported === 56).length ?? 0
+  const coverageSparse = coverage?.coverage.filter((row) => row.years_reported <= 3).length ?? 0
 
   return (
     <main id="main" className="dashboard">
@@ -333,7 +380,7 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
         <div className="terms-grid">
           <div className="term-card">
             <p className="term-card-label">ISO</p>
-            <p className="term-card-definition">ISO stands for the International Organization for Standardization, the body that maintains the global country coding system. In this dataset, every country entity is tagged with its ISO country code, a three-letter alpha-3 code such as <span className="term-value">LTU</span> for Lithuania, so rates from different sources can be matched reliably. The analysis recognizes 190 current ISO entities, plus six historical entities that use publisher-specific codes beginning with <span className="term-value">OWID_</span>.</p>
+            <p className="term-card-definition">ISO stands for the International Organization for Standardization, the body that maintains the global country coding system. The dataset includes 190 current ISO alpha-3 codes, such as <span className="term-value">LTU</span> for Lithuania, plus six historical entities whose publisher-specific codes begin with <span className="term-value">OWID_</span>; those six are not ISO codes.</p>
           </div>
           <div className="term-card">
             <p className="term-card-label">IQR</p>
@@ -353,7 +400,7 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
           </div>
           <div className="term-card">
             <p className="term-card-label">Effect decomposition</p>
-            <p className="term-card-definition">A year-over-year change in a mean rate is decomposed into two effects: the within-country effect, the average change among countries present in both years, and the composition effect, the change arising from shifts in the mix of reporting countries. The total change equals the sum of both: total change = within-country effect + composition effect. For example, a total change of <span className="term-value">0.47</span> may consist of a within-country effect of <span className="term-value">0.18</span> and a composition effect of <span className="term-value">0.29</span>.</p>
+            <p className="term-card-definition">A change in the global mean is decomposed into the within-country effect, the average rate change among entities present at both endpoints, and the composition effect, the residual from changes in reporting composition. The total global-mean change equals within-country effect + composition effect. This describes the global mean, not Lithuania's own rate.</p>
           </div>
         </div>
       </section>
@@ -367,6 +414,9 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
           <article className="kpi-card"><div className="kpi-label">IQR fences</div><div className="kpi-value">{formatRate(distribution.rate_iqr_fences[0])}</div><div className="kpi-unit">{formatRate(distribution.rate_iqr_fences[1])} upper fence</div></article>
           <article className="kpi-card"><div className="kpi-label">Outliers</div><div className="kpi-value">{quality.quality.rate_outlier_count}</div><div className="kpi-unit">above Tukey fences</div></article>
         </div>
+        <InterpretationBox>
+          The CSV contains {quality.quality.null_cells} null cells, {quality.quality.duplicate_entity_year_rows} duplicate entity-year rows, {quality.quality.invalid_codes} invalid codes, and {quality.quality.non_country_aggregates.length} non-country aggregates. Its {quality.entity_count} entities use {quality.iso_entity_count} ISO alpha-3 codes and {Object.keys(quality.former_state_entities ?? {}).length} publisher-specific historical codes. No records are removed for statistical extremity.
+        </InterpretationBox>
         <ChartWindow eyebrow="B · DISTRIBUTION" title="Rate distribution" caption="Histogram of validated country-year rates per 100,000">
           <div className="chart-wrap" ref={(node) => { trendRefHolder.current = node }}>
             <ResponsiveContainer width="100%" height="100%">
@@ -380,9 +430,12 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
             </ResponsiveContainer>
           </div>
           <div className="chart-explanation">
-            <p>The histogram bins all {quality.row_count.toLocaleString()} validated country-year suicide rates into fixed ranges, measured per 100,000 people. Most observations fall in the 5–15 range (820 records, about 29% of all data), with progressively fewer records in the higher bands.</p>
-            <p>The long right tail is driven by high observed rates; 82 rates exceed the Tukey upper fence of 30.92 per 100,000, and the largest value is 44.35 for Lithuania in 1996. The fences are derived from the interquartile range (Q1 = 6.22, Q3 = 16.10, IQR = 9.88; upper fence = Q3 + 1.5 × IQR = 30.92). Flagged outliers are retained rather than corrected, because a statistical outlier alone is not evidence of an invalid record.</p>
+            <p>The histogram bins all {quality.row_count.toLocaleString()} validated country-year suicide rates into fixed ranges, measured per 100,000 people. The 5–10 bin contains {histogramFiveToTen.toLocaleString()} observations ({(histogramFiveToTen / quality.row_count * 100).toFixed(1)}%); the combined 5–15 range contains {(histogramFiveToTen + histogramTenToFifteen).toLocaleString()} ({((histogramFiveToTen + histogramTenToFifteen) / quality.row_count * 100).toFixed(1)}%).</p>
+            <p>The long right tail includes {distribution.outliers.length} values above the Tukey upper fence of {formatRate(distribution.rate_iqr_fences[1])} per 100,000; the maximum is {formatRate(summary.max)} for Lithuania in 1996. The fences use linear-interpolated quartiles (Q1 = {formatRate(summary.q1)}, Q3 = {formatRate(summary.q3)}; IQR = {formatRate(summary.q3 - summary.q1)}). Flagged outliers are retained because a statistical outlier alone is not evidence of an invalid record.</p>
           </div>
+          <InterpretationBox>
+            The 5–10 rate band is the largest single bin, while the combined 5–15 interval contains {(histogramFiveToTen + histogramTenToFifteen).toLocaleString()} of {quality.row_count.toLocaleString()} observations. The upper fence flags {distribution.outliers.length} rates across {Object.keys(outlierCounts).length} entities; {topOutlierCountries.map(([name, count]) => `${name} (${count})`).join(', ')} account for {(topThreeOutlierShare * 100).toFixed(1)}% of them, so the high tail is concentrated rather than broadly distributed. These are statistical flags, not invalid records by themselves.
+          </InterpretationBox>
         </ChartWindow>
         <div className="table-scroll">
           <table>
@@ -418,9 +471,14 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
           </div>
           <ExportButtons rows={topCountries} name="analysis-top" chartRef={topRefHolder} />
           <div className="chart-explanation">
-            <p>The horizontal bar chart ranks countries by their historical mean suicide rate, computed as the mean of country-year observations. With the default minimum of 10 observed years, Lithuania ranks first at 35.13 per 100,000 across 23 observations, ahead of Russia (30.77, n = 24) and Hungary (29.85, n = 51).</p>
-            <p>The ranking is coverage-qualified: without the minimum-years rule, short series such as Guyana (3 observations, 30.85 mean) would enter the ranking, so the rule keeps sparse series from dominating. The full ranked list is shown in the table below.</p>
+            <p>The horizontal bar chart ranks current ISO-coded entities by their historical mean from 1950–2005. With a minimum of {minYears} reported years, {topCountries.slice(0, 3).map((row) => `${row.entity} (${formatRate(row.avg_rate)}, n=${row.years_reported})`).join(', ')} are the top entries.</p>
+            <p>The minimum-years threshold limits the influence of sparse series; each row reports its observation count so coverage can be considered alongside the mean. This is a descriptive ranking, not a judgment about people, health systems, or policy performance.</p>
           </div>
+          <InterpretationBox>
+            {topCountry
+              ? `${topCountry.entity} has the highest eligible historical mean at ${formatRate(topCountry.avg_rate)} per 100,000 from ${topCountry.years_reported} observations. The minimum is ${minYears} years; compare the observation counts in the table because fewer years make a mean less representative of a full series.`
+              : `No entity meets the selected minimum of ${minYears} observations. Lowering the threshold may admit shorter and less comparable series.`}
+          </InterpretationBox>
         </ChartWindow>
         <div className="table-scroll">
           <table>
@@ -476,7 +534,7 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
         {trendChartData.length === 1 && <p className="panel-note">Selected year: {trendChartData[0].year} · raw mean {formatRate(Number(trendChartData[0].raw))} per 100,000. Select a wider year range to see the historical trend.</p>}
         <ExportButtons rows={trend.yearly} name="analysis-trend" chartRef={trendRefHolder} />
           <div className="chart-explanation">
-            <p>The annual mean rate across reporting entities fluctuates over 1950–2005; the unweighted yearly mean peaks at 14.76 per 100,000 in 1982, when 52 entities reported.</p>
+            <p>The annual mean rate across reporting entities is shown for {from}–{to}. Across the full historical dataset, the unweighted yearly mean peaks at 14.76 per 100,000 in 1982, when 52 entities reported.</p>
             <p>The chart overlays four series — raw mean, fixed eight-entity panel, wider panel, and annual median — so the same years can be compared. Because the set of reporting entities shifts over time, raw averages can move with coverage; the reporting counts chart below shows coverage rising from 10 entities in 1950 to 191 in 2004–2005.</p>
           </div>
           <div className="chart-explanation">
@@ -484,8 +542,13 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
             <p><strong>Fixed panel</strong> averages only the eight entities that report in every single year from 1950 to 2005 (Australia, Canada, Ireland, Japan, Netherlands, New Zealand, United Kingdom, United States), giving a stable like-for-like comparison.</p>
             <p><strong>Wider panel</strong> averages entities with at least 40 years of observations, a middle ground between the raw mean and the strict fixed panel.</p>
             <p><strong>Annual median</strong> is the middle value of that year's reported rates, which is less affected by extreme outliers than the mean.</p>
-            <p>In the comparison table, <strong>Global mean</strong> is the unweighted average of all reporters that year, while <strong>Panel mean</strong> is the average of the fixed eight-entity panel for that same year. The panel mean is usually lower and smoother than the global mean because it excludes the high-coverage, high-rate countries added in later years.</p>
+            <p>In the comparison table, <strong>Global mean</strong> is the unweighted average of all reporters that year, while <strong>Panel mean</strong> is the average of the fixed eight-entity panel. From 1950–2001 the panel mean is lower than the raw mean in 52 of 52 years; from 2002–2005 it is higher in 3 of 4 years. The comparison therefore reverses late in the series and should not be summarized as uniformly lower.</p>
           </div>
+          <InterpretationBox>
+            {peakRows.raw && peakRows.fixed && peakRows.wide && peakRows.median
+              ? `Within ${from}–${to}, the raw mean peaks in ${peakRows.raw.year} (${formatRate(peakRows.raw.avg_rate)}), the fixed panel in ${peakRows.fixed.year} (${formatRate(peakRows.fixed.avg_rate)}), the ≥40-year panel in ${peakRows.wide.year} (${formatRate(peakRows.wide.avg_rate)}), and the annual median in ${peakRows.median.year} (${formatRate(peakRows.median.avg_rate)}). Different peak years show that a single “global peak” depends on series and reporting coverage.`
+              : `The selected interval ${from}–${to} does not contain enough observations to calculate all four series.`}
+          </InterpretationBox>
         </ChartWindow>
         <ChartWindow eyebrow="D · OBJECTIVE 2 + Q1" title="Reporting counts" caption="Entities reporting per year">
           <div className="chart-wrap" ref={(node) => { trendRefHolder.current = node }}>
@@ -501,16 +564,21 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
         </div>
           {reportingChartData.length === 1 && <p className="panel-note">Selected year: {reportingChartData[0].year} · {reportingChartData[0].countries_reporting} entities reporting. Choose a wider year range to see the historical trend.</p>}
           <div className="chart-explanation">
-            <p>The bar chart shows how many entities reported a suicide rate in each year, from 10 in 1950 to 191 in 2004 and 2005. Coverage is uneven and jumps sharply in nearby years — for example, 62 entities in 2001, 190 in 2002, and 55 in 2003 — meaning annual averages can shift even when underlying rates do not.</p>
+            <p>The bar chart shows how many entities reported a suicide rate in each year in the selected range. Across 1950–2005, coverage ranges from 10 in 1950 to 191 in 2004 and 2005, with sharp nearby-year changes including 62 in 2001, 190 in 2002, and 55 in 2003.</p>
           </div>
+          <InterpretationBox>
+            {reportingCounts.length
+              ? `For ${from}–${to}, annual reporting ranges from ${Math.min(...reportingCounts)} to ${Math.max(...reportingCounts)} entities. Abrupt coverage changes can shift a raw annual mean through composition as well as rate changes; reporter counts describe availability, not whether rates improved or worsened.`
+              : `There are no reporting-count observations in the selected period ${from}–${to}.`}
+          </InterpretationBox>
         </ChartWindow>
-        <ChartWindow eyebrow="D · OBJECTIVE 2 + Q1" title="Reporting counts (Part 2): Country vs. Global & Panel baselines" caption="Selected entity against global and fixed-panel baselines">
+        <ChartWindow eyebrow="E · OBJECTIVE 3 + Q3" title="Country comparison table" caption="Selected entity against global and fixed-panel baselines">
           <div className="table-scroll">
             <table>
               <caption className="sr-only">Country comparison rows</caption>
               <thead><tr><th scope="col">Entity</th><th scope="col">Year</th><th scope="col">Country rate</th><th scope="col">Global mean</th><th scope="col">Panel mean</th></tr></thead>
               <tbody>
-                {compare.filter((row) => row.entity === compareEntities).slice(0, 60).map((row) => (
+                {selectedComparison.slice(0, 60).map((row) => (
                   <tr key={`${row.entity}-${row.year}`}><td>{row.entity}</td><td>{row.year}</td><td>{formatRate(row.country_rate)}</td><td>{formatRate(row.global_avg)}</td><td>{formatRate(row.panel_avg)}</td></tr>
                 ))}
               </tbody>
@@ -518,10 +586,15 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
           </div>
           <div className="chart-explanation">
             <p>The table lists, for each year the selected country reported a rate, that country's rate alongside the global mean and the fixed-panel mean for the same year. It is the detailed record behind the comparison chart, so you can see year by year whether the country sits above or below the global and panel baselines.</p>
-            <p>Lithuania is featured here because it ranks #1 among eligible countries by historical mean rate. Global mean is the unweighted average of all reporters that year, while Panel mean is the average of the fixed eight-entity panel, a stable like-for-like benchmark. A country consistently above both lines carries a higher rate than typical, and crossings or divergences over time reveal when its trajectory separated from the broader pattern.</p>
+            <p>{compareEntities} is shown against the unweighted average of that year's reporting entities and the average for the eight entities observed in every year from 1950 through 2005. The comparison is descriptive; it does not rank countries as better or worse.</p>
           </div>
+          <InterpretationBox>
+            {selectedComparison.length
+              ? `${compareEntities} is above both baselines in ${selectedComparison.filter((row) => row.country_rate > row.global_avg && row.country_rate > row.panel_avg).length} of ${selectedComparison.length} reported years (${(bothBaselineShare * 100).toFixed(1)}%). Its country-minus-global gap ranges from ${gapRange(globalGaps)} and country-minus-panel from ${gapRange(panelGaps)} per 100,000. Missing years are not interpolated.`
+              : `No comparison rows are available for ${compareEntities} in ${from}–${to}. Select a country and range containing reported observations.`}
+          </InterpretationBox>
         </ChartWindow>
-        <ChartWindow eyebrow="D · DECOMPOSITION" title="Lithuania year-over-year changes" caption="Total change split into within-country and composition effects">
+        <ChartWindow eyebrow="F · DECOMPOSITION" title="Global mean change decomposition" caption="The total change is within-country effect plus composition effect">
           {decomposition && decomposition.pairs.length > 0 ? (
             decomposition.pairs.map((pair) => (
               <p className="panel-note" key={`${pair.from_year}-${pair.to_year}`}>
@@ -530,8 +603,14 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
             ))
           ) : null}
           <div className="chart-explanation">
-            <p>Each line decomposes a year-over-year change in Lithuania's rate into two parts: the within-country effect (the average change among entities present in both years) and the composition effect (the change arising from shifts in which countries are reporting). The total change equals the sum of the two.</p>
+            <p>Each row decomposes a change in the global mean, not Lithuania's own rate. The within-country effect is the mean rate change among entities present in both endpoint years; the composition effect is the residual from changes in who reports. The two parts sum to the change in the global mean.</p>
+            <p>The 2000–2002 row is an additional two-year comparison next to consecutive-year pairs; it spans an omitted year and is not a one-year change.</p>
           </div>
+          <InterpretationBox>
+            {decompositionExample
+              ? `From ${decompositionExample.from_year} to ${decompositionExample.to_year}, the global mean changes by ${formatRate(decompositionExample.total_change)} per 100,000: ${formatRate(decompositionExample.within_effect)} within-country and ${formatRate(decompositionExample.composition_effect)} composition. ${Math.abs(decompositionExample.composition_effect) > Math.abs(decompositionExample.within_effect) ? 'Composition is larger in absolute size, so this mean movement is substantially affected by the reporting mix.' : 'The within-country component is at least as large as the composition component.'} This is not a change in Lithuania's own rate.`
+              : 'No decomposition rows are available.'}
+          </InterpretationBox>
         </ChartWindow>
         <div className="table-scroll">
           <table>
@@ -546,16 +625,19 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
           </table>
         </div>
         <div className="chart-explanation">
-          <p>The apparent peak year of the global suicide rate depends heavily on which series and coverage rule you use. The raw mean peaks in 1982 at 14.76 per 100,000, the fixed eight-entity panel peaks in 1998 at 12.21, the wider panel peaks in 1984 at 13.01, and the annual median peaks in 1988 at 13.64. No single year is "the" peak — each series tells a different story about when rates were highest.</p>
-          <p>This shows that the peak is not a fixed fact but is sensitive to coverage and method. The raw 1982 peak reflects the particular mix of 52 reporting entities that year, while the fixed panel's later 1998 peak reflects a stable, complete-coverage subset. Comparing these series helps separate a genuine rise in rates from an artifact of changing who reports.</p>
+          <p>The apparent peak year depends on which series and coverage rule are used. Across the selected {from}–{to} interval, the raw mean peaks in {peakRows.raw ? `${peakRows.raw.year} at ${formatRate(peakRows.raw.avg_rate)}` : '—'}, the fixed eight-entity panel in {peakRows.fixed ? `${peakRows.fixed.year} at ${formatRate(peakRows.fixed.avg_rate)}` : '—'}, the wider panel in {peakRows.wide ? `${peakRows.wide.year} at ${formatRate(peakRows.wide.avg_rate)}` : '—'}, and the annual median in {peakRows.median ? `${peakRows.median.year} at ${formatRate(peakRows.median.avg_rate)}` : '—'} per 100,000.</p>
+          <p>These differing peak years demonstrate method sensitivity; the chart alone cannot determine which series represents an unobserved world population best.</p>
         </div>
+        <InterpretationBox>
+          The selected period's peaks are {peakRows.raw?.year ?? 'unavailable'} for the raw mean, {peakRows.fixed?.year ?? 'unavailable'} for the fixed panel, {peakRows.wide?.year ?? 'unavailable'} for the wider panel, and {peakRows.median?.year ?? 'unavailable'} for the annual median. Different peak years show that one method-independent global maximum cannot be inferred from these series.
+        </InterpretationBox>
       </section>
 
       <section id="compare" className="panel" aria-labelledby="compare-title">
         <ChartWindow eyebrow="E · OBJECTIVE 3 + Q3" title="Country and global baseline" caption="Selected entities against global and fixed-panel baselines">
           <div className="chart-wrap" ref={(node) => { compareRefHolder.current = node }}>
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={compare} margin={{ top: 12, right: 10, bottom: 4, left: 0 }}>
+            <LineChart data={selectedComparison} margin={{ top: 12, right: 10, bottom: 4, left: 0 }}>
               <CartesianGrid strokeDasharray="3 5" vertical={false} />
               <XAxis dataKey="year" type="number" domain={['dataMin', 'dataMax']} tickCount={6} />
               <YAxis domain={[0, 'auto']} width={42} />
@@ -571,6 +653,11 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
             <p>The line chart compares the selected country against the global mean and the fixed-panel mean for each year the country reported.</p>
             <p>The global mean is the unweighted average among entities reporting in that year, while the fixed panel is the small set of countries reporting every year from 1950 through 2005. Only years with a reported value for the selected country are plotted; missing years are not interpolated.</p>
           </div>
+          <InterpretationBox>
+            {selectedComparison.length
+              ? `${compareEntities} is above both reference series in ${(bothBaselineShare * 100).toFixed(1)}% of its ${selectedComparison.length} reported years. The country-to-global gap ranges ${gapRange(globalGaps)} per 100,000; the country-to-panel gap ranges ${gapRange(panelGaps)}. A comparison describes differences in the observed series and does not explain their causes.`
+              : `No values for ${compareEntities} are present in the selected ${from}–${to} interval; no missing values are filled in.`}
+          </InterpretationBox>
         </ChartWindow>
       </section>
       <section id="anomalies" className="panel" aria-labelledby="anomalies-title">
@@ -591,7 +678,7 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
                   <td>{row.entity}</td>
                   <td>{row.year}</td>
                   <td>{row.change > 0 ? '+' : ''}{formatRate(row.change)}</td>
-                  <td>{row.z_score.toFixed(2)}</td>
+                  <td>{row.z_score.toFixed(3)}</td>
                   <td><span className={row.zscore_flag ? 'flag-badge flag-badge--yes' : 'flag-badge flag-badge--no'} title={row.zscore_flag ? 'Flagged by z-score method' : 'Not flagged'}>{row.zscore_flag ? 'Flagged' : '—'}</span></td>
                   <td><span className={row.iqr_flag ? 'flag-badge flag-badge--yes' : 'flag-badge flag-badge--no'} title={row.iqr_flag ? 'Flagged by IQR method' : 'Not flagged'}>{row.iqr_flag ? 'Flagged' : '—'}</span></td>
                 </tr>
@@ -600,16 +687,21 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
           </table>
         </div>
         <div className="chart-explanation">
-          <p>These rows list year-over-year changes in a country's suicide rate that were flagged as statistically unusual. Each row is a consecutive-year pair for one entity, with the signed change, its z-score, and which screening rules it tripped. A change is flagged by the z-score method when its absolute z-score exceeds 2 (more than two standard deviations from the pooled mean of all changes), and by the IQR method when it falls outside the Tukey fences built from the interquartile range of all changes.</p>
+          <p>These rows list year-over-year changes in a country's suicide rate that were flagged as statistically unusual. Each row is a consecutive-year pair for one entity, with the signed change, its z-score, and which screening rules it tripped. A change is flagged by the z-score method when its absolute z-score strictly exceeds 2, and by the IQR method when it falls outside the Tukey fences built from the interquartile range of all consecutive changes.</p>
           <p>The KPIs summarize the screening: how many consecutive-year pairs were evaluated, how many were flagged by each method, and how many were flagged by both. These are descriptive screening flags, not proof of data errors or explanations of causes — an unusual change may reflect a real shift, a reporting change, or noise, and only the data themselves can distinguish these.</p>
         </div>
+        <InterpretationBox>
+          {anomalySummary
+            ? `Across ${anomalySummary.consecutive_changes.toLocaleString()} consecutive-year changes, ${anomalySummary.zscore_count} (${(anomalySummary.zscore_count / anomalySummary.consecutive_changes * 100).toFixed(2)}%) exceed |z| > 2, close to the 4.6% normal-reference share. All ${anomalySummary.zscore_count} z-score flags are also among the ${anomalySummary.iqr_count} IQR flags; the top three flagged entities (${topChangeFlagCountries.map(([name, count]) => `${name} (${count})`).join(', ')}) account for ${(topThreeChangeFlagShare * 100).toFixed(1)}% of z flags. Flags locate unusual changes; they do not prove an error or cause.`
+            : 'Anomaly counts are loading.'}
+        </InterpretationBox>
       </section>
 
       <section id="coverage" className="panel" aria-labelledby="coverage-title">
         <PanelHeading eyebrow="G · OBJECTIVE 5" title="Reporting coverage" caption="Coverage tiers, gaps, and entity counts" />
         <div className="kpi-grid">
           <article className="kpi-card"><div className="kpi-label">Entities tracked</div><div className="kpi-value">{coverage ? quality.entity_count : 0}</div><div className="kpi-unit">in coverage report</div></article>
-          <article className="kpi-card"><div className="kpi-label">Years in range</div><div className="kpi-value">{to - from + 1}</div><div className="kpi-unit">{from}–{to}</div></article>
+          <article className="kpi-card"><div className="kpi-label">Historical coverage period</div><div className="kpi-value">56</div><div className="kpi-unit">years · 1950–2005</div></article>
           <article className="kpi-card"><div className="kpi-label">Coverage rows</div><div className="kpi-value">{coverage?.coverage.length ?? 0}</div><div className="kpi-unit">entities listed</div></article>
           <article className="kpi-card"><div className="kpi-label">Gaps (observed span)</div><div className="kpi-value">{coverage?.coverage.reduce((sum, row) => sum + (row.gaps ?? 0), 0) ?? 0}</div><div className="kpi-unit">missing year slots</div></article>
         </div>
@@ -625,9 +717,14 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
           </table>
         </div>
         <div className="chart-explanation">
-          <p>Reporting coverage describes how completely each entity is observed across the period. Each row shows one entity, how many years it reported, its first and last reporting year, and the gaps — years missing between its first and last report. The KPIs summarize how many entities are tracked, how many years the selected range spans, how many entities appear in the report, and the total missing year slots within observed spans.</p>
+          <p>Reporting coverage describes how completely each entity is observed during 1950–2005. Each row shows one entity, how many years it reported, its first and last reporting year, and the gaps — years missing between its first and last report. The KPIs summarize entities in the report, the 56-year coverage period, listed entities, and total missing year slots within observed spans.</p>
           <p>Uneven coverage matters because the annual averages are unweighted means of whoever reported that year. An entity added or dropped between years changes the composition of the average, so a rise or fall in the yearly mean can reflect changing coverage as much as changing rates. Entities with fewer than the required years are excluded from rankings, and missing years are never interpolated.</p>
         </div>
+        <InterpretationBox>
+          {coverage
+            ? `Only ${coverageComplete} of ${coverage.coverage.length} entities report in every year from 1950–2005; ${coverageSparse} entities have three or fewer observations. This uneven coverage limits how representative year-to-year global averages and short country series can be.`
+            : 'Coverage statistics are loading.'}
+        </InterpretationBox>
       </section>
 
       <section id="findings" className="panel" aria-labelledby="findings-title">
@@ -650,6 +747,9 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
             </tbody>
           </table>
         </div>
+        <InterpretationBox>
+          The findings summarize descriptive patterns, not causal explanations. Read each confidence label alongside its stated caveat and the underlying coverage: the labels are qualitative evidence-strength assessments, not statistical confidence intervals.
+        </InterpretationBox>
       </section>
 
       <section id="methods" className="panel" aria-labelledby="methods-title">
@@ -660,6 +760,9 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
           <p><strong>Limitations:</strong> Data ends in 2005; country coverage and years reported are uneven. Outliers are retained. The data are descriptive only; no causal or predictive claims are made. Correlation does not establish causation.</p>
           <p><strong>Safe messaging:</strong> If you or someone you know needs support, contact a local crisis service. <a href="https://findahelpline.com/" target="_blank" rel="noreferrer">Find international crisis resources at findahelpline.com<span className="sr-only"> (opens in a new tab)</span></a>.</p>
         </div>
+        <InterpretationBox>
+          All results are descriptive summaries of the available 1950–2005 records. Uneven coverage, historical boundaries, and missing observations limit comparisons; no result establishes causation or predicts future rates.
+        </InterpretationBox>
       </section>
     </main>
   )

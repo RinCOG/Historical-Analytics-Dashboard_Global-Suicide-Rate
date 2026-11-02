@@ -10,6 +10,7 @@ export type TopCountry = { entity: string; avg_rate: number; years_reported: num
 export type Country = { entity: string; code: string }
 export type CompareRow = { year: number; country_rate: number; global_avg: number }
 export type Anomaly = { entity: string; year: number; change: number; z_score: number }
+export type AnalysisFlaggedRow = Anomaly & { zscore_flag: boolean; iqr_flag: boolean }
 export type Coverage = { entity: string; years_reported: number; first_year: number | null; last_year: number | null; gaps: number }
 export type Insight = { title: string; detail: string; caveat: string }
 
@@ -94,7 +95,7 @@ export type AnomalySummary = {
   zscore_count: number
   iqr_count: number
   both_count: number
-  flagged_rows: Anomaly[]
+  flagged_rows: AnalysisFlaggedRow[]
 }
 export type CoverageDeep = {
   coverage: Coverage[]
