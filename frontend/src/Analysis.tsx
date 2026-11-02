@@ -131,6 +131,8 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
   const [minYears, setMinYears] = useState(10)
   const [panelSeries, setPanelSeries] = useState<'all' | 'raw' | 'fixed' | 'wide' | 'median'>('all')
   const [activeSection, setActiveSection] = useState('overview')
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [sectionsOpen, setSectionsOpen] = useState(true)
   const [paramsInitialized, setParamsInitialized] = useState(false)
 
   const [quality, setQuality] = useState<AnalysisQuality | null>(null)
@@ -187,7 +189,14 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
   }, [from, to, entity, compareEntities, minYears, paramsInitialized])
 
   useEffect(() => {
+    let wasScrolled = false
     const onScroll = () => {
+      const scrolled = window.scrollY > 160
+      if (scrolled !== wasScrolled) {
+        wasScrolled = scrolled
+        setIsScrolled(scrolled)
+        setSectionsOpen(!scrolled)
+      }
       const scrollPos = window.scrollY + 160
       let current = TOC_SECTIONS[0].id
       for (const section of TOC_SECTIONS) {
@@ -344,13 +353,35 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
       </section>
       {loadErrors.length > 0 && <div role="alert" className="error-banner"><strong>Some analysis sections could not load</strong><ul>{loadErrors.map((error) => <li key={error}>{error}</li>)}</ul></div>}
 
-      <nav className="toc" aria-label="In-depth analysis sections">
+      <nav className={`toc${isScrolled ? ' toc-scrolled' : ''}${isScrolled && sectionsOpen ? ' toc-expanded' : ''}`} aria-label="In-depth analysis sections">
         <div className="toc-sticky">
-          <p className="eyebrow">SECTIONS</p>
-          <ul>
+          <div className="toc-header">
+            <p className="eyebrow">SECTIONS</p>
+            {isScrolled && (
+              <button
+                type="button"
+                className="toc-toggle"
+                aria-label={sectionsOpen ? 'Hide section links' : 'Show section links'}
+                aria-expanded={sectionsOpen}
+                aria-controls="analysis-section-links"
+                onClick={() => setSectionsOpen((open) => !open)}
+              >
+                <svg className="toc-toggle-icon" viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="m5 7.5 5 5 5-5" />
+                </svg>
+              </button>
+            )}
+          </div>
+          <ul id="analysis-section-links" hidden={isScrolled && !sectionsOpen}>
             {TOC_SECTIONS.map((section) => (
               <li key={section.id}>
-                <a href={`#${section.id}`} className={activeSection === section.id ? 'toc-active' : undefined}>{section.label}</a>
+                <a
+                  href={`#${section.id}`}
+                  className={activeSection === section.id ? 'toc-active' : undefined}
+                  aria-current={activeSection === section.id ? 'location' : undefined}
+                >
+                  {section.label}
+                </a>
               </li>
             ))}
           </ul>
