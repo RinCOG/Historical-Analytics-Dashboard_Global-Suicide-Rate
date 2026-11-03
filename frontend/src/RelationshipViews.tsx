@@ -386,7 +386,7 @@ export function CompactRelationships({ data, selectedEntity, from, to }: {
   ]
   const active = views.find((item) => item.id === view) ?? views[0]
   const block = view === 'trend' ? null : data.block_b[active.block as 'B1' | 'B3' | 'B4']
-  const anchor = view === 'trend' ? data.anchors.A : data.anchors[active.block]
+
   const takeaway = view === 'trend' ? data.takeaways.A : data.takeaways[active.block]
   const verdict = view === 'trend' ? data.block_a.verdict : block?.verdict
   const csvRows = view === 'trend'
@@ -424,7 +424,7 @@ export function CompactRelationships({ data, selectedEntity, from, to }: {
       <p className="relationship-takeaway">{takeaway}</p>
       <div className="relationship-meta">
         {verdict && <VerdictBadge verdict={verdict} />}
-        <a className="see-full-link" href={`/analysis?from=${from}&to=${to}&entity=${encodeURIComponent(selectedEntity)}${anchor}`}>See full analysis</a>
+        <a className="see-full-link" href={`/analysis?from=${from}&to=${to}&entity=${encodeURIComponent(selectedEntity)}`}>See full analysis</a>
       </div>
       <p className="panel-note">{data.note} Descriptive only: no causes or forecasts; correlation does not establish causation. {view !== 'trend' && block ? (selectedPresent ? `${selectedEntity} is highlighted.` : `${selectedEntity} has no data in this fixed view.`) : ''}</p>
       {view === 'trend' ? <HiddenATable rows={data.block_a.rows} /> : block ? <HiddenPointTable block={block} /> : null}
