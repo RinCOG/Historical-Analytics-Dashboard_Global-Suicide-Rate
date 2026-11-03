@@ -362,11 +362,12 @@ function HiddenATable({ rows }: { rows: RelationshipRow[] }) {
   )
 }
 
-export function CompactRelationships({ data, selectedEntity, from, to }: {
+export function CompactRelationships({ data, selectedEntity, from, to, onSeeFullAnalysis }: {
   data: RelationshipsCompact | null
   selectedEntity: string
   from: number
   to: number
+  onSeeFullAnalysis?: () => void
 }) {
   const [view, setView] = useState<ViewId>('trend')
   const chartRef = useRef<HTMLDivElement>(null)
@@ -424,7 +425,7 @@ export function CompactRelationships({ data, selectedEntity, from, to }: {
       <p className="relationship-takeaway">{takeaway}</p>
       <div className="relationship-meta">
         {verdict && <VerdictBadge verdict={verdict} />}
-        <a className="see-full-link" href={`/analysis?from=${from}&to=${to}&entity=${encodeURIComponent(selectedEntity)}`}>See full analysis</a>
+        {onSeeFullAnalysis ? <button type="button" className="see-full-link" onClick={onSeeFullAnalysis}>See full analysis</button> : <a className="see-full-link" href={`/analysis?from=${from}&to=${to}&entity=${encodeURIComponent(selectedEntity)}`}>See full analysis</a>}
       </div>
       <p className="panel-note">{data.note} Descriptive only: no causes or forecasts; correlation does not establish causation. {view !== 'trend' && block ? (selectedPresent ? `${selectedEntity} is highlighted.` : `${selectedEntity} has no data in this fixed view.`) : ''}</p>
       {view === 'trend' ? <HiddenATable rows={data.block_a.rows} /> : block ? <HiddenPointTable block={block} /> : null}

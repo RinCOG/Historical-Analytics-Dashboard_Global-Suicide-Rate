@@ -379,7 +379,7 @@ function App() {
           <p className="panel-note">All entities are shown, including those with no reports in the selected range. Download CSV for first/last year and internal gap counts.</p>
                   </section>
 
-        <CompactRelationships data={data.relationships} selectedEntity={selectedEntity} from={range.from} to={range.to} />
+        <CompactRelationships data={data.relationships} selectedEntity={selectedEntity} from={range.from} to={range.to} onSeeFullAnalysis={() => openAnalysis('relationships')} />
 
         <section className="insights-section" aria-labelledby="insights-title">
           <div className="insights-intro"><p className="eyebrow">ANALYSIS SUMMARY</p><h2 id="insights-title">Key insights</h2><p>Each finding is descriptive and includes a coverage or interpretation caveat.</p></div>
