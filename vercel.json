@@ -9,7 +9,7 @@
           "includeFiles": "data/**"
         }
       },
-      "buildCommand": "pip install -r requirements.txt && python -m backend.analysis && python -m backend.ingest"
+      "buildCommand": "pip install -r requirements.txt && python -m backend.analysis && python -m backend.relationships && python -m backend.registry && python -m backend.ingest"
     },
     "frontend": {
       "root": "frontend",

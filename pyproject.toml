@@ -2,4 +2,4 @@
 entrypoint = "backend.main:app"
 
 [tool.vercel.scripts]
-build = "python -m backend.analysis && python -m backend.ingest"
+build = "python -m backend.analysis && python -m backend.relationships && python -m backend.registry && python -m backend.ingest"

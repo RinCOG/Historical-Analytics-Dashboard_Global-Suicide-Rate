@@ -11,8 +11,10 @@ import {
   Bar,
   BarChart,
 } from 'recharts'
-import { api, type Anomaly, type CompareRow, type Country, type Coverage, type Insight, type KPI, type TopCountry, type TrendRow } from './api'
+import { api, type Anomaly, type CompareRow, type Country, type Coverage, type Insight, type KPI, type RelationshipsCompact, type TopCountry, type TrendRow } from './api'
 import Analysis from './Analysis'
+import { CompactRelationships } from './RelationshipViews'
+import { LABELS, formatRate, formatZScore } from './shared'
 
 const ALL_YEARS = { from: 1950, to: 2005 }
 type DashboardData = {
@@ -24,14 +26,11 @@ type DashboardData = {
   coverage: Coverage[]
   countries: Country[]
   insights: Insight[]
+  relationships: RelationshipsCompact | null
 }
 
 const emptyData: DashboardData = {
-  kpis: null, trend: [], top: [], compare: [], anomalies: [], coverage: [], countries: [], insights: [],
-}
-
-function formatRate(value: number) {
-  return value.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+  kpis: null, trend: [], top: [], compare: [], anomalies: [], coverage: [], countries: [], insights: [], relationships: null,
 }
 
 function formatExact(value: number) {
@@ -135,8 +134,20 @@ function App() {
   const [analysisSection, setAnalysisSection] = useState<string | null>(null)
 
   useEffect(() => {
+    const path = window.location.pathname.replace(/\/+$/, '')
+    if (path.endsWith('/analysis')) {
+      const params = new URLSearchParams(window.location.search)
+      const hash = window.location.hash.replace(/^#/, '')
+      setAnalysisSection(params.get('section') || hash || null)
+      setRoute('analysis')
+    } else if (window.location.hash === '#relationships') {
+      requestAnimationFrame(() => document.getElementById('relationships')?.scrollIntoView({ behavior: 'smooth' }))
+    }
+  }, [])
+
+  useEffect(() => {
     let active = true
-    Promise.allSettled([api.countries(), api.insights()]).then(([countriesResult, insightsResult]) => {
+    Promise.allSettled([api.countries(), api.insights(), api.relationshipsCompact()]).then(([countriesResult, insightsResult, relationshipsResult]) => {
       if (!active) return
       const failures: string[] = []
       if (countriesResult.status === 'fulfilled') {
@@ -153,6 +164,11 @@ function App() {
         setData((current) => ({ ...current, insights: insightsResult.value }))
       } else {
         failures.push(`insights: ${insightsResult.reason instanceof Error ? insightsResult.reason.message : String(insightsResult.reason)}`)
+      }
+      if (relationshipsResult.status === 'fulfilled') {
+        setData((current) => ({ ...current, relationships: relationshipsResult.value }))
+      } else {
+        failures.push(`relationships: ${relationshipsResult.reason instanceof Error ? relationshipsResult.reason.message : String(relationshipsResult.reason)}`)
       }
       if (failures.length) setError(failures.join(' · '))
     })
@@ -206,14 +222,26 @@ function App() {
   const openAnalysis = (section: string) => {
     setAnalysisSection(section)
     setRoute('analysis')
+    const params = new URLSearchParams({
+      from: String(range.from),
+      to: String(range.to),
+      entity: selectedEntity,
+      section,
+    })
+    window.history.replaceState(null, '', `/analysis?${params.toString()}`)
+  }
+
+  const openDashboard = () => {
+    setRoute('dashboard')
+    window.history.replaceState(null, '', '/')
   }
 
   return (
     <div className={darkMode ? 'app theme-dark' : 'app'}>
       <header className="topbar">
         <div className="topnav" role="navigation" aria-label="Dashboard and analysis">
-          <button type="button" className={route === 'dashboard' ? 'topnav-link active' : 'topnav-link'} onClick={() => setRoute('dashboard')}>Dashboard</button>
-          <button type="button" className={route === 'analysis' ? 'topnav-link active' : 'topnav-link'} onClick={() => setRoute('analysis')}>In-Depth Analysis</button>
+          <button type="button" className={route === 'dashboard' ? 'topnav-link active' : 'topnav-link'} onClick={openDashboard}>Dashboard</button>
+          <button type="button" className={route === 'analysis' ? 'topnav-link active' : 'topnav-link'} onClick={() => openAnalysis(analysisSection ?? 'overview')}>In-Depth Analysis</button>
         </div>
         <div className="topbar-actions">
           <span className="dataset-badge"><span aria-hidden="true" className="status-dot" /> Historical dataset · 1950—2005</span>
@@ -252,10 +280,10 @@ function App() {
 
         {error && <div role="alert" className="error-banner">Dashboard data could not be loaded: {error}</div>}
         <section className="kpi-grid" aria-label="Summary indicators">
-          <article className="kpi-card"><div className="kpi-label">Global average <span className="info-dot" title="Mean of all country-year observations in the selected years." aria-label="Mean of all observed country-year records">i</span></div><div className="kpi-value">{data.kpis ? formatRate(data.kpis.global_avg) : '—'}</div><div className="kpi-unit">per 100,000 · observed records</div></article>
-          <article className="kpi-card"><div className="kpi-label">Peak year average</div><div className="kpi-value">{data.kpis ? data.kpis.peak_year : '—'}</div><div className="kpi-unit">{data.kpis ? `${formatRate(data.kpis.peak_value)} per 100,000` : 'Selected period'}</div></article>
-          <article className="kpi-card"><div className="kpi-label">Highest eligible country</div><div className="kpi-value kpi-country">{topCountry?.entity ?? '—'}</div><div className="kpi-unit">{topCountry ? `${formatRate(topCountry.avg_rate)} mean · ${topCountry.years_reported} yr` : 'Requires 10+ observations'}</div></article>
-          <article className="kpi-card"><div className="kpi-label">Entities reported</div><div className="kpi-value">{data.kpis?.country_count ?? '—'}</div><div className="kpi-unit">in selected year range</div></article>
+          <article className="kpi-card"><div className="kpi-label">{LABELS.observationMean} <span className="info-dot" title="Mean of all country-year observations in the selected years." aria-label="Mean of all observed country-year records">i</span></div><div className="kpi-value">{data.kpis ? formatRate(data.kpis.global_avg) : '—'}</div><div className="kpi-unit">per 100,000 · observed records</div></article>
+          <article className="kpi-card"><div className="kpi-label">{LABELS.peakYear} <span className="info-dot" title="Raw yearly mean; the peak year ranges 1982–1998 depending on method." aria-label="Raw yearly mean; the peak year depends on method">i</span></div><div className="kpi-value">{data.kpis ? data.kpis.peak_year : '—'}</div><div className="kpi-unit">{data.kpis ? `${formatRate(data.kpis.peak_value)} per 100,000` : 'Selected period'}</div></article>
+          <article className="kpi-card"><div className="kpi-label">{LABELS.topEligibleCountry}</div><div className="kpi-value kpi-country">{topCountry?.entity ?? '—'}</div><div className="kpi-unit">{topCountry ? `${formatRate(topCountry.avg_rate)} mean · ${topCountry.years_reported} yr` : 'Requires 10+ observations'}</div></article>
+          <article className="kpi-card"><div className="kpi-label">{LABELS.entitiesWithReportedRates}</div><div className="kpi-value">{data.kpis?.country_count ?? '—'}</div><div className="kpi-unit">in selected year range</div></article>
         </section>
         {loading && <p className="loading-note" role="status">Updating the selected period…</p>}
 
@@ -327,7 +355,7 @@ function App() {
               <button className="table-export" type="button" onClick={() => downloadCsv('country-anomalies.csv', data.anomalies)}>Download CSV</button>
             </div>
             {data.anomalies.length ? <div className="table-scroll"><table><caption className="sr-only">Unusual consecutive year-to-year changes for {selectedEntity}</caption><thead><tr><th scope="col">Year</th><th scope="col">Change</th><th scope="col">Direction</th><th scope="col">z-score</th></tr></thead><tbody>
-              {data.anomalies.slice(0, 8).map((anomaly) => <tr key={`${anomaly.entity}-${anomaly.year}`}><td>{anomaly.year}</td><td>{anomaly.change > 0 ? '+' : ''}{formatRate(anomaly.change)}</td><td><span className={anomaly.change > 0 ? 'direction-up' : 'direction-down'}>{anomaly.change > 0 ? 'Increase' : 'Decrease'}</span></td><td>{anomaly.z_score.toFixed(2)}</td></tr>)}
+              {data.anomalies.slice(0, 8).map((anomaly) => <tr key={`${anomaly.entity}-${anomaly.year}`}><td>{anomaly.year}</td><td>{anomaly.change > 0 ? '+' : ''}{formatRate(anomaly.change)}</td><td><span className={anomaly.change > 0 ? 'direction-up' : 'direction-down'}>{anomaly.change > 0 ? 'Increase' : 'Decrease'}</span></td><td>{formatZScore(anomaly.z_score)}</td></tr>)}
             </tbody></table></div> : <div className="empty-state">No flagged consecutive-year changes for this entity in the selected range.</div>}
             <p className="panel-note">Z-scores are standardized against all consecutive-year entity changes. Sparse or missing years are not interpolated.</p>
           </section>
@@ -350,6 +378,8 @@ function App() {
           </div>
           <p className="panel-note">All entities are shown, including those with no reports in the selected range. Download CSV for first/last year and internal gap counts.</p>
                   </section>
+
+        <CompactRelationships data={data.relationships} selectedEntity={selectedEntity} from={range.from} to={range.to} />
 
         <section className="insights-section" aria-labelledby="insights-title">
           <div className="insights-intro"><p className="eyebrow">ANALYSIS SUMMARY</p><h2 id="insights-title">Key insights</h2><p>Each finding is descriptive and includes a coverage or interpretation caveat.</p></div>

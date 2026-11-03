@@ -7,6 +7,8 @@ import pandas as pd
 
 from backend.analysis import FORMER_STATES, MIN_TOP_COUNTRY_YEARS, OUTPUT_PATH, analyze
 from backend.db import connect
+from backend.registry import load_registry
+from backend.relationships import compact_payload, load_relationships
 
 
 def _query(sql: str, params: tuple = ()) -> pd.DataFrame:
@@ -21,21 +23,40 @@ def _date_where(start: int, end: int) -> tuple[str, tuple[int, int]]:
     return "year BETWEEN ? AND ?", (start, end)
 
 
-@lru_cache(maxsize=64)
-def get_kpis(start: int = 1950, end: int = 2005) -> dict:
+@lru_cache(maxsize=128)
+def get_range_summary(start: int = 1950, end: int = 2005) -> dict:
+    """Range-specific headline values shared by the dashboard and in-depth page."""
     rows = _query(
-        "SELECT AVG(rate) AS global_avg, COUNT(DISTINCT entity) AS country_count FROM suicide_rates WHERE year BETWEEN ? AND ?",
+        "SELECT AVG(rate) AS mean, COUNT(*) AS records, COUNT(DISTINCT entity) AS entities FROM suicide_rates WHERE year BETWEEN ? AND ?",
         (start, end),
     )
+    rates = _query("SELECT rate FROM suicide_rates WHERE year BETWEEN ? AND ?", (start, end))
     trend = get_global_trend(start, end)
-    peak = max(trend, key=lambda row: row["avg_rate"])
+    peak = max(trend, key=lambda row: row["avg_rate"]) if trend else None
     top = get_top_countries(1, start, end)
     return {
-        "global_avg": float(rows.iloc[0]["global_avg"] or 0),
-        "peak_year": int(peak["year"]),
-        "peak_value": float(peak["avg_rate"]),
+        "from": start,
+        "to": end,
+        "mean": float(rows.iloc[0]["mean"] or 0),
+        "median": float(rates["rate"].median()) if not rates.empty else 0.0,
+        "records": int(rows.iloc[0]["records"]),
+        "entity_count": int(rows.iloc[0]["entities"]),
+        "peak_year": int(peak["year"]) if peak else None,
+        "peak_value": float(peak["avg_rate"]) if peak else None,
+        "peak_countries_reporting": int(peak["countries_reporting"]) if peak else None,
         "top_country": top[0] if top else None,
-        "country_count": int(rows.iloc[0]["country_count"]),
+    }
+
+
+@lru_cache(maxsize=64)
+def get_kpis(start: int = 1950, end: int = 2005) -> dict:
+    summary = get_range_summary(start, end)
+    return {
+        "global_avg": summary["mean"],
+        "peak_year": summary["peak_year"],
+        "peak_value": summary["peak_value"],
+        "top_country": summary["top_country"],
+        "country_count": summary["entity_count"],
     }
 
 
@@ -437,4 +458,61 @@ def get_findings() -> list:
                 "section": "overview",
             }
         )
+    try:
+        findings.extend(get_relationships_full()["findings"])
+    except FileNotFoundError:
+        pass
     return findings
+
+
+@lru_cache(maxsize=1)
+def get_relationships_full() -> dict:
+    """Full relationship payload, read from the stored artefact only."""
+    return load_relationships()
+
+
+@lru_cache(maxsize=1)
+def get_relationships_compact() -> dict:
+    """Compact dashboard payload derived from the same stored full payload."""
+    return compact_payload(get_relationships_full())
+
+
+@lru_cache(maxsize=1)
+def get_metric_registry() -> dict:
+    return load_registry()
+
+
+@lru_cache(maxsize=256)
+def get_alignment(start: int = 1950, end: int = 2005, entity: str = "Lithuania") -> dict:
+    """Contract payload used by tests and clients to compare both pages."""
+    summary = get_range_summary(start, end)
+    dashboard_compare = get_compare(entity, start, end)
+    deep_compare = get_compare_multi((entity,), start, end)
+    deep_by_year = {row["year"]: row for row in deep_compare}
+    baseline_equal = all(
+        abs(row["global_avg"] - deep_by_year.get(row["year"], {}).get("global_avg", float("nan"))) < 1e-9
+        for row in dashboard_compare
+        if row["year"] in deep_by_year
+    )
+    insights = get_insights()
+    findings = get_findings()
+    return {
+        "period": {"from": start, "to": end},
+        "entity": entity,
+        "observation_mean": summary["mean"],
+        "median": summary["median"],
+        "peak_year": summary["peak_year"],
+        "peak_value": summary["peak_value"],
+        "peak_countries_reporting": summary["peak_countries_reporting"],
+        "top_eligible_country": summary["top_country"],
+        "entities_with_reported_rates": summary["entity_count"],
+        "records": summary["records"],
+        "comparison_global_baseline_equal": bool(baseline_equal),
+        "key_insights": insights,
+        "findings_1_to_7": [
+            {"title": finding["title"], "detail": finding["detail"], "caveat": finding["caveat"]}
+            for finding in findings[: len(insights)]
+        ],
+        "relationships_compact": get_relationships_compact(),
+        "relationships_full": get_relationships_full(),
+    }

@@ -186,12 +186,13 @@ class AnalysisEndpointsTests(unittest.TestCase):
 
     def test_findings_register_shape(self):
         findings = get_findings()
-        self.assertEqual(len(findings), 7)
+        self.assertEqual(len(findings), 11)
         self.assertEqual(findings[0]["number"], 1)
         for finding in findings:
             self.assertTrue(
                 {"number", "title", "detail", "caveat", "confidence", "section"} <= set(finding)
             )
+        self.assertEqual([finding["number"] for finding in findings[7:]], [8, 9, 10, 11])
 
 
 if __name__ == "__main__":

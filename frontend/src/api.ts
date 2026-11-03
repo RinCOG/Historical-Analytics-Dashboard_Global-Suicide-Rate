@@ -111,6 +111,136 @@ export type Finding = {
   section: string
 }
 
+export type RelationshipRow = {
+  id: string
+  label: string
+  description: string
+  n: number
+  entities: number
+  pearson: number | null
+  pearson_ci: number[] | null
+}
+
+export type RelationshipVerdict = {
+  id: string
+  label: 'Favourable' | 'Not Favourable' | 'Mixed'
+  judged_on: string
+  icon: string
+  rule: string
+  reason: string
+}
+
+export type RelationshipPoint = {
+  entity: string
+  code: string
+  x: number
+  y: number
+  x_obs: number
+  y_obs: number
+  former_state: boolean
+  label_rank: number | null
+}
+
+export type RelationshipStat = {
+  id: string
+  label: string
+  n: number
+  pearson: number | null
+  pearson_ci: number[] | null
+  spearman: number | null
+  spearman_ci: number[] | null
+}
+
+export type RelationshipBlock = {
+  id: string
+  title: string
+  question: string
+  x_label: string
+  y_label: string
+  n: number
+  pearson: number | null
+  pearson_ci: number[] | null
+  spearman: number | null
+  spearman_ci: number[] | null
+  points: RelationshipPoint[]
+  sensitivity: RelationshipStat[]
+  cutoff?: number
+  cutoff_label?: string
+  reference_line: boolean
+  verdict: RelationshipVerdict
+  subset?: RelationshipStat
+  windows?: Record<string, number[]>
+  min_observations?: number
+}
+
+export type RelationshipsFull = {
+  version: number
+  source: string
+  period: { from: number; to: number }
+  bootstrap: { method: string; resamples: number; seed: number; confidence: number; interval: string }
+  verdict_rules: Record<string, unknown>
+  block_a: {
+    id: string
+    title: string
+    question: string
+    rows: RelationshipRow[]
+    verdict: RelationshipVerdict
+    message: string
+    chart_note: string
+  }
+  block_b: Record<'B1' | 'B2' | 'B3' | 'B4', RelationshipBlock>
+  takeaways: Record<string, string>
+  anomaly_sensitivity: {
+    consecutive_changes: number
+    pooled_zscore_flags: number
+    within_country_zscore_flags: number
+    status_changes: number
+    note: string
+  }
+  findings: Finding[]
+  methods: {
+    block_a: string
+    windows: Record<string, unknown>
+    bootstrap: string
+    verdict_rules: Record<string, unknown>
+    no_pvalues: string
+    causation: string
+  }
+}
+
+export type RelationshipsCompact = {
+  version: number
+  source: string
+  period: { from: number; to: number }
+  bootstrap: RelationshipsFull['bootstrap']
+  note: string
+  anchors: Record<'A' | 'B1' | 'B2' | 'B3' | 'B4', string>
+  block_a: {
+    id: string
+    title: string
+    question: string
+    rows: RelationshipRow[]
+    verdict: RelationshipVerdict
+    message: string
+  }
+  block_b: Record<'B1' | 'B3' | 'B4', RelationshipBlock>
+  takeaways: Record<string, string>
+}
+
+export type RangeSummary = {
+  from: number
+  to: number
+  mean: number
+  median: number
+  records: number
+  entity_count: number
+  peak_year: number | null
+  peak_value: number | null
+  peak_countries_reporting: number | null
+  top_country: TopCountry | null
+}
+
+
 const API_BASE = import.meta.env.VITE_API_BASE ?? '/api/v1'
 
 async function request<T>(path: string): Promise<T> {
@@ -162,4 +292,10 @@ export const api = {
   analysisAnomalies: () => request<AnomalySummary>('/analysis/anomalies'),
   analysisCoverage: () => request<CoverageDeep>('/analysis/coverage'),
   analysisFindings: () => request<Finding[]>('/analysis/findings'),
+  analysisSummary: (from: number, to: number) => request<RangeSummary>(`/analysis/summary?${rangeQuery(from, to)}`),
+  relationshipsFull: () => request<RelationshipsFull>('/analysis/relationships'),
+  relationshipsCompact: () => request<RelationshipsCompact>('/analysis/relationships/compact'),
+  analysisRegistry: () => request<Record<string, unknown>>('/analysis/registry'),
+  analysisAlignment: (entity: string, from: number, to: number) =>
+    request<Record<string, unknown>>(`/analysis/alignment?entity=${encodeURIComponent(entity)}&${rangeQuery(from, to)}`),
 }

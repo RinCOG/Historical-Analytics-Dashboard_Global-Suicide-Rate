@@ -1,0 +1,4552 @@
+{
+  "version": 1,
+  "source": "SDG-3___suicide-rates-by-country.csv",
+  "period": {
+    "from": 1950,
+    "to": 2005
+  },
+  "bootstrap": {
+    "method": "entity-cluster percentile bootstrap",
+    "resamples": 2000,
+    "seed": 20260101,
+    "confidence": 0.95,
+    "interval": "2.5th to 97.5th percentile"
+  },
+  "verdict_rules": {
+    "A": {
+      "judged_on": "Data reliability",
+      "favourable": {
+        "spread_below": 0.1
+      },
+      "mixed": {
+        "spread_below": 0.3
+      },
+      "description": "Not Favourable when the inclusion rules move Pearson r by 0.30 or more; Mixed for 0.10-0.30; Favourable below 0.10."
+    },
+    "B1": {
+      "judged_on": "Data reliability",
+      "favourable": {
+        "spearman_min": 0.8,
+        "n_min": 30
+      },
+      "mixed": {
+        "spearman_min": 0.5,
+        "n_min": 30
+      },
+      "description": "Favourable when Spearman rho >= 0.80 and n >= 30; Mixed when rho >= 0.50 and n >= 30; otherwise Not Favourable."
+    },
+    "B2": {
+      "judged_on": "Data reliability",
+      "favourable": {
+        "spearman_min": 0.8,
+        "n_min": 30
+      },
+      "mixed": {
+        "spearman_min": 0.5,
+        "n_min": 30
+      },
+      "description": "Favourable when Spearman rho >= 0.80 and n >= 30; Mixed when rho >= 0.50 and n >= 30; otherwise Not Favourable."
+    },
+    "B3": {
+      "judged_on": "Data reliability",
+      "mixed": {
+        "full_abs_pearson_below": 0.3,
+        "subset_abs_pearson_below": 0.3,
+        "subset_n_min": 30
+      },
+      "not_favourable": {
+        "full_abs_pearson_min": 0.5,
+        "subset_abs_pearson_min": 0.5
+      },
+      "description": "Mixed when the full-sample |r| < 0.30 and the >=10-year subset |r| < 0.30; Not Favourable when both |r| values are >= 0.50; otherwise Mixed."
+    },
+    "B4": {
+      "judged_on": "Data reliability",
+      "not_favourable": {
+        "pearson_min": 0.5,
+        "n_min": 30
+      },
+      "mixed": {
+        "pearson_min": 0.3,
+        "n_min": 30
+      },
+      "description": "Not Favourable when Pearson r >= 0.50 and n >= 30; Mixed for 0.30-0.50; Favourable below 0.30."
+    }
+  },
+  "block_a": {
+    "id": "A",
+    "title": "One question, three answers",
+    "question": "Is year correlated with the reported suicide rate?",
+    "rows": [
+      {
+        "id": "A1",
+        "label": "All records pooled",
+        "description": "Every country-year record from 1950 to 2005.",
+        "n": 2843,
+        "entities": 196,
+        "pearson": -0.024163,
+        "pearson_ci": [
+          -0.145647,
+          0.0807
+        ]
+      },
+      {
+        "id": "A2",
+        "label": "All records, 1950\u20132001",
+        "description": "Records in the period before the late coverage break.",
+        "n": 2216,
+        "entities": 74,
+        "pearson": 0.086232,
+        "pearson_ci": [
+          -0.029677,
+          0.200309
+        ]
+      },
+      {
+        "id": "A3",
+        "label": "Within-country, eight complete panels",
+        "description": "Each entity's own mean is subtracted before correlating with year.",
+        "n": 448,
+        "entities": 8,
+        "pearson": 0.193379,
+        "pearson_ci": [
+          -0.304758,
+          0.646006
+        ]
+      },
+      {
+        "id": "A4",
+        "label": "Yearly mean of the eight panels",
+        "description": "The eight entities' yearly mean rate correlated with year.",
+        "n": 56,
+        "entities": 8,
+        "pearson": 0.722589,
+        "pearson_ci": [
+          -0.653282,
+          0.925126
+        ]
+      },
+      {
+        "id": "A5",
+        "label": "Within-country, entities with \u226540 years",
+        "description": "Demeaned records for the 32 entities with at least 40 reporting years.",
+        "n": 1637,
+        "entities": 32,
+        "pearson": 0.107195,
+        "pearson_ci": [
+          -0.093295,
+          0.309074
+        ]
+      }
+    ],
+    "verdict": {
+      "id": "A",
+      "label": "Not Favourable",
+      "judged_on": "Data reliability",
+      "icon": "!",
+      "rule": "Not Favourable when the inclusion rules move Pearson r by 0.30 or more; Mixed for 0.10-0.30; Favourable below 0.10.",
+      "reason": "The same year-rate question gives Pearson r values from -0.02 to 0.72, a spread of 0.75. The answer depends on the inclusion rule."
+    },
+    "message": "Across all records the year\u2013rate correlation is about zero (r = -0.02), but it is 0.19 within the eight complete panels and 0.72 for their yearly average \u2014 the answer depends on who is included.",
+    "chart_note": "A1\u2013A2 pool records and mix changing country groups. A4 correlates a yearly average, not individual observations."
+  },
+  "block_b": {
+    "B1": {
+      "id": "B1",
+      "title": "Persistence: 1980s to 1990s",
+      "question": "Do countries with higher rates in the 1980s also have higher rates in the 1990s?",
+      "x_label": "1980s mean (per 100,000)",
+      "y_label": "1990s mean (per 100,000)",
+      "windows": {
+        "x": [
+          1980,
+          1989
+        ],
+        "y": [
+          1990,
+          1999
+        ]
+      },
+      "n": 63,
+      "pearson": 0.924159,
+      "pearson_ci": [
+        0.896597,
+        0.95128
+      ],
+      "spearman": 0.958861,
+      "spearman_ci": [
+        0.914649,
+        0.976124
+      ],
+      "points": [
+        {
+          "entity": "Argentina",
+          "code": "ARG",
+          "x": 7.344643,
+          "y": 6.617252,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Australia",
+          "code": "AUS",
+          "x": 11.542457,
+          "y": 12.272283,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Austria",
+          "code": "AUT",
+          "x": 22.831807,
+          "y": 17.511899,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": 10
+        },
+        {
+          "entity": "Azerbaijan",
+          "code": "AZE",
+          "x": 4.542889,
+          "y": 1.424009,
+          "x_obs": 7,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Bahrain",
+          "code": "BHR",
+          "x": 2.508005,
+          "y": 2.012584,
+          "x_obs": 3,
+          "y_obs": 1,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Belarus",
+          "code": "BLR",
+          "x": 20.534079,
+          "y": 26.61447,
+          "x_obs": 7,
+          "y_obs": 9,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Belgium",
+          "code": "BEL",
+          "x": 18.604579,
+          "y": 16.624676,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Bosnia and Herzegovina",
+          "code": "BIH",
+          "x": 10.569537,
+          "y": 10.768925,
+          "x_obs": 5,
+          "y_obs": 2,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Brazil",
+          "code": "BRA",
+          "x": 3.919109,
+          "y": 4.249609,
+          "x_obs": 8,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Bulgaria",
+          "code": "BGR",
+          "x": 12.992157,
+          "y": 13.531497,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Canada",
+          "code": "CAN",
+          "x": 13.206635,
+          "y": 11.998657,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Chile",
+          "code": "CHL",
+          "x": 6.155675,
+          "y": 6.366764,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Colombia",
+          "code": "COL",
+          "x": 3.494059,
+          "y": 3.846138,
+          "x_obs": 6,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Costa Rica",
+          "code": "CRI",
+          "x": 5.850891,
+          "y": 6.045522,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Croatia",
+          "code": "HRV",
+          "x": 19.378692,
+          "y": 18.944664,
+          "x_obs": 5,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Czech Republic",
+          "code": "CZE",
+          "x": 16.842907,
+          "y": 14.794358,
+          "x_obs": 4,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Czechoslovakia",
+          "code": "OWID_CZS",
+          "x": 17.25988,
+          "y": 15.737335,
+          "x_obs": 10,
+          "y_obs": 2,
+          "former_state": true,
+          "label_rank": null
+        },
+        {
+          "entity": "Denmark",
+          "code": "DNK",
+          "x": 24.489504,
+          "y": 15.238814,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": 7
+        },
+        {
+          "entity": "East Germany",
+          "code": "OWID_GDR",
+          "x": 20.54407,
+          "y": 19.00906,
+          "x_obs": 1,
+          "y_obs": 1,
+          "former_state": true,
+          "label_rank": null
+        },
+        {
+          "entity": "Estonia",
+          "code": "EST",
+          "x": 26.75272,
+          "y": 31.676236,
+          "x_obs": 7,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": 5
+        },
+        {
+          "entity": "Finland",
+          "code": "FIN",
+          "x": 23.568765,
+          "y": 24.146601,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": 8
+        },
+        {
+          "entity": "France",
+          "code": "FRA",
+          "x": 18.161697,
+          "y": 16.353422,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Georgia",
+          "code": "GEO",
+          "x": 4.604662,
+          "y": 3.703427,
+          "x_obs": 7,
+          "y_obs": 9,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Greece",
+          "code": "GRC",
+          "x": 3.289556,
+          "y": 2.942821,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Guatemala",
+          "code": "GTM",
+          "x": 2.186679,
+          "y": 2.363369,
+          "x_obs": 7,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Hungary",
+          "code": "HUN",
+          "x": 38.093567,
+          "y": 28.854702,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": 1
+        },
+        {
+          "entity": "Ireland",
+          "code": "IRL",
+          "x": 7.696788,
+          "y": 10.986016,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Israel",
+          "code": "ISR",
+          "x": 6.570348,
+          "y": 6.763166,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Italy",
+          "code": "ITA",
+          "x": 6.254544,
+          "y": 6.102777,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Japan",
+          "code": "JPN",
+          "x": 16.918441,
+          "y": 14.743945,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Kazakhstan",
+          "code": "KAZ",
+          "x": 22.113096,
+          "y": 26.630001,
+          "x_obs": 7,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Kuwait",
+          "code": "KWT",
+          "x": 0.753262,
+          "y": 1.419683,
+          "x_obs": 8,
+          "y_obs": 7,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Kyrgyzstan",
+          "code": "KGZ",
+          "x": 15.051043,
+          "y": 14.983687,
+          "x_obs": 7,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Latvia",
+          "code": "LVA",
+          "x": 26.335327,
+          "y": 31.219092,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": 6
+        },
+        {
+          "entity": "Lithuania",
+          "code": "LTU",
+          "x": 28.541454,
+          "y": 38.016468,
+          "x_obs": 7,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": 3
+        },
+        {
+          "entity": "Mauritius",
+          "code": "MUS",
+          "x": 8.060453,
+          "y": 13.239918,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Mexico",
+          "code": "MEX",
+          "x": 2.316792,
+          "y": 3.411458,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Moldova",
+          "code": "MDA",
+          "x": 18.887901,
+          "y": 16.718224,
+          "x_obs": 7,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Netherlands",
+          "code": "NLD",
+          "x": 9.776921,
+          "y": 8.65089,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "New Zealand",
+          "code": "NZL",
+          "x": 11.7992,
+          "y": 13.759498,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Norway",
+          "code": "NOR",
+          "x": 13.46611,
+          "y": 12.240764,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Panama",
+          "code": "PAN",
+          "x": 3.579884,
+          "y": 5.348025,
+          "x_obs": 6,
+          "y_obs": 4,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Poland",
+          "code": "POL",
+          "x": 12.524894,
+          "y": 13.505369,
+          "x_obs": 7,
+          "y_obs": 8,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Portugal",
+          "code": "PRT",
+          "x": 7.96621,
+          "y": 5.88298,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Romania",
+          "code": "ROU",
+          "x": 10.38418,
+          "y": 10.709841,
+          "x_obs": 1,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Russia",
+          "code": "RUS",
+          "x": 26.934083,
+          "y": 32.885837,
+          "x_obs": 8,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": 4
+        },
+        {
+          "entity": "Singapore",
+          "code": "SGP",
+          "x": 12.895029,
+          "y": 10.342739,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Slovenia",
+          "code": "SVN",
+          "x": 28.802394,
+          "y": 25.840719,
+          "x_obs": 5,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": 2
+        },
+        {
+          "entity": "South Korea",
+          "code": "KOR",
+          "x": 8.432241,
+          "y": 11.083832,
+          "x_obs": 5,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Spain",
+          "code": "ESP",
+          "x": 5.469261,
+          "y": 6.378686,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Sweden",
+          "code": "SWE",
+          "x": 16.293943,
+          "y": 12.668942,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Switzerland",
+          "code": "CHE",
+          "x": 20.877778,
+          "y": 16.797713,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Trinidad and Tobago",
+          "code": "TTO",
+          "x": 8.717422,
+          "y": 13.62617,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Turkmenistan",
+          "code": "TKM",
+          "x": 10.703927,
+          "y": 8.572315,
+          "x_obs": 7,
+          "y_obs": 9,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "USSR",
+          "code": "OWID_USS",
+          "x": 23.038079,
+          "y": 20.62313,
+          "x_obs": 8,
+          "y_obs": 1,
+          "former_state": true,
+          "label_rank": 9
+        },
+        {
+          "entity": "Ukraine",
+          "code": "UKR",
+          "x": 19.116813,
+          "y": 23.115982,
+          "x_obs": 7,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "United Kingdom",
+          "code": "GBR",
+          "x": 7.605739,
+          "y": 6.868738,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "United States",
+          "code": "USA",
+          "x": 11.463993,
+          "y": 10.867033,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Uruguay",
+          "code": "URY",
+          "x": 9.342736,
+          "y": 12.281728,
+          "x_obs": 10,
+          "y_obs": 8,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Uzbekistan",
+          "code": "UZB",
+          "x": 9.695111,
+          "y": 8.633395,
+          "x_obs": 7,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Venezuela",
+          "code": "VEN",
+          "x": 5.944497,
+          "y": 5.708531,
+          "x_obs": 9,
+          "y_obs": 8,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "West Germany",
+          "code": "OWID_GFR",
+          "x": 16.204395,
+          "y": 12.3628,
+          "x_obs": 10,
+          "y_obs": 1,
+          "former_state": true,
+          "label_rank": null
+        },
+        {
+          "entity": "Yugoslavia",
+          "code": "OWID_YGS",
+          "x": 15.101735,
+          "y": 13.88089,
+          "x_obs": 10,
+          "y_obs": 1,
+          "former_state": true,
+          "label_rank": null
+        }
+      ],
+      "sensitivity": [
+        {
+          "id": "B1-min3",
+          "label": "At least 3 observations in each window",
+          "n": 55,
+          "pearson": 0.922862,
+          "pearson_ci": [
+            0.891275,
+            0.955254
+          ],
+          "spearman": 0.959235,
+          "spearman_ci": [
+            0.913528,
+            0.976092
+          ]
+        },
+        {
+          "id": "B1-no-former",
+          "label": "Excluding the six OWID former-state entities",
+          "n": 58,
+          "pearson": 0.925303,
+          "pearson_ci": [
+            0.896513,
+            0.956725
+          ],
+          "spearman": 0.956381,
+          "spearman_ci": [
+            0.903982,
+            0.974919
+          ]
+        }
+      ],
+      "reference_line": true,
+      "verdict": {
+        "id": "B1",
+        "label": "Favourable",
+        "judged_on": "Data reliability",
+        "icon": "\u2713",
+        "rule": "Favourable when Spearman rho >= 0.80 and n >= 30; Mixed when rho >= 0.50 and n >= 30; otherwise Not Favourable.",
+        "reason": "Spearman rho = 0.96 with n = 63: country rankings are stable enough for country-level comparison across these fixed windows."
+      }
+    },
+    "B2": {
+      "id": "B2",
+      "title": "Persistence: 1990s to 2000\u20132005",
+      "question": "Do countries with higher rates in the 1990s also have higher rates in 2000\u20132005?",
+      "x_label": "1990s mean (per 100,000)",
+      "y_label": "2000\u20132005 mean (per 100,000)",
+      "windows": {
+        "x": [
+          1990,
+          1999
+        ],
+        "y": [
+          2000,
+          2005
+        ]
+      },
+      "n": 67,
+      "pearson": 0.946463,
+      "pearson_ci": [
+        0.914132,
+        0.970567
+      ],
+      "spearman": 0.936388,
+      "spearman_ci": [
+        0.866672,
+        0.969319
+      ],
+      "points": [
+        {
+          "entity": "Argentina",
+          "code": "ARG",
+          "x": 6.617252,
+          "y": 8.131658,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Australia",
+          "code": "AUS",
+          "x": 12.272283,
+          "y": 10.467639,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Austria",
+          "code": "AUT",
+          "x": 17.511899,
+          "y": 14.435082,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Azerbaijan",
+          "code": "AZE",
+          "x": 1.424009,
+          "y": 2.079102,
+          "x_obs": 10,
+          "y_obs": 4,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Bahrain",
+          "code": "BHR",
+          "x": 2.012584,
+          "y": 3.874419,
+          "x_obs": 1,
+          "y_obs": 5,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Belarus",
+          "code": "BLR",
+          "x": 26.61447,
+          "y": 29.81904,
+          "x_obs": 9,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Belgium",
+          "code": "BEL",
+          "x": 16.624676,
+          "y": 16.507973,
+          "x_obs": 10,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Bosnia and Herzegovina",
+          "code": "BIH",
+          "x": 10.768925,
+          "y": 12.04147,
+          "x_obs": 2,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Brazil",
+          "code": "BRA",
+          "x": 4.249609,
+          "y": 4.558735,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Bulgaria",
+          "code": "BGR",
+          "x": 13.531497,
+          "y": 11.157908,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Canada",
+          "code": "CAN",
+          "x": 11.998657,
+          "y": 10.4567,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Chile",
+          "code": "CHL",
+          "x": 6.366764,
+          "y": 10.328179,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Colombia",
+          "code": "COL",
+          "x": 3.846138,
+          "y": 5.605577,
+          "x_obs": 10,
+          "y_obs": 5,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Costa Rica",
+          "code": "CRI",
+          "x": 6.045522,
+          "y": 7.020929,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Croatia",
+          "code": "HRV",
+          "x": 18.944664,
+          "y": 15.52645,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Cuba",
+          "code": "CUB",
+          "x": 18.505543,
+          "y": 12.290088,
+          "x_obs": 8,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Cyprus",
+          "code": "CYP",
+          "x": 0.131242,
+          "y": 1.128144,
+          "x_obs": 1,
+          "y_obs": 4,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Czech Republic",
+          "code": "CZE",
+          "x": 14.794358,
+          "y": 12.868,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Denmark",
+          "code": "DNK",
+          "x": 15.238814,
+          "y": 10.042425,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Estonia",
+          "code": "EST",
+          "x": 31.676236,
+          "y": 22.077648,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Finland",
+          "code": "FIN",
+          "x": 24.146601,
+          "y": 18.637068,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "France",
+          "code": "FRA",
+          "x": 16.353422,
+          "y": 14.563085,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Georgia",
+          "code": "GEO",
+          "x": 3.703427,
+          "y": 2.007282,
+          "x_obs": 9,
+          "y_obs": 5,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Germany",
+          "code": "DEU",
+          "x": 12.263914,
+          "y": 10.052263,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Greece",
+          "code": "GRC",
+          "x": 2.942821,
+          "y": 2.636921,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Guatemala",
+          "code": "GTM",
+          "x": 2.363369,
+          "y": 2.399522,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Hungary",
+          "code": "HUN",
+          "x": 28.854702,
+          "y": 22.450685,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Ireland",
+          "code": "IRL",
+          "x": 10.986016,
+          "y": 11.164923,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Israel",
+          "code": "ISR",
+          "x": 6.763166,
+          "y": 6.11564,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Italy",
+          "code": "ITA",
+          "x": 6.102777,
+          "y": 5.258136,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Japan",
+          "code": "JPN",
+          "x": 14.743945,
+          "y": 18.54105,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Kazakhstan",
+          "code": "KAZ",
+          "x": 26.630001,
+          "y": 28.951742,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Kuwait",
+          "code": "KWT",
+          "x": 1.419683,
+          "y": 1.39176,
+          "x_obs": 7,
+          "y_obs": 5,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Kyrgyzstan",
+          "code": "KGZ",
+          "x": 14.983687,
+          "y": 11.625024,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Latvia",
+          "code": "LVA",
+          "x": 31.219092,
+          "y": 23.346885,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Lithuania",
+          "code": "LTU",
+          "x": 38.016468,
+          "y": 37.995055,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Macedonia",
+          "code": "MKD",
+          "x": 7.285873,
+          "y": 7.031621,
+          "x_obs": 9,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Mauritius",
+          "code": "MUS",
+          "x": 13.239918,
+          "y": 9.178542,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Mexico",
+          "code": "MEX",
+          "x": 3.411458,
+          "y": 4.062309,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Moldova",
+          "code": "MDA",
+          "x": 16.718224,
+          "y": 15.362522,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Netherlands",
+          "code": "NLD",
+          "x": 8.65089,
+          "y": 7.964517,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "New Zealand",
+          "code": "NZL",
+          "x": 13.759498,
+          "y": 12.139135,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Norway",
+          "code": "NOR",
+          "x": 12.240764,
+          "y": 10.769819,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Panama",
+          "code": "PAN",
+          "x": 5.348025,
+          "y": 5.998049,
+          "x_obs": 4,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Paraguay",
+          "code": "PRY",
+          "x": 2.991212,
+          "y": 3.708214,
+          "x_obs": 6,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Philippines",
+          "code": "PHL",
+          "x": 1.31074,
+          "y": 1.982657,
+          "x_obs": 5,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Poland",
+          "code": "POL",
+          "x": 13.505369,
+          "y": 13.65427,
+          "x_obs": 8,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Portugal",
+          "code": "PRT",
+          "x": 5.88298,
+          "y": 7.086816,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Romania",
+          "code": "ROU",
+          "x": 10.709841,
+          "y": 11.009583,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Russia",
+          "code": "RUS",
+          "x": 32.885837,
+          "y": 32.340613,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Serbia",
+          "code": "SRB",
+          "x": 15.560285,
+          "y": 14.109277,
+          "x_obs": 2,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Serbia and Montenegro",
+          "code": "OWID_SRM",
+          "x": 13.374957,
+          "y": 14.117093,
+          "x_obs": 3,
+          "y_obs": 5,
+          "former_state": true,
+          "label_rank": null
+        },
+        {
+          "entity": "Singapore",
+          "code": "SGP",
+          "x": 10.342739,
+          "y": 8.910205,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Slovakia",
+          "code": "SVK",
+          "x": 12.190734,
+          "y": 11.388253,
+          "x_obs": 8,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Slovenia",
+          "code": "SVN",
+          "x": 25.840719,
+          "y": 21.679575,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "South Korea",
+          "code": "KOR",
+          "x": 11.083832,
+          "y": 18.284962,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Spain",
+          "code": "ESP",
+          "x": 6.378686,
+          "y": 6.187224,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Sweden",
+          "code": "SWE",
+          "x": 12.668942,
+          "y": 10.749252,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Switzerland",
+          "code": "CHE",
+          "x": 16.797713,
+          "y": 14.168207,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Trinidad and Tobago",
+          "code": "TTO",
+          "x": 13.62617,
+          "y": 13.535675,
+          "x_obs": 10,
+          "y_obs": 5,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Turkmenistan",
+          "code": "TKM",
+          "x": 8.572315,
+          "y": 12.817296,
+          "x_obs": 9,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Ukraine",
+          "code": "UKR",
+          "x": 23.115982,
+          "y": 21.962808,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "United Kingdom",
+          "code": "GBR",
+          "x": 6.868738,
+          "y": 6.275702,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "United States",
+          "code": "USA",
+          "x": 10.867033,
+          "y": 9.844688,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Uruguay",
+          "code": "URY",
+          "x": 12.281728,
+          "y": 14.87358,
+          "x_obs": 8,
+          "y_obs": 5,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Uzbekistan",
+          "code": "UZB",
+          "x": 8.633395,
+          "y": 6.972205,
+          "x_obs": 10,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Venezuela",
+          "code": "VEN",
+          "x": 5.708531,
+          "y": 5.197716,
+          "x_obs": 8,
+          "y_obs": 6,
+          "former_state": false,
+          "label_rank": null
+        }
+      ],
+      "sensitivity": [
+        {
+          "id": "B2-min3",
+          "label": "At least 3 observations in each window",
+          "n": 63,
+          "pearson": 0.944283,
+          "pearson_ci": [
+            0.90706,
+            0.96892
+          ],
+          "spearman": 0.93414,
+          "spearman_ci": [
+            0.863854,
+            0.968723
+          ]
+        },
+        {
+          "id": "B2-no-former",
+          "label": "Excluding the six OWID former-state entities",
+          "n": 66,
+          "pearson": 0.946759,
+          "pearson_ci": [
+            0.913711,
+            0.970533
+          ],
+          "spearman": 0.938169,
+          "spearman_ci": [
+            0.87135,
+            0.970715
+          ]
+        }
+      ],
+      "reference_line": true,
+      "verdict": {
+        "id": "B2",
+        "label": "Favourable",
+        "judged_on": "Data reliability",
+        "icon": "\u2713",
+        "rule": "Favourable when Spearman rho >= 0.80 and n >= 30; Mixed when rho >= 0.50 and n >= 30; otherwise Not Favourable.",
+        "reason": "Spearman rho = 0.94 with n = 67: country rankings are stable enough for country-level comparison across these fixed windows."
+      }
+    },
+    "B3": {
+      "id": "B3",
+      "title": "Coverage vs level",
+      "question": "Are countries with more reported years systematically higher or lower?",
+      "x_label": "Years reported",
+      "y_label": "Country mean (per 100,000)",
+      "cutoff": 10,
+      "cutoff_label": "10-year cutoff",
+      "n": 196,
+      "pearson": 0.227605,
+      "pearson_ci": [
+        0.111634,
+        0.354232
+      ],
+      "spearman": 0.258545,
+      "spearman_ci": [
+        0.127763,
+        0.389749
+      ],
+      "points": [
+        {
+          "entity": "Afghanistan",
+          "code": "AFG",
+          "x": 3.0,
+          "y": 6.745275,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Albania",
+          "code": "ALB",
+          "x": 3.0,
+          "y": 6.063859,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Algeria",
+          "code": "DZA",
+          "x": 3.0,
+          "y": 4.48406,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Andorra",
+          "code": "AND",
+          "x": 3.0,
+          "y": 5.395041,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Angola",
+          "code": "AGO",
+          "x": 3.0,
+          "y": 13.683605,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Antigua and Barbuda",
+          "code": "ATG",
+          "x": 3.0,
+          "y": 1.599948,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Argentina",
+          "code": "ARG",
+          "x": 34.0,
+          "y": 7.655741,
+          "x_obs": 34,
+          "y_obs": 34,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Armenia",
+          "code": "ARM",
+          "x": 3.0,
+          "y": 3.568778,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Australia",
+          "code": "AUS",
+          "x": 56.0,
+          "y": 11.960147,
+          "x_obs": 56,
+          "y_obs": 56,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Austria",
+          "code": "AUT",
+          "x": 51.0,
+          "y": 19.68569,
+          "x_obs": 51,
+          "y_obs": 51,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Azerbaijan",
+          "code": "AZE",
+          "x": 21.0,
+          "y": 2.588415,
+          "x_obs": 21,
+          "y_obs": 21,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Bahamas",
+          "code": "BHS",
+          "x": 3.0,
+          "y": 3.296671,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Bahrain",
+          "code": "BHR",
+          "x": 9.0,
+          "y": 3.212077,
+          "x_obs": 9,
+          "y_obs": 9,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Bangladesh",
+          "code": "BGD",
+          "x": 3.0,
+          "y": 14.607838,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Barbados",
+          "code": "BRB",
+          "x": 3.0,
+          "y": 3.404419,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Belarus",
+          "code": "BLR",
+          "x": 22.0,
+          "y": 25.553774,
+          "x_obs": 22,
+          "y_obs": 22,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Belgium",
+          "code": "BEL",
+          "x": 49.0,
+          "y": 15.08041,
+          "x_obs": 49,
+          "y_obs": 49,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Belize",
+          "code": "BLZ",
+          "x": 3.0,
+          "y": 7.308055,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Benin",
+          "code": "BEN",
+          "x": 3.0,
+          "y": 6.247377,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Bhutan",
+          "code": "BTN",
+          "x": 3.0,
+          "y": 16.160878,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Bolivia",
+          "code": "BOL",
+          "x": 3.0,
+          "y": 2.09177,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Bosnia and Herzegovina",
+          "code": "BIH",
+          "x": 10.0,
+          "y": 11.050995,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Botswana",
+          "code": "BWA",
+          "x": 3.0,
+          "y": 9.960465,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Brazil",
+          "code": "BRA",
+          "x": 24.0,
+          "y": 4.216724,
+          "x_obs": 24,
+          "y_obs": 24,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Brunei",
+          "code": "BRN",
+          "x": 3.0,
+          "y": 1.396966,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Bulgaria",
+          "code": "BGR",
+          "x": 42.0,
+          "y": 11.997839,
+          "x_obs": 42,
+          "y_obs": 42,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Burkina Faso",
+          "code": "BFA",
+          "x": 3.0,
+          "y": 8.228693,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Burundi",
+          "code": "BDI",
+          "x": 3.0,
+          "y": 13.401804,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Cambodia",
+          "code": "KHM",
+          "x": 3.0,
+          "y": 4.983513,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Cameroon",
+          "code": "CMR",
+          "x": 3.0,
+          "y": 7.036993,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Canada",
+          "code": "CAN",
+          "x": 56.0,
+          "y": 11.081953,
+          "x_obs": 56,
+          "y_obs": 56,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Cape Verde",
+          "code": "CPV",
+          "x": 3.0,
+          "y": 5.065422,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Central African Republic",
+          "code": "CAF",
+          "x": 3.0,
+          "y": 13.39951,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Chad",
+          "code": "TCD",
+          "x": 3.0,
+          "y": 7.952727,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Chile",
+          "code": "CHL",
+          "x": 51.0,
+          "y": 7.099053,
+          "x_obs": 51,
+          "y_obs": 51,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "China",
+          "code": "CHN",
+          "x": 3.0,
+          "y": 18.343259,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Colombia",
+          "code": "COL",
+          "x": 43.0,
+          "y": 4.218676,
+          "x_obs": 43,
+          "y_obs": 43,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Comoros",
+          "code": "COM",
+          "x": 3.0,
+          "y": 4.626598,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Congo",
+          "code": "COG",
+          "x": 3.0,
+          "y": 9.856473,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Cook Islands",
+          "code": "COK",
+          "x": 3.0,
+          "y": 4.437335,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Costa Rica",
+          "code": "CRI",
+          "x": 44.0,
+          "y": 5.546782,
+          "x_obs": 44,
+          "y_obs": 44,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Cote d'Ivoire",
+          "code": "CIV",
+          "x": 3.0,
+          "y": 18.647283,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Croatia",
+          "code": "HRV",
+          "x": 21.0,
+          "y": 18.071371,
+          "x_obs": 21,
+          "y_obs": 21,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Cuba",
+          "code": "CUB",
+          "x": 25.0,
+          "y": 16.483783,
+          "x_obs": 25,
+          "y_obs": 25,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Cyprus",
+          "code": "CYP",
+          "x": 5.0,
+          "y": 0.928763,
+          "x_obs": 5,
+          "y_obs": 5,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Czech Republic",
+          "code": "CZE",
+          "x": 20.0,
+          "y": 14.626161,
+          "x_obs": 20,
+          "y_obs": 20,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Czechoslovakia",
+          "code": "OWID_CZS",
+          "x": 39.0,
+          "y": 19.517797,
+          "x_obs": 39,
+          "y_obs": 39,
+          "former_state": true,
+          "label_rank": null
+        },
+        {
+          "entity": "Democratic Republic of Congo",
+          "code": "COD",
+          "x": 3.0,
+          "y": 12.257568,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Denmark",
+          "code": "DNK",
+          "x": 55.0,
+          "y": 19.011753,
+          "x_obs": 55,
+          "y_obs": 55,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Djibouti",
+          "code": "DJI",
+          "x": 3.0,
+          "y": 5.160983,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Dominica",
+          "code": "DMA",
+          "x": 2.0,
+          "y": 5.835251,
+          "x_obs": 2,
+          "y_obs": 2,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Dominican Republic",
+          "code": "DOM",
+          "x": 3.0,
+          "y": 5.553111,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "East Germany",
+          "code": "OWID_GDR",
+          "x": 4.0,
+          "y": 24.452345,
+          "x_obs": 4,
+          "y_obs": 4,
+          "former_state": true,
+          "label_rank": null
+        },
+        {
+          "entity": "Ecuador",
+          "code": "ECU",
+          "x": 3.0,
+          "y": 7.713121,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Egypt",
+          "code": "EGY",
+          "x": 13.0,
+          "y": 0.521248,
+          "x_obs": 13,
+          "y_obs": 13,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "El Salvador",
+          "code": "SLV",
+          "x": 3.0,
+          "y": 8.35675,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Equatorial Guinea",
+          "code": "GNQ",
+          "x": 3.0,
+          "y": 9.182362,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Eritrea",
+          "code": "ERI",
+          "x": 3.0,
+          "y": 9.017198,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Estonia",
+          "code": "EST",
+          "x": 23.0,
+          "y": 27.673795,
+          "x_obs": 23,
+          "y_obs": 23,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Ethiopia",
+          "code": "ETH",
+          "x": 3.0,
+          "y": 8.516033,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Fiji",
+          "code": "FJI",
+          "x": 3.0,
+          "y": 3.979135,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Finland",
+          "code": "FIN",
+          "x": 54.0,
+          "y": 22.153146,
+          "x_obs": 54,
+          "y_obs": 54,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "France",
+          "code": "FRA",
+          "x": 55.0,
+          "y": 15.243681,
+          "x_obs": 55,
+          "y_obs": 55,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Gabon",
+          "code": "GAB",
+          "x": 3.0,
+          "y": 7.211264,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Gambia",
+          "code": "GMB",
+          "x": 3.0,
+          "y": 6.357598,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Georgia",
+          "code": "GEO",
+          "x": 21.0,
+          "y": 3.599995,
+          "x_obs": 21,
+          "y_obs": 21,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Germany",
+          "code": "DEU",
+          "x": 16.0,
+          "y": 11.434545,
+          "x_obs": 16,
+          "y_obs": 16,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Ghana",
+          "code": "GHA",
+          "x": 3.0,
+          "y": 6.020095,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Greece",
+          "code": "GRC",
+          "x": 45.0,
+          "y": 3.028587,
+          "x_obs": 45,
+          "y_obs": 45,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Grenada",
+          "code": "GRD",
+          "x": 3.0,
+          "y": 3.614289,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Guatemala",
+          "code": "GTM",
+          "x": 34.0,
+          "y": 2.654906,
+          "x_obs": 34,
+          "y_obs": 34,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Guinea",
+          "code": "GIN",
+          "x": 3.0,
+          "y": 7.482283,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Guinea-Bissau",
+          "code": "GNB",
+          "x": 3.0,
+          "y": 7.429408,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Guyana",
+          "code": "GUY",
+          "x": 3.0,
+          "y": 30.847468,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Haiti",
+          "code": "HTI",
+          "x": 3.0,
+          "y": 1.455347,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Honduras",
+          "code": "HND",
+          "x": 3.0,
+          "y": 7.752265,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Hungary",
+          "code": "HUN",
+          "x": 51.0,
+          "y": 29.8454,
+          "x_obs": 51,
+          "y_obs": 51,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Iceland",
+          "code": "ISL",
+          "x": 3.0,
+          "y": 11.457287,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "India",
+          "code": "IND",
+          "x": 3.0,
+          "y": 18.758307,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Indonesia",
+          "code": "IDN",
+          "x": 3.0,
+          "y": 11.665304,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Iran",
+          "code": "IRN",
+          "x": 3.0,
+          "y": 6.926356,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Iraq",
+          "code": "IRQ",
+          "x": 3.0,
+          "y": 14.146752,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Ireland",
+          "code": "IRL",
+          "x": 56.0,
+          "y": 6.168293,
+          "x_obs": 56,
+          "y_obs": 56,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Israel",
+          "code": "ISR",
+          "x": 31.0,
+          "y": 6.691274,
+          "x_obs": 31,
+          "y_obs": 31,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Italy",
+          "code": "ITA",
+          "x": 55.0,
+          "y": 5.722737,
+          "x_obs": 55,
+          "y_obs": 55,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Jamaica",
+          "code": "JAM",
+          "x": 3.0,
+          "y": 2.979122,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Japan",
+          "code": "JPN",
+          "x": 56.0,
+          "y": 18.297614,
+          "x_obs": 56,
+          "y_obs": 56,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Jordan",
+          "code": "JOR",
+          "x": 3.0,
+          "y": 8.272032,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Kazakhstan",
+          "code": "KAZ",
+          "x": 23.0,
+          "y": 25.860962,
+          "x_obs": 23,
+          "y_obs": 23,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Kenya",
+          "code": "KEN",
+          "x": 3.0,
+          "y": 10.374225,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Kuwait",
+          "code": "KWT",
+          "x": 26.0,
+          "y": 0.994204,
+          "x_obs": 26,
+          "y_obs": 26,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Kyrgyzstan",
+          "code": "KGZ",
+          "x": 23.0,
+          "y": 14.128014,
+          "x_obs": 23,
+          "y_obs": 23,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Laos",
+          "code": "LAO",
+          "x": 3.0,
+          "y": 26.731572,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Latvia",
+          "code": "LVA",
+          "x": 26.0,
+          "y": 27.524058,
+          "x_obs": 26,
+          "y_obs": 26,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Lebanon",
+          "code": "LBN",
+          "x": 3.0,
+          "y": 5.978734,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Lesotho",
+          "code": "LSO",
+          "x": 3.0,
+          "y": 8.197178,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Liberia",
+          "code": "LBR",
+          "x": 3.0,
+          "y": 8.135992,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Libya",
+          "code": "LBY",
+          "x": 3.0,
+          "y": 4.472429,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Lithuania",
+          "code": "LTU",
+          "x": 23.0,
+          "y": 35.127182,
+          "x_obs": 23,
+          "y_obs": 23,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Luxembourg",
+          "code": "LUX",
+          "x": 3.0,
+          "y": 12.730392,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Macedonia",
+          "code": "MKD",
+          "x": 15.0,
+          "y": 7.184172,
+          "x_obs": 15,
+          "y_obs": 15,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Madagascar",
+          "code": "MDG",
+          "x": 3.0,
+          "y": 5.969327,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Malawi",
+          "code": "MWI",
+          "x": 3.0,
+          "y": 10.43463,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Malaysia",
+          "code": "MYS",
+          "x": 3.0,
+          "y": 8.128557,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Maldives",
+          "code": "MDV",
+          "x": 3.0,
+          "y": 17.335748,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Mali",
+          "code": "MLI",
+          "x": 3.0,
+          "y": 8.261613,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Malta",
+          "code": "MLT",
+          "x": 3.0,
+          "y": 4.869791,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Marshall Islands",
+          "code": "MHL",
+          "x": 3.0,
+          "y": 7.255069,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Mauritania",
+          "code": "MRT",
+          "x": 3.0,
+          "y": 7.180395,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Mauritius",
+          "code": "MUS",
+          "x": 45.0,
+          "y": 8.07416,
+          "x_obs": 45,
+          "y_obs": 45,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Mexico",
+          "code": "MEX",
+          "x": 51.0,
+          "y": 2.606419,
+          "x_obs": 51,
+          "y_obs": 51,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Micronesia (country)",
+          "code": "FSM",
+          "x": 3.0,
+          "y": 4.848552,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Moldova",
+          "code": "MDA",
+          "x": 23.0,
+          "y": 17.024899,
+          "x_obs": 23,
+          "y_obs": 23,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Monaco",
+          "code": "MCO",
+          "x": 3.0,
+          "y": 11.287015,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Mongolia",
+          "code": "MNG",
+          "x": 3.0,
+          "y": 13.496994,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Morocco",
+          "code": "MAR",
+          "x": 3.0,
+          "y": 2.216827,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Mozambique",
+          "code": "MOZ",
+          "x": 3.0,
+          "y": 9.08157,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Myanmar",
+          "code": "MMR",
+          "x": 3.0,
+          "y": 10.566758,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Namibia",
+          "code": "NAM",
+          "x": 3.0,
+          "y": 8.526319,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Nauru",
+          "code": "NRU",
+          "x": 3.0,
+          "y": 4.076258,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Nepal",
+          "code": "NPL",
+          "x": 3.0,
+          "y": 11.911376,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Netherlands",
+          "code": "NLD",
+          "x": 56.0,
+          "y": 8.002347,
+          "x_obs": 56,
+          "y_obs": 56,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "New Zealand",
+          "code": "NZL",
+          "x": 56.0,
+          "y": 11.121161,
+          "x_obs": 56,
+          "y_obs": 56,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Nicaragua",
+          "code": "NIC",
+          "x": 3.0,
+          "y": 12.467002,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Niger",
+          "code": "NER",
+          "x": 3.0,
+          "y": 9.251179,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Nigeria",
+          "code": "NGA",
+          "x": 3.0,
+          "y": 7.514536,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Niue",
+          "code": "NIU",
+          "x": 3.0,
+          "y": 4.28114,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "North Korea",
+          "code": "PRK",
+          "x": 3.0,
+          "y": 4.879155,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Norway",
+          "code": "NOR",
+          "x": 55.0,
+          "y": 9.923191,
+          "x_obs": 55,
+          "y_obs": 55,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Oman",
+          "code": "OMN",
+          "x": 3.0,
+          "y": 3.749442,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Pakistan",
+          "code": "PAK",
+          "x": 3.0,
+          "y": 13.23573,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Palau",
+          "code": "PLW",
+          "x": 3.0,
+          "y": 5.562626,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Panama",
+          "code": "PAN",
+          "x": 16.0,
+          "y": 4.928731,
+          "x_obs": 16,
+          "y_obs": 16,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Papua New Guinea",
+          "code": "PNG",
+          "x": 3.0,
+          "y": 12.120167,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Paraguay",
+          "code": "PRY",
+          "x": 12.0,
+          "y": 3.349713,
+          "x_obs": 12,
+          "y_obs": 12,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Peru",
+          "code": "PER",
+          "x": 3.0,
+          "y": 1.731239,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Philippines",
+          "code": "PHL",
+          "x": 11.0,
+          "y": 1.67724,
+          "x_obs": 11,
+          "y_obs": 11,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Poland",
+          "code": "POL",
+          "x": 42.0,
+          "y": 11.990036,
+          "x_obs": 42,
+          "y_obs": 42,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Portugal",
+          "code": "PRT",
+          "x": 51.0,
+          "y": 7.978727,
+          "x_obs": 51,
+          "y_obs": 51,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Qatar",
+          "code": "QAT",
+          "x": 3.0,
+          "y": 2.762526,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Romania",
+          "code": "ROU",
+          "x": 17.0,
+          "y": 10.796476,
+          "x_obs": 17,
+          "y_obs": 17,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Russia",
+          "code": "RUS",
+          "x": 24.0,
+          "y": 30.765613,
+          "x_obs": 24,
+          "y_obs": 24,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Rwanda",
+          "code": "RWA",
+          "x": 3.0,
+          "y": 12.342499,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Saint Lucia",
+          "code": "LCA",
+          "x": 3.0,
+          "y": 7.423608,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Saint Vincent and the Grenadines",
+          "code": "VCT",
+          "x": 3.0,
+          "y": 9.20307,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Samoa",
+          "code": "WSM",
+          "x": 3.0,
+          "y": 5.498493,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "San Marino",
+          "code": "SMR",
+          "x": 3.0,
+          "y": 6.422834,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Sao Tome and Principe",
+          "code": "STP",
+          "x": 3.0,
+          "y": 10.025574,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Saudi Arabia",
+          "code": "SAU",
+          "x": 3.0,
+          "y": 6.252704,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Senegal",
+          "code": "SEN",
+          "x": 3.0,
+          "y": 6.677666,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Serbia",
+          "code": "SRB",
+          "x": 8.0,
+          "y": 14.472029,
+          "x_obs": 8,
+          "y_obs": 8,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Serbia and Montenegro",
+          "code": "OWID_SRM",
+          "x": 8.0,
+          "y": 13.838792,
+          "x_obs": 8,
+          "y_obs": 8,
+          "former_state": true,
+          "label_rank": null
+        },
+        {
+          "entity": "Seychelles",
+          "code": "SYC",
+          "x": 3.0,
+          "y": 9.730802,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Sierra Leone",
+          "code": "SLE",
+          "x": 3.0,
+          "y": 12.533892,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Singapore",
+          "code": "SGP",
+          "x": 43.0,
+          "y": 12.685771,
+          "x_obs": 43,
+          "y_obs": 43,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Slovakia",
+          "code": "SVK",
+          "x": 14.0,
+          "y": 11.846814,
+          "x_obs": 14,
+          "y_obs": 14,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Slovenia",
+          "code": "SVN",
+          "x": 21.0,
+          "y": 25.356981,
+          "x_obs": 21,
+          "y_obs": 21,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Solomon Islands",
+          "code": "SLB",
+          "x": 3.0,
+          "y": 4.550748,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Somalia",
+          "code": "SOM",
+          "x": 3.0,
+          "y": 23.27363,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "South Africa",
+          "code": "ZAF",
+          "x": 3.0,
+          "y": 14.675797,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "South Korea",
+          "code": "KOR",
+          "x": 21.0,
+          "y": 12.509967,
+          "x_obs": 21,
+          "y_obs": 21,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Spain",
+          "code": "ESP",
+          "x": 55.0,
+          "y": 5.302825,
+          "x_obs": 55,
+          "y_obs": 55,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Sri Lanka",
+          "code": "LKA",
+          "x": 30.0,
+          "y": 20.239038,
+          "x_obs": 30,
+          "y_obs": 30,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Sudan",
+          "code": "SDN",
+          "x": 3.0,
+          "y": 9.372405,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Suriname",
+          "code": "SUR",
+          "x": 3.0,
+          "y": 19.885247,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Swaziland",
+          "code": "SWZ",
+          "x": 3.0,
+          "y": 10.701648,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Sweden",
+          "code": "SWE",
+          "x": 55.0,
+          "y": 15.421425,
+          "x_obs": 55,
+          "y_obs": 55,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Switzerland",
+          "code": "CHE",
+          "x": 55.0,
+          "y": 18.232953,
+          "x_obs": 55,
+          "y_obs": 55,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Syria",
+          "code": "SYR",
+          "x": 3.0,
+          "y": 0.535992,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Tajikistan",
+          "code": "TJK",
+          "x": 3.0,
+          "y": 3.936591,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Tanzania",
+          "code": "TZA",
+          "x": 3.0,
+          "y": 9.471288,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Thailand",
+          "code": "THA",
+          "x": 3.0,
+          "y": 10.127827,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Timor",
+          "code": "TLS",
+          "x": 3.0,
+          "y": 10.78199,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Togo",
+          "code": "TGO",
+          "x": 3.0,
+          "y": 6.441331,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Tonga",
+          "code": "TON",
+          "x": 3.0,
+          "y": 4.546555,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Trinidad and Tobago",
+          "code": "TTO",
+          "x": 49.0,
+          "y": 9.33737,
+          "x_obs": 49,
+          "y_obs": 49,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Tunisia",
+          "code": "TUN",
+          "x": 3.0,
+          "y": 3.600387,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Turkey",
+          "code": "TUR",
+          "x": 3.0,
+          "y": 4.614304,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Turkmenistan",
+          "code": "TKM",
+          "x": 19.0,
+          "y": 10.027906,
+          "x_obs": 19,
+          "y_obs": 19,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Tuvalu",
+          "code": "TUV",
+          "x": 3.0,
+          "y": 7.920045,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "USSR",
+          "code": "OWID_USS",
+          "x": 9.0,
+          "y": 22.769751,
+          "x_obs": 9,
+          "y_obs": 9,
+          "former_state": true,
+          "label_rank": null
+        },
+        {
+          "entity": "Uganda",
+          "code": "UGA",
+          "x": 3.0,
+          "y": 9.319756,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Ukraine",
+          "code": "UKR",
+          "x": 23.0,
+          "y": 21.598016,
+          "x_obs": 23,
+          "y_obs": 23,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "United Arab Emirates",
+          "code": "ARE",
+          "x": 3.0,
+          "y": 2.00404,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "United Kingdom",
+          "code": "GBR",
+          "x": 56.0,
+          "y": 7.677848,
+          "x_obs": 56,
+          "y_obs": 56,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "United States",
+          "code": "USA",
+          "x": 56.0,
+          "y": 11.021925,
+          "x_obs": 56,
+          "y_obs": 56,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Uruguay",
+          "code": "URY",
+          "x": 45.0,
+          "y": 11.435451,
+          "x_obs": 45,
+          "y_obs": 45,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Uzbekistan",
+          "code": "UZB",
+          "x": 23.0,
+          "y": 8.523172,
+          "x_obs": 23,
+          "y_obs": 23,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Vanuatu",
+          "code": "VUT",
+          "x": 3.0,
+          "y": 5.025896,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Venezuela",
+          "code": "VEN",
+          "x": 48.0,
+          "y": 6.715234,
+          "x_obs": 48,
+          "y_obs": 48,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Vietnam",
+          "code": "VNM",
+          "x": 3.0,
+          "y": 12.107191,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "West Germany",
+          "code": "OWID_GFR",
+          "x": 39.0,
+          "y": 17.265328,
+          "x_obs": 39,
+          "y_obs": 39,
+          "former_state": true,
+          "label_rank": null
+        },
+        {
+          "entity": "Yemen",
+          "code": "YEM",
+          "x": 3.0,
+          "y": 6.221543,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Yugoslavia",
+          "code": "OWID_YGS",
+          "x": 15.0,
+          "y": 14.672197,
+          "x_obs": 15,
+          "y_obs": 15,
+          "former_state": true,
+          "label_rank": null
+        },
+        {
+          "entity": "Zambia",
+          "code": "ZMB",
+          "x": 3.0,
+          "y": 10.039353,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Zimbabwe",
+          "code": "ZWE",
+          "x": 3.0,
+          "y": 11.783864,
+          "x_obs": 3,
+          "y_obs": 3,
+          "former_state": false,
+          "label_rank": null
+        }
+      ],
+      "subset": {
+        "id": "B3-subset",
+        "label": "At least 10 years reported",
+        "n": 68,
+        "pearson": -0.046522,
+        "pearson_ci": [
+          -0.274872,
+          0.172684
+        ],
+        "spearman": 0.037957,
+        "spearman_ci": [
+          -0.208148,
+          0.257134
+        ]
+      },
+      "sensitivity": [
+        {
+          "id": "B3-min5",
+          "label": "At least 5 years reported",
+          "n": 73,
+          "pearson": -0.016111,
+          "pearson_ci": [
+            -0.227872,
+            0.192614
+          ],
+          "spearman": 0.051593,
+          "spearman_ci": [
+            -0.164196,
+            0.27278
+          ]
+        },
+        {
+          "id": "B3-min10",
+          "label": "At least 10 years reported (subset)",
+          "n": 68,
+          "pearson": -0.046522,
+          "pearson_ci": [
+            -0.274872,
+            0.172684
+          ],
+          "spearman": 0.037957,
+          "spearman_ci": [
+            -0.208148,
+            0.257134
+          ]
+        },
+        {
+          "id": "B3-min20",
+          "label": "At least 20 years reported",
+          "n": 57,
+          "pearson": -0.275548,
+          "pearson_ci": [
+            -0.506974,
+            0.003918
+          ],
+          "spearman": -0.200181,
+          "spearman_ci": [
+            -0.44494,
+            0.073651
+          ]
+        }
+      ],
+      "reference_line": false,
+      "verdict": {
+        "id": "B3",
+        "label": "Mixed",
+        "judged_on": "Data reliability",
+        "icon": "\u25d0",
+        "rule": "Mixed when the full-sample |r| < 0.30 and the >=10-year subset |r| < 0.30; Not Favourable when both |r| values are >= 0.50; otherwise Mixed.",
+        "reason": "The full-sample association is weak (r = 0.23) and it is absent among the 68 countries with at least 10 years (r = -0.05)."
+      }
+    },
+    "B4": {
+      "id": "B4",
+      "title": "Level vs variability",
+      "question": "Do countries with higher mean rates also have more variable yearly rates?",
+      "x_label": "Country mean (per 100,000)",
+      "y_label": "SD of yearly rates (per 100,000)",
+      "min_observations": 10,
+      "n": 68,
+      "pearson": 0.715447,
+      "pearson_ci": [
+        0.591884,
+        0.859434
+      ],
+      "spearman": 0.769401,
+      "spearman_ci": [
+        0.627867,
+        0.86316
+      ],
+      "points": [
+        {
+          "entity": "Argentina",
+          "code": "ARG",
+          "x": 7.655741,
+          "y": 1.206548,
+          "x_obs": 34,
+          "y_obs": 34,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Australia",
+          "code": "AUS",
+          "x": 11.960147,
+          "y": 1.587019,
+          "x_obs": 56,
+          "y_obs": 56,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Austria",
+          "code": "AUT",
+          "x": 19.68569,
+          "y": 2.786757,
+          "x_obs": 51,
+          "y_obs": 51,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Azerbaijan",
+          "code": "AZE",
+          "x": 2.588415,
+          "y": 1.685091,
+          "x_obs": 21,
+          "y_obs": 21,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Belarus",
+          "code": "BLR",
+          "x": 25.553774,
+          "y": 5.244334,
+          "x_obs": 22,
+          "y_obs": 22,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Belgium",
+          "code": "BEL",
+          "x": 15.08041,
+          "y": 2.840951,
+          "x_obs": 49,
+          "y_obs": 49,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Bosnia and Herzegovina",
+          "code": "BIH",
+          "x": 11.050995,
+          "y": 0.950668,
+          "x_obs": 10,
+          "y_obs": 10,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Brazil",
+          "code": "BRA",
+          "x": 4.216724,
+          "y": 0.352596,
+          "x_obs": 24,
+          "y_obs": 24,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Bulgaria",
+          "code": "BGR",
+          "x": 11.997839,
+          "y": 1.696028,
+          "x_obs": 42,
+          "y_obs": 42,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Canada",
+          "code": "CAN",
+          "x": 11.081953,
+          "y": 2.122781,
+          "x_obs": 56,
+          "y_obs": 56,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Chile",
+          "code": "CHL",
+          "x": 7.099053,
+          "y": 1.922098,
+          "x_obs": 51,
+          "y_obs": 51,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Colombia",
+          "code": "COL",
+          "x": 4.218676,
+          "y": 1.694234,
+          "x_obs": 43,
+          "y_obs": 43,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Costa Rica",
+          "code": "CRI",
+          "x": 5.546782,
+          "y": 1.201229,
+          "x_obs": 44,
+          "y_obs": 44,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Croatia",
+          "code": "HRV",
+          "x": 18.071371,
+          "y": 1.972384,
+          "x_obs": 21,
+          "y_obs": 21,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Cuba",
+          "code": "CUB",
+          "x": 16.483783,
+          "y": 3.639703,
+          "x_obs": 25,
+          "y_obs": 25,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Czech Republic",
+          "code": "CZE",
+          "x": 14.626161,
+          "y": 1.850696,
+          "x_obs": 20,
+          "y_obs": 20,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Czechoslovakia",
+          "code": "OWID_CZS",
+          "x": 19.517797,
+          "y": 2.159781,
+          "x_obs": 39,
+          "y_obs": 39,
+          "former_state": true,
+          "label_rank": null
+        },
+        {
+          "entity": "Denmark",
+          "code": "DNK",
+          "x": 19.011753,
+          "y": 4.76249,
+          "x_obs": 55,
+          "y_obs": 55,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Egypt",
+          "code": "EGY",
+          "x": 0.521248,
+          "y": 0.724847,
+          "x_obs": 13,
+          "y_obs": 13,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Estonia",
+          "code": "EST",
+          "x": 27.673795,
+          "y": 5.600816,
+          "x_obs": 23,
+          "y_obs": 23,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Finland",
+          "code": "FIN",
+          "x": 22.153146,
+          "y": 2.383208,
+          "x_obs": 54,
+          "y_obs": 54,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "France",
+          "code": "FRA",
+          "x": 15.243681,
+          "y": 1.811357,
+          "x_obs": 55,
+          "y_obs": 55,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Georgia",
+          "code": "GEO",
+          "x": 3.599995,
+          "y": 1.131844,
+          "x_obs": 21,
+          "y_obs": 21,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Germany",
+          "code": "DEU",
+          "x": 11.434545,
+          "y": 1.378897,
+          "x_obs": 16,
+          "y_obs": 16,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Greece",
+          "code": "GRC",
+          "x": 3.028587,
+          "y": 0.387913,
+          "x_obs": 45,
+          "y_obs": 45,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Guatemala",
+          "code": "GTM",
+          "x": 2.654906,
+          "y": 1.075328,
+          "x_obs": 34,
+          "y_obs": 34,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Hungary",
+          "code": "HUN",
+          "x": 29.8454,
+          "y": 6.100156,
+          "x_obs": 51,
+          "y_obs": 51,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Ireland",
+          "code": "IRL",
+          "x": 6.168293,
+          "y": 3.717605,
+          "x_obs": 56,
+          "y_obs": 56,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Israel",
+          "code": "ISR",
+          "x": 6.691274,
+          "y": 0.865316,
+          "x_obs": 31,
+          "y_obs": 31,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Italy",
+          "code": "ITA",
+          "x": 5.722737,
+          "y": 0.585508,
+          "x_obs": 55,
+          "y_obs": 55,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Japan",
+          "code": "JPN",
+          "x": 18.297614,
+          "y": 3.955585,
+          "x_obs": 56,
+          "y_obs": 56,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Kazakhstan",
+          "code": "KAZ",
+          "x": 25.860962,
+          "y": 4.473206,
+          "x_obs": 23,
+          "y_obs": 23,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Kuwait",
+          "code": "KWT",
+          "x": 0.994204,
+          "y": 0.481653,
+          "x_obs": 26,
+          "y_obs": 26,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Kyrgyzstan",
+          "code": "KGZ",
+          "x": 14.128014,
+          "y": 2.221428,
+          "x_obs": 23,
+          "y_obs": 23,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Latvia",
+          "code": "LVA",
+          "x": 27.524058,
+          "y": 5.217364,
+          "x_obs": 26,
+          "y_obs": 26,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Lithuania",
+          "code": "LTU",
+          "x": 35.127182,
+          "y": 6.775349,
+          "x_obs": 23,
+          "y_obs": 23,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Macedonia",
+          "code": "MKD",
+          "x": 7.184172,
+          "y": 0.582509,
+          "x_obs": 15,
+          "y_obs": 15,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Mauritius",
+          "code": "MUS",
+          "x": 8.07416,
+          "y": 4.579255,
+          "x_obs": 45,
+          "y_obs": 45,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Mexico",
+          "code": "MEX",
+          "x": 2.606419,
+          "y": 0.876045,
+          "x_obs": 51,
+          "y_obs": 51,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Moldova",
+          "code": "MDA",
+          "x": 17.024899,
+          "y": 1.842854,
+          "x_obs": 23,
+          "y_obs": 23,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Netherlands",
+          "code": "NLD",
+          "x": 8.002347,
+          "y": 1.333575,
+          "x_obs": 56,
+          "y_obs": 56,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "New Zealand",
+          "code": "NZL",
+          "x": 11.121161,
+          "y": 1.797443,
+          "x_obs": 56,
+          "y_obs": 56,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Norway",
+          "code": "NOR",
+          "x": 9.923191,
+          "y": 2.803461,
+          "x_obs": 55,
+          "y_obs": 55,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Panama",
+          "code": "PAN",
+          "x": 4.928731,
+          "y": 1.332725,
+          "x_obs": 16,
+          "y_obs": 16,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Paraguay",
+          "code": "PRY",
+          "x": 3.349713,
+          "y": 0.603257,
+          "x_obs": 12,
+          "y_obs": 12,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Philippines",
+          "code": "PHL",
+          "x": 1.67724,
+          "y": 0.445807,
+          "x_obs": 11,
+          "y_obs": 11,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Poland",
+          "code": "POL",
+          "x": 11.990036,
+          "y": 1.679907,
+          "x_obs": 42,
+          "y_obs": 42,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Portugal",
+          "code": "PRT",
+          "x": 7.978727,
+          "y": 1.662314,
+          "x_obs": 51,
+          "y_obs": 51,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Romania",
+          "code": "ROU",
+          "x": 10.796476,
+          "y": 1.000637,
+          "x_obs": 17,
+          "y_obs": 17,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Russia",
+          "code": "RUS",
+          "x": 30.765613,
+          "y": 5.320474,
+          "x_obs": 24,
+          "y_obs": 24,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Singapore",
+          "code": "SGP",
+          "x": 12.685771,
+          "y": 2.957046,
+          "x_obs": 43,
+          "y_obs": 43,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Slovakia",
+          "code": "SVK",
+          "x": 11.846814,
+          "y": 0.981662,
+          "x_obs": 14,
+          "y_obs": 14,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Slovenia",
+          "code": "SVN",
+          "x": 25.356981,
+          "y": 3.013852,
+          "x_obs": 21,
+          "y_obs": 21,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "South Korea",
+          "code": "KOR",
+          "x": 12.509967,
+          "y": 4.987663,
+          "x_obs": 21,
+          "y_obs": 21,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Spain",
+          "code": "ESP",
+          "x": 5.302825,
+          "y": 0.997054,
+          "x_obs": 55,
+          "y_obs": 55,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Sri Lanka",
+          "code": "LKA",
+          "x": 20.239038,
+          "y": 10.703434,
+          "x_obs": 30,
+          "y_obs": 30,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Sweden",
+          "code": "SWE",
+          "x": 15.421425,
+          "y": 2.632966,
+          "x_obs": 55,
+          "y_obs": 55,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Switzerland",
+          "code": "CHE",
+          "x": 18.232953,
+          "y": 2.470372,
+          "x_obs": 55,
+          "y_obs": 55,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Trinidad and Tobago",
+          "code": "TTO",
+          "x": 9.33737,
+          "y": 3.968011,
+          "x_obs": 49,
+          "y_obs": 49,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Turkmenistan",
+          "code": "TKM",
+          "x": 10.027906,
+          "y": 1.946929,
+          "x_obs": 19,
+          "y_obs": 19,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Ukraine",
+          "code": "UKR",
+          "x": 21.598016,
+          "y": 3.139358,
+          "x_obs": 23,
+          "y_obs": 23,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "United Kingdom",
+          "code": "GBR",
+          "x": 7.677848,
+          "y": 1.065478,
+          "x_obs": 56,
+          "y_obs": 56,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "United States",
+          "code": "USA",
+          "x": 11.021925,
+          "y": 0.779997,
+          "x_obs": 56,
+          "y_obs": 56,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Uruguay",
+          "code": "URY",
+          "x": 11.435451,
+          "y": 1.997096,
+          "x_obs": 45,
+          "y_obs": 45,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Uzbekistan",
+          "code": "UZB",
+          "x": 8.523172,
+          "y": 1.437982,
+          "x_obs": 23,
+          "y_obs": 23,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "Venezuela",
+          "code": "VEN",
+          "x": 6.715234,
+          "y": 1.346371,
+          "x_obs": 48,
+          "y_obs": 48,
+          "former_state": false,
+          "label_rank": null
+        },
+        {
+          "entity": "West Germany",
+          "code": "OWID_GFR",
+          "x": 17.265328,
+          "y": 1.696607,
+          "x_obs": 39,
+          "y_obs": 39,
+          "former_state": true,
+          "label_rank": null
+        },
+        {
+          "entity": "Yugoslavia",
+          "code": "OWID_YGS",
+          "x": 14.672197,
+          "y": 0.753149,
+          "x_obs": 15,
+          "y_obs": 15,
+          "former_state": true,
+          "label_rank": null
+        }
+      ],
+      "sensitivity": [
+        {
+          "id": "B4-min5",
+          "label": "At least 5 observations",
+          "n": 73,
+          "pearson": 0.715034,
+          "pearson_ci": [
+            0.580536,
+            0.854538
+          ],
+          "spearman": 0.753949,
+          "spearman_ci": [
+            0.602961,
+            0.848961
+          ]
+        },
+        {
+          "id": "B4-min10",
+          "label": "At least 10 observations (main rule)",
+          "n": 68,
+          "pearson": 0.715447,
+          "pearson_ci": [
+            0.591884,
+            0.859434
+          ],
+          "spearman": 0.769401,
+          "spearman_ci": [
+            0.627867,
+            0.86316
+          ]
+        },
+        {
+          "id": "B4-min20",
+          "label": "At least 20 observations",
+          "n": 57,
+          "pearson": 0.705126,
+          "pearson_ci": [
+            0.565573,
+            0.867821
+          ],
+          "spearman": 0.793622,
+          "spearman_ci": [
+            0.647713,
+            0.883658
+          ]
+        }
+      ],
+      "reference_line": false,
+      "verdict": {
+        "id": "B4",
+        "label": "Not Favourable",
+        "judged_on": "Data reliability",
+        "icon": "!",
+        "rule": "Not Favourable when Pearson r >= 0.50 and n >= 30; Mixed for 0.30-0.50; Favourable below 0.30.",
+        "reason": "Pearson r = 0.72 with n = 68: level and variability move together, so one pooled z-score threshold treats high-variability countries differently."
+      }
+    }
+  },
+  "takeaways": {
+    "A": "Across all records the year\u2013rate correlation is about zero (r = -0.02), but it is 0.19 within the eight complete panels and 0.72 for their yearly average \u2014 the answer depends on who is included.",
+    "B1": "Country means are highly persistent: the 1980s and 1990s means correlate at r = 0.92 (Spearman 0.96, n = 63).",
+    "B2": "Persistence continues into 2000\u20132005: r = 0.95 (Spearman 0.94, n = 67).",
+    "B3": "Coverage and level are weakly associated overall (r = 0.23), and the association is absent among the 68 countries with at least 10 years (r = -0.05).",
+    "B4": "Countries with higher mean rates also tend to have more variable yearly rates (r = 0.72, n = 68), which matters for pooled anomaly screening."
+  },
+  "anomaly_sensitivity": {
+    "consecutive_changes": 2457,
+    "pooled_zscore_flags": 122,
+    "within_country_zscore_flags": 124,
+    "status_changes": 154,
+    "note": "Sensitivity only. The existing anomaly table is unchanged; it still uses the pooled z-score rule. Within-country standardisation would flag a different set of changes."
+  },
+  "findings": [
+    {
+      "number": 8,
+      "title": "Country rankings are stable across the 1980s and 1990s.",
+      "detail": "The 1980s-to-1990s country means correlate at Pearson r = 0.92 (95% cluster-bootstrap interval 0.90 to 0.95) and Spearman rho = 0.96 (n = 63). The 1990s-to-2000\u20132005 pair is r = 0.95, Spearman rho = 0.94 (n = 67).",
+      "caveat": "One point per entity; window coverage is uneven, and the six OWID former-state entities are included in the main row but tested separately.",
+      "confidence": "High \u2014 stable across sensitivity checks",
+      "section": "relationships"
+    },
+    {
+      "number": 9,
+      "title": "Coverage and rate level are not meaningfully associated among countries with at least 10 years.",
+      "detail": "Across all 196 entities, years reported and country mean correlate at Pearson r = 0.23 and Spearman rho = 0.26. Among the 68 entities with at least 10 years, Pearson r = -0.05 and Spearman rho = 0.04.",
+      "caveat": "The full sample includes many entities with only three observations; the subset is the relevant comparison.",
+      "confidence": "High \u2014 stable across sensitivity checks",
+      "section": "relationships"
+    },
+    {
+      "number": 10,
+      "title": "Level and variability move together, which affects pooled anomaly screening.",
+      "detail": "Among the 68 entities with at least 10 observations, country mean and the SD of yearly rates correlate at Pearson r = 0.72 and Spearman rho = 0.77. Within-country standardisation would flag 124 changes versus 122 under the pooled rule; 154 of 2,457 rows would change status.",
+      "caveat": "The existing anomaly table is unchanged; this is a sensitivity note about the screening rule.",
+      "confidence": "High \u2014 stable across sensitivity checks",
+      "section": "relationships"
+    },
+    {
+      "number": 11,
+      "title": "The trend correlation depends on who is included.",
+      "detail": "Pooled Pearson r is -0.02 for all 2,843 records and 0.09 for 1950\u20132001 (2,216 records). Within the eight complete panels it is 0.19 (n = 448), their yearly average gives 0.72 (n = 56), and the 32 entities with at least 40 years give 0.11 (n = 1,637).",
+      "caveat": "A1\u2013A2 mix changing country groups; A4 correlates a yearly average, not individual observations. These are descriptive associations only.",
+      "confidence": "Medium \u2014 sensitive to the inclusion rule",
+      "section": "relationships"
+    }
+  ],
+  "methods": {
+    "block_a": "Pearson r between year and rate, computed on the stated inclusion set. A3 and A5 subtract each entity's own mean rate before correlating with year. A4 correlates the eight-panel yearly mean with year.",
+    "windows": {
+      "B1": {
+        "x": [
+          1980,
+          1989
+        ],
+        "y": [
+          1990,
+          1999
+        ],
+        "minimum_observations": 1
+      },
+      "B2": {
+        "x": [
+          1990,
+          1999
+        ],
+        "y": [
+          2000,
+          2005
+        ],
+        "minimum_observations": 1
+      },
+      "B3": {
+        "coverage_cutoff_years": 10
+      },
+      "B4": {
+        "minimum_observations": 10
+      }
+    },
+    "bootstrap": "Each interval resamples whole entities with replacement, 2,000 times, using a fixed seed. The interval is the 2.5th\u201397.5th percentile of the resampled statistic.",
+    "verdict_rules": {
+      "A": {
+        "judged_on": "Data reliability",
+        "favourable": {
+          "spread_below": 0.1
+        },
+        "mixed": {
+          "spread_below": 0.3
+        },
+        "description": "Not Favourable when the inclusion rules move Pearson r by 0.30 or more; Mixed for 0.10-0.30; Favourable below 0.10."
+      },
+      "B1": {
+        "judged_on": "Data reliability",
+        "favourable": {
+          "spearman_min": 0.8,
+          "n_min": 30
+        },
+        "mixed": {
+          "spearman_min": 0.5,
+          "n_min": 30
+        },
+        "description": "Favourable when Spearman rho >= 0.80 and n >= 30; Mixed when rho >= 0.50 and n >= 30; otherwise Not Favourable."
+      },
+      "B2": {
+        "judged_on": "Data reliability",
+        "favourable": {
+          "spearman_min": 0.8,
+          "n_min": 30
+        },
+        "mixed": {
+          "spearman_min": 0.5,
+          "n_min": 30
+        },
+        "description": "Favourable when Spearman rho >= 0.80 and n >= 30; Mixed when rho >= 0.50 and n >= 30; otherwise Not Favourable."
+      },
+      "B3": {
+        "judged_on": "Data reliability",
+        "mixed": {
+          "full_abs_pearson_below": 0.3,
+          "subset_abs_pearson_below": 0.3,
+          "subset_n_min": 30
+        },
+        "not_favourable": {
+          "full_abs_pearson_min": 0.5,
+          "subset_abs_pearson_min": 0.5
+        },
+        "description": "Mixed when the full-sample |r| < 0.30 and the >=10-year subset |r| < 0.30; Not Favourable when both |r| values are >= 0.50; otherwise Mixed."
+      },
+      "B4": {
+        "judged_on": "Data reliability",
+        "not_favourable": {
+          "pearson_min": 0.5,
+          "n_min": 30
+        },
+        "mixed": {
+          "pearson_min": 0.3,
+          "n_min": 30
+        },
+        "description": "Not Favourable when Pearson r >= 0.50 and n >= 30; Mixed for 0.30-0.50; Favourable below 0.30."
+      }
+    },
+    "no_pvalues": "No p-values are reported on pooled country-year data. Observations from the same country are not independent, so p-values would overstate certainty. All associations are descriptive.",
+    "causation": "Correlation does not establish causation."
+  }
+}

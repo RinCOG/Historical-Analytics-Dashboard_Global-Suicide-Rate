@@ -241,3 +241,37 @@ def analysis_coverage():
 @app.get("/api/v1/analysis/findings")
 def analysis_findings():
     return services.get_findings()
+
+
+@app.get("/api/v1/analysis/summary")
+def analysis_summary(
+    from_year: int = Query(1950, alias="from", ge=1950, le=2005),
+    to_year: int = Query(2005, alias="to", ge=1950, le=2005),
+):
+    start, end = list_range(from_year, to_year)
+    return services.get_range_summary(start, end)
+
+
+@app.get("/api/v1/analysis/relationships")
+def analysis_relationships():
+    return services.get_relationships_full()
+
+
+@app.get("/api/v1/analysis/relationships/compact")
+def analysis_relationships_compact():
+    return services.get_relationships_compact()
+
+
+@app.get("/api/v1/analysis/registry")
+def analysis_registry():
+    return services.get_metric_registry()
+
+
+@app.get("/api/v1/analysis/alignment")
+def analysis_alignment(
+    entity: str = Query("Lithuania", min_length=1, max_length=100),
+    from_year: int = Query(1950, alias="from", ge=1950, le=2005),
+    to_year: int = Query(2005, alias="to", ge=1950, le=2005),
+):
+    start, end = list_range(from_year, to_year)
+    return services.get_alignment(start, end, entity)
