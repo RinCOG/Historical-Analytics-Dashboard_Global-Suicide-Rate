@@ -219,11 +219,25 @@ export default function Analysis({ focusSection }: { focusSection?: string | nul
   }, [])
 
   useEffect(() => {
-    if (focusSection) {
-      const el = document.getElementById(focusSection)
-      if (el) el.scrollIntoView({ behavior: 'smooth' })
+    const target = focusSection || window.location.hash.replace(/^#/, '') || null
+    if (!target) return
+    let cancelled = false
+    let attempts = 0
+    const tryScroll = () => {
+      if (cancelled) return
+      const el = document.getElementById(target)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        return
+      }
+      attempts++
+      if (attempts < 60) {
+        requestAnimationFrame(tryScroll)
+      }
     }
-  }, [focusSection])
+    requestAnimationFrame(tryScroll)
+    return () => { cancelled = true }
+  }, [focusSection, relationships])
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
